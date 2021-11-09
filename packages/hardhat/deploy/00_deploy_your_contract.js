@@ -1,21 +1,23 @@
 // deploy/00_deploy_your_contract.js
 
-//const { ethers } = require("hardhat");
+const { ethers } = require("hardhat");
 
-module.exports = async ({ getNamedAccounts, deployments }) => {
+module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
+  const chainId = await getChainId();
+
   await deploy("YourCollectible", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
-    //args: [ "Hello", ethers.utils.parseEther("1.5") ],
+    // args: [ "Hello", ethers.utils.parseEther("1.5") ],
     log: true,
   });
 
-  /*
-    // Getting a previously deployed contract
-    const YourContract = await ethers.getContract("YourContract", deployer);
-    await YourContract.setPurpose("Hello");
+  // Getting a previously deployed contract
+  const YourCollectible = await ethers.getContract("YourCollectible", deployer);
+
+  /*  await YourContract.setPurpose("Hello");
 
     To take ownership of yourContract using the ownable library uncomment next line and add the
     address you want to be the owner.
@@ -47,14 +49,15 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
    LibraryName: **LibraryAddress**
   });
   */
+
+  // make sure were not on the local chain...
+  if (chainId !== "31337") {
+    // verigy the staking contract
+    await run("verify:verify", {
+      address: YourCollectible.address,
+      contract: "contracts/YourCollectible.sol:YourCollectible",
+      constructorArguments: [],
+    });
+  }
 };
 module.exports.tags = ["YourCollectible"];
-
-/*
-Tenderly verification
-let verification = await tenderly.verify({
-  name: contractName,
-  address: contractAddress,
-  network: targetNetwork,
-});
-*/

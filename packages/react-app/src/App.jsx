@@ -755,16 +755,6 @@ function App(props) {
               blockExplorer={blockExplorer}
               contractConfig={contractConfig}
             />
-            {/*
-            <Contract
-              name="UNI"
-              customContract={mainnetContracts && mainnetContracts.contracts && mainnetContracts.contracts.UNI}
-              signer={userSigner}
-              provider={mainnetProvider}
-              address={address}
-              blockExplorer={blockExplorer}
-            />
-            */}
           </Route>
         </Switch>
       </BrowserRouter>
