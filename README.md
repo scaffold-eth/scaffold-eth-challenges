@@ -19,7 +19,7 @@
 ### Checkpoint 0: 📦 install 📚
 
 ```bash
-git clone https://github.com/austintgriffith/scaffold-eth.git challenge-2-token-vendor
+git clone https://github.com/scaffold-eth/scaffold-eth-challenges challenge-2-token-vendor
 cd challenge-2-token-vendor
 git checkout challenge-2-token-vendor
 yarn install
