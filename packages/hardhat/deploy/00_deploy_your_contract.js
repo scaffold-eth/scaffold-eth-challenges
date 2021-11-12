@@ -8,7 +8,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   await deploy("Balloons", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
-    //args: [ "Hello", ethers.utils.parseEther("1.5") ],
+    // args: [ "Hello", ethers.utils.parseEther("1.5") ],
     log: true,
   });
 
@@ -17,13 +17,12 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   await deploy("DEX", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
-    args: [ balloons.address],
+    args: [balloons.address],
     log: true,
   });
 
-  const dex = await ethers.getContract("DEX", deployer);
+  // const dex = await ethers.getContract("DEX", deployer);
 
-  
   // paste in your address here to get 10 balloons on deploy:
   // await balloons.transfer("YOUR_ADDRESS",""+(10*10**18));
 
@@ -33,6 +32,5 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   // await balloons.approve(dex.address,ethers.utils.parseEther('100'));
   // // console.log("INIT exchange...")
   // await dex.init(""+(3*10**18),{value:ethers.utils.parseEther('3'),gasLimit:200000})
-
 };
-module.exports.tags = ["YourContract"];
+module.exports.tags = ["Balloons", "DEX"];
