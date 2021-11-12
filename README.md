@@ -18,7 +18,7 @@
 
 ```bash
 
-git clone https://github.com/austintgriffith/scaffold-eth.git challenge-1-decentralized-staking
+git clone https://github.com/scaffold-eth/scaffold-eth-challenges.git challenge-1-decentralized-staking
 
 cd challenge-1-decentralized-staking
 
