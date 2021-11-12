@@ -5,26 +5,26 @@
 # 🏃‍♀️ Quick Start
 Required: [Node](https://nodejs.org/dist/latest-v12.x/) plus [Yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable) and [Git](https://git-scm.com/downloads)
 
+```sh
+git clone https://github.com/scaffold-eth/scaffold-eth-challenges.git simple-nft-example
 ```
-git clone https://github.com/austintgriffith/scaffold-eth.git simple-nft-example
-```
-```
+```sh
 cd simple-nft-example
-git checkout simple-nft-example
+git checkout challenge-0-simple-nft
 yarn install
 yarn start
 ```
 
 > in a second terminal window, start your 📱 frontend:
 
-```
+```sh
 cd simple-nft-example
 yarn chain
 ```
 
 > in a third terminal window, 🛰 deploy your contract:
 
-```
+```sh
 cd simple-nft-example
 yarn deploy --network NETWORK_OF_CHOICE (localhost, kovan, rinkeby, mainnet)
 ```
@@ -36,7 +36,8 @@ yarn deploy --network NETWORK_OF_CHOICE (localhost, kovan, rinkeby, mainnet)
 ![nft1](https://user-images.githubusercontent.com/526558/124386962-37e5dd00-dcb3-11eb-911e-0afce760d7ee.png)
 
 > in a terminal window run the mint script:
-```
+
+```sh
 yarn mint
 ```
 ![nft2](https://user-images.githubusercontent.com/526558/124386972-3d432780-dcb3-11eb-933e-dad7dfd313b2.png)
@@ -86,7 +87,7 @@ yarn mint
 
 Make sure your target network is present in the hardhat networks config, then either update the default network in `hardhat.config.js` to your network of choice or run:
 
-```
+```sh
 yarn deploy --network NETWORK_OF_CHOICE
 ```
 > ✏️ Edit your frontend `App.jsx` in `packages/react-app/src` to change the `targetNetwork` to wherever you deployed your contract:
@@ -98,16 +99,18 @@ You should see the correct network in the frontend:
 ![nft10](https://user-images.githubusercontent.com/526558/124387099-9a3edd80-dcb3-11eb-9a57-54a7d370589a.png)
 
 🎫 Ready to mint a batch of NFTs for reals?
-```
+
+```sh
 yarn mint
 ```
+
 Once verified, they will then be available to view on Tenderly!
 
 ![nft11](https://user-images.githubusercontent.com/526558/124387132-b04c9e00-dcb3-11eb-95d1-03b8c272e52f.png)
 
 # ⚔️ Side Quests
 ## 🐟 Open Sea
-> Add your contract to OpenSea ( create -> submit NFTs -> "or add an existing contract" )
+> Add your contract to OpenSea ( create -> submit NFTs -> "or add an existing contract")
 
 (It can take a while before they show up, but here is an example:)
 https://testnets.opensea.io/assets/0xc2839329166d3d004aaedb94dde4173651babccf/1
@@ -126,7 +129,7 @@ https://testnets.opensea.io/assets/0xc2839329166d3d004aaedb94dde4173651babccf/1
 # 🛳 Ship the app!
 > ⚙️ build and upload your frontend and share the url with your friends...
 
-```
+```sh
 # build it:
 
 yarn build
