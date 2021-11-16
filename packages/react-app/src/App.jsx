@@ -24,6 +24,7 @@ import externalContracts from "./contracts/external_contracts";
 // contracts
 import deployedContracts from "./contracts/hardhat_contracts.json";
 import { Transactor } from "./helpers";
+import useEthPriceFeed from "./hooks/EthPriceFeed";
 // import Hints from "./Hints";
 import { ExampleUI, Hints, Subgraph } from "./views";
 
@@ -48,7 +49,7 @@ const { ethers } = require("ethers");
 */
 
 /// 📡 What chain are your contracts deployed to?
-const targetNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+const targetNetwork = NETWORKS.kovan; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
 const DEBUG = true;
@@ -424,6 +425,9 @@ function App(props) {
     );
   }
 
+  const price2 = useEthPriceFeed(mainnetProvider);
+  //console.log("ETH price: ", price2);
+
   return (
     <div className="App">
       {/* ✏️ Edit the header and change the title to your project name */}
@@ -490,7 +494,8 @@ function App(props) {
                 this <Contract/> component will automatically parse your ABI
                 and give you a form to interact with it locally
             */}
-
+            <span>ETH: {ethers.utils.formatUnits(price2, 8)}</span>
+            <br />
             <Contract
               name="YourContract"
               price={price}

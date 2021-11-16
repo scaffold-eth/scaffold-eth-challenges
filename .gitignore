@@ -38,6 +38,7 @@ build
 .yarn/cache
 .yarn/install-state.gz
 .yarn/build-state.yml
+yarn.lock
 .eslintcache
 # testing
 coverage
