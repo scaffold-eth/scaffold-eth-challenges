@@ -49,7 +49,6 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   // });
 
   // If you want to link a library into your contract:
-  // reference: https://github.com/austintgriffith/scaffold-eth/blob/using-libraries-example/packages/hardhat/scripts/deploy.js#L19
   // const yourContract = await deploy("YourContract", [], {}, {
   //  LibraryName: **LibraryAddress**
   // });
@@ -57,7 +56,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   // Verify your contracts with Etherscan
   // You don't want to verify on localhost
   if (chainId !== localChainId) {
-    await run("verify:verify", {
+    run("verify:verify", {
       address: YourContract.address,
       contract: "contracts/YourContract.sol:YourContract",
       contractArguments: [],
