@@ -426,7 +426,6 @@ function App(props) {
   }
 
   const price2 = useEthPriceFeed(mainnetProvider);
-  //console.log("ETH price: ", price2);
 
   return (
     <div className="App">
