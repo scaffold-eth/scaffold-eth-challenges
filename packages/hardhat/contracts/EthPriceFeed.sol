@@ -27,6 +27,7 @@ contract PriceConsumerV3 {
             uint timeStamp,
             uint80 answeredInRound
         ) = priceFeed.latestRoundData();
+
         return price;
     }
 }

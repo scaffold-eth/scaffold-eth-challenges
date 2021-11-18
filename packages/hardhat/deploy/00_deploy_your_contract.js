@@ -27,7 +27,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   //   deployer
   // );
 
-  await YourContract.setPurpose("Hello");
+  // await YourContract.setPurpose("Hello");
 
   // To take ownership of yourContract using the ownable library uncomment next line and add the
   // address you want to be the owner.
