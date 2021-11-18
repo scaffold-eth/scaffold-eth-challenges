@@ -1,37 +1,78 @@
-# 🏗 Scaffold-ETH - 🎟 Simple NFT Example
+# 🏗 scaffold-eth | 🏰 BuidlGuidl
 
-> Build, mint, and send around your own ERC721!
+## 🚩 Challenge 0: 🎟 Simple NFT Example 🤓
 
-# 🏃‍♀️ Quick Start
-Required: [Node](https://nodejs.org/dist/latest-v12.x/) plus [Yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable) and [Git](https://git-scm.com/downloads)
+🎫 Create a simple NFT to learn basics of 🏗 scaffold-eth. You'll use [👷‍♀️ HardHat](https://hardhat.org/getting-started/) to compile and deploy smart contracts. Then, you'll use a template React app full of important Ethereum components and hooks. Finally, you'll deploy an NFT to a public network to share with friends! 🚀
+
+🏆 The final deliverable is an app that lets users purchase and transfer NFTs. Deploy your contracts to Rinkeby and then yarn build and yarn surge your app to a public web server. Share the url in the Challenge 0 telegram channel!!!
+
+---
+
+# Checkpoint 0: 📦 install 📚
+
+
+Required: 
+* [Git](https://git-scm.com/downloads)
+* [Node](https://nodejs.org/dist/latest-v12.x/)
+* [Yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable)
+
+(⚠️ Don't install the linux package `yarn` make sure you install yarn with `npm i -g yarn`)
 
 ```sh
-git clone https://github.com/scaffold-eth/scaffold-eth-challenges.git simple-nft-example
+git clone https://github.com/scaffold-eth/scaffold-eth-challenges.git challenge-0-simple-nft
 ```
 ```sh
-cd simple-nft-example
+cd challenge-0-simple-nft
 git checkout challenge-0-simple-nft
 yarn install
-yarn start
+yarn chain
 ```
 
 > in a second terminal window, start your 📱 frontend:
 
 ```sh
-cd simple-nft-example
-yarn chain
+cd challenge-0-simple-nft
+yarn start
 ```
 
 > in a third terminal window, 🛰 deploy your contract:
 
 ```sh
-cd simple-nft-example
-yarn deploy --network NETWORK_OF_CHOICE (localhost, kovan, rinkeby, mainnet)
+cd challenge-0-simple-nft
+yarn deploy 
 ```
+
+> You can `yarn deploy --reset` to deploy a new contract any time.
 
 📱 Open http://localhost:3000 to see the app
 
-> ✏️ Edit the mint script mint.js in packages/hardhat/scripts and update the toAddress to your frontend address (wallet address in the top right or localhost:3000).
+---
+
+# Checkpoint 1: ⛽️  Gas & Wallets 👛
+
+> ⛽️ You'll need to get some funds from the faucet for gas. 
+
+![image](https://user-images.githubusercontent.com/2653167/142483294-ff4c305c-0f5e-4099-8c7d-11c142cb688c.png)
+
+> 🦊 At first, please **don't** connect MetaMask. If you already connected, please click **logout**:
+
+![image](https://user-images.githubusercontent.com/2653167/142484483-1439d925-8cef-4b1a-a4b2-0f022eebc0f6.png)
+
+
+> 🔥 We'll use **burner wallets** on localhost...
+
+
+> 👛 Explore how **burner wallets** work in 🏗 scaffold-eth by opening a new *incognito* window and navigate it to http://localhost:3000. You'll notice it has a new wallet address in the top right. Copy the incognito browsers' address and send localhost test funds to it from your wallet: 
+
+![image](https://user-images.githubusercontent.com/2653167/142483685-d5c6a153-da93-47fa-8caa-a425edba10c8.png)
+
+> 👨🏻‍🚒 When you close the incognito window, the account is gone forever. Burner wallets are great for local development but you'll move to more permanent wallets when you interact with public networks.
+
+---
+
+# Checkpoint 2: 🖨 Minting 
+
+> ✏️ Edit the script `mint.js` in `packages/hardhat/scripts` and update the `toAddress` to your frontend address (in the top right of http://localhost:3000).
 
 ![nft1](https://user-images.githubusercontent.com/526558/124386962-37e5dd00-dcb3-11eb-911e-0afce760d7ee.png)
 
@@ -46,55 +87,59 @@ yarn mint
 
 ![nft3](https://user-images.githubusercontent.com/526558/124386983-48965300-dcb3-11eb-88a7-e88ad6307976.png)
 
-👛 Open an incognito window and navigate to http://localhost:3000 (You'll notice it has a new wallet address).
+👛 Open an **incognito** window and navigate to http://localhost:3000 
 
-⛽️ Grab some gas for each account using the faucet:
-
-![nft4](https://user-images.githubusercontent.com/526558/124387005-55b34200-dcb3-11eb-8565-1ee40b5634ad.png)
-
-🎟 Send an NFT to the incognito window address:
+🎟 Transfer an NFT to the incognito window address using the UI:
 
 ![nft5](https://user-images.githubusercontent.com/526558/124387008-58ae3280-dcb3-11eb-920d-07b6118f1ab2.png)
 
 🕵🏻‍♂️ Inspect the `Debug Contracts` tab to figure out what address is the `owner` of `YourCollectible`?
 
-💼 Edit your deployment script `deploy.js` in `packages/hardhat/scripts`
+🔏 You can also check out your smart contract `YourCollectible.sol` in `packages/hardhat/contracts`.
 
-🔏 Edit your smart contract `YourCollectible.sol` in `packages/hardhat/contracts`
+💼 Take a quick look at your deploy script `00_deploy_your_contract.js` in `packages/hardhat/deploy`.
 
-📝 Edit your frontend `App.jsx` in `packages/react-app/src`
+📝 If you want to make frontend edits, open `App.jsx` in `packages/react-app/src`.
 
-🔑 Create wallet links to your app with `yarn wallet` and `yarn fundedwallet`
+---
 
-⬇️ Installing a new package to your frontend? You need to `cd packages/react-app` and then `yarn add PACKAGE`
+# Checkpoint 3: 💾 Deploy it! 🛰
 
-# 📡 Deploy NFT smart contract!
+🛰 Ready to deploy to a public testnet?!?
 
-🛰 Ready to deploy to a testnet?
-> Change the `defaultNetwork` in `packages/hardhat/hardhat.config.js`
+> Change the `defaultNetwork` in `packages/hardhat/hardhat.config.js` to `NETWORKS.rinkeby`
 
-![nft6](https://user-images.githubusercontent.com/526558/124387061-7a0f1e80-dcb3-11eb-9f4c-19229f43adec.png)
+![image](https://user-images.githubusercontent.com/2653167/142488032-fd3bd75f-34d0-46fc-be63-5d66e09174e6.png)
 
-🔐 Generate a deploy account with `yarn generate`
+🔐 Generate a **deployer address** with `yarn generate`
 
 ![nft7](https://user-images.githubusercontent.com/526558/124387064-7d0a0f00-dcb3-11eb-9d0c-195f93547fb9.png)
 
-👛 View your deployer address using `yarn account` (You'll need to fund this account. Hint: use an instant wallet to fund your account via QR code)
+👛 View your **deployer address** using `yarn account` 
 
 ![nft8](https://user-images.githubusercontent.com/526558/124387068-8004ff80-dcb3-11eb-9d0f-43fba2b3b791.png)
 
-👨‍🎤 Deploy your NFT smart contract:
+⛽️ Use a faucet like [faucet.paradigm.xyz](https://faucet.paradigm.xyz/) to fund your **deployer address**.
 
-Make sure your target network is present in the hardhat networks config, then either update the default network in `hardhat.config.js` to your network of choice or run:
+> ⚔️ **Side Quest:** Keep a 🧑‍🎤 punkwallet.io on your phone's home screen and keep it loaded with testnet eth. 🧙‍♂️ You'll look like a wizard when you can fund your **deployer address** from your phone in seconds. 
+
+🚀 Deploy your NFT smart contract:
 
 ```sh
-yarn deploy --network NETWORK_OF_CHOICE
+yarn deploy
 ```
-> ✏️ Edit your frontend `App.jsx` in `packages/react-app/src` to change the `targetNetwork` to wherever you deployed your contract:
 
-![nft9](https://user-images.githubusercontent.com/526558/124387095-9743ed00-dcb3-11eb-8ea5-afc25d7fef80.png)
+> 💬 Hint: You can set the `defaultNetwork` in `hardhat.config.js` to `Rinkeby` OR you can `yarn deploy --network Rinkeby`. 
 
-You should see the correct network in the frontend:
+---
+
+# Checkpoint 4: 🚢 Ship it! 🚁
+
+> ✏️ Edit your frontend `App.jsx` in `packages/react-app/src` to change the `targetNetwork` to `NETWORKS.rinkeby`:
+
+![image](https://user-images.githubusercontent.com/2653167/142491593-a032ebf2-38c7-4d1c-a4c5-5e02485e21b4.png)
+
+You should see the correct network in the frontend (http://localhost:3000):
 
 ![nft10](https://user-images.githubusercontent.com/526558/124387099-9a3edd80-dcb3-11eb-9a57-54a7d370589a.png)
 
@@ -104,11 +149,39 @@ You should see the correct network in the frontend:
 yarn mint
 ```
 
-Once verified, they will then be available to view on Tenderly!
-
 ![nft11](https://user-images.githubusercontent.com/526558/124387132-b04c9e00-dcb3-11eb-95d1-03b8c272e52f.png)
 
+
+
+📦 Build your frontend:
+
+```sh
+yarn build
+```
+
+💽 Upload your app to surge:
+```sh
+yarn surge
+```
+(You could also `yarn s3` or maybe even `yarn ipfs`?)
+
+
+---
+
+# Checkpoint 5: 💪 Flex!
+
+> 🎖 Show off your app by pasting the surge url in the [Challenge 0 telegram channel](https://t.me/joinchat/Y2vqXZZ_pEFhMGMx)
+
+---
+
+👩‍❤️‍👨 Share your public url with a friend and ask them for their address to send them a collectible :)
+
+![nft15](https://user-images.githubusercontent.com/526558/124387205-00c3fb80-dcb4-11eb-9e2f-29585e323037.gif)
+
+---
+
 # ⚔️ Side Quests
+
 ## 🐟 Open Sea
 > Add your contract to OpenSea ( create -> submit NFTs -> "or add an existing contract")
 
@@ -126,70 +199,8 @@ https://testnets.opensea.io/assets/0xc2839329166d3d004aaedb94dde4173651babccf/1
 
 ![nft13](https://user-images.githubusercontent.com/526558/124387174-d83c0180-dcb3-11eb-989e-d58ba15d26db.png)
 
-# 🛳 Ship the app!
-> ⚙️ build and upload your frontend and share the url with your friends...
-
-```sh
-# build it:
-
-yarn build
-
-# upload it:
-
-yarn surge
-
-yarn s3
-
-yarn ipfs
-```
-![nft14](https://user-images.githubusercontent.com/526558/124387203-fe61a180-dcb3-11eb-8d68-82a76a514e43.png)
-
-👩‍❤️‍👨 Share your public url with a friend and ask them for their address to send them a collectible :)
-
-![nft15](https://user-images.githubusercontent.com/526558/124387205-00c3fb80-dcb4-11eb-9e2f-29585e323037.gif)
-
-------------
-
-# 🔭 Learning Solidity
-
-📕 Read the docs: https://docs.soliditylang.org
-
-📚 Go through each topic from [solidity by example](https://solidity-by-example.org) editing `YourContract.sol` in **🏗 scaffold-eth**
-
-- [Primitive Data Types](https://solidity-by-example.org/primitives/)
-- [Mappings](https://solidity-by-example.org/mapping/)
-- [Structs](https://solidity-by-example.org/structs/)
-- [Modifiers](https://solidity-by-example.org/function-modifier/)
-- [Events](https://solidity-by-example.org/events/)
-- [Inheritance](https://solidity-by-example.org/inheritance/)
-- [Payable](https://solidity-by-example.org/payable/)
-- [Fallback](https://solidity-by-example.org/fallback/)
-
-📧 Learn the [Solidity globals and units](https://solidity.readthedocs.io/en/v0.6.6/units-and-global-variables.html)
-
-# 🛠 Buidl
-
-Check out all the [active branches](https://github.com/austintgriffith/scaffold-eth/branches/active), [open issues](https://github.com/austintgriffith/scaffold-eth/issues), and join/fund the 🏰 [BuidlGuidl](https://BuidlGuidl.com)!
-
-
- - 🚤  [Follow the full Ethereum Speed Run](https://medium.com/@austin_48503/%EF%B8%8Fethereum-dev-speed-run-bd72bcba6a4c)
-
-
- - 🎟  [Create your first NFT](https://github.com/austintgriffith/scaffold-eth/tree/simple-nft-example)
- - 🥩  [Build a staking smart contract](https://github.com/austintgriffith/scaffold-eth/tree/challenge-1-decentralized-staking)
- - 🏵  [Deploy a token and vendor](https://github.com/austintgriffith/scaffold-eth/tree/challenge-2-token-vendor)
- - 🎫  [Extend the NFT example to make a "buyer mints" marketplace](https://github.com/austintgriffith/scaffold-eth/tree/buyer-mints-nft)
- - 🎲  [Learn about commit/reveal](https://github.com/austintgriffith/scaffold-eth/tree/commit-reveal-with-frontend)
- - ✍️  [Learn how ecrecover works](https://github.com/austintgriffith/scaffold-eth/tree/signature-recover)
- - 👩‍👩‍👧‍👧  [Build a multi-sig that uses off-chain signatures](https://github.com/austintgriffith/scaffold-eth/tree/meta-multi-sig)
- - ⏳  [Extend the multi-sig to stream ETH](https://github.com/austintgriffith/scaffold-eth/tree/streaming-meta-multi-sig)
- - ⚖️  [Learn how a simple DEX works](https://medium.com/@austin_48503/%EF%B8%8F-minimum-viable-exchange-d84f30bd0c90)
- - 🦍  [Ape into learning!](https://github.com/austintgriffith/scaffold-eth/tree/aave-ape)
-
-# 💬 Support Chat
-
-Join the telegram [support chat 💬](https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA) to ask questions and find others building with 🏗 scaffold-eth!
-
 ---
 
-🙏 Please check out our [Gitcoin grant](https://gitcoin.co/grants/2851/scaffold-eth) too!
+> 🏰 Buidl Guidl Discord Server [Join Here](https://discord.gg/ZnFs36fbbU)
+
+> 💬 Problems, questions, comments on the stack? Post them to the [🏗 scaffold-eth developers chat](https://t.me/joinchat/F7nCRK3kI93PoCOk)

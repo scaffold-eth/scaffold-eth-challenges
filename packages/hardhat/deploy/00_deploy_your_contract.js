@@ -15,7 +15,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   });
 
   // Getting a previously deployed contract
-  const YourCollectible = await ethers.getContract("YourCollectible", deployer);
+  const yourCollectible = await ethers.getContract("YourCollectible", deployer);
 
   /*  await YourContract.setPurpose("Hello");
 
@@ -49,15 +49,5 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
    LibraryName: **LibraryAddress**
   });
   */
-
-  // make sure were not on the local chain...
-  if (chainId !== "31337") {
-    // verigy the staking contract
-    await run("verify:verify", {
-      address: YourCollectible.address,
-      contract: "contracts/YourCollectible.sol:YourCollectible",
-      constructorArguments: [],
-    });
-  }
 };
 module.exports.tags = ["YourCollectible"];
