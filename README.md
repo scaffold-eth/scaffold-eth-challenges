@@ -169,7 +169,7 @@ at around line 258. The verify script is at the bottom of `00_deploy_your_token.
 
 ⚔️ Side Quest: 🔂 use this same methodology to verify the Vendor contract.
 
-### Checkpoint 5: 🚢 Ship it! 🚁
+### Checkpoint 6: 🚢 Ship it! 🚁
 
 📦 Run `yarn build` to package up your frontend.
 
