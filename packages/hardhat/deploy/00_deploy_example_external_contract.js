@@ -1,10 +1,12 @@
 // deploy/00_deploy_example_external_contract.js
 
-// const { ethers } = require("hardhat");
+const { ethers } = require("hardhat");
 
-module.exports = async ({ getNamedAccounts, deployments }) => {
+module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
+  const chianId = await getChainId();
+
   await deploy("ExampleExternalContract", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
@@ -13,10 +15,15 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   });
 
   // Getting a previously deployed contract
-  // const YourContract = await ethers.getContract("YourContract", deployer);
+  // const ExampleExternalContract = await ethers.getContract(
+  //   "ExampleExternalContract",
+  //   deployer
+  // );
+
   // await YourContract.setPurpose("Hello");
 
-  // const yourContract = await ethers.getContractAt('YourContract', "0xaAC799eC2d00C013f1F11c37E654e59B0429DF6A") //<-- if you want to instantiate a version of a contract at a specific address!
+  // if you want to instantiate a version of a contract at a specific address!
+  // const yourContract = await ethers.getContractAt('YourContract', "0xaAC799eC2d00C013f1F11c37E654e59B0429DF6A") 
 
   // If you want to send value to an address from the deployer
   // const deployerWallet = ethers.provider.getSigner()
@@ -34,6 +41,13 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   // reference: https://github.com/austintgriffith/scaffold-eth/blob/using-libraries-example/packages/hardhat/scripts/deploy.js#L19
   // const yourContract = await deploy("YourContract", [], {}, {
   //  LibraryName: **LibraryAddress**
+  // });
+
+  // Verification
+  // await run("verify:verify", {
+  //   address: ExampleExternalContract.address,
+  //   contract: "contracts/ExampleExternalContract.sol:ExampleExternalContract",
+  //   contractArguments: [],
   // });
 };
 module.exports.tags = ["ExampleExternalContract"];
