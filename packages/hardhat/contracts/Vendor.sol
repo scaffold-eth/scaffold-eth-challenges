@@ -1,24 +1,38 @@
-pragma solidity >=0.6.0 <0.7.0;
+pragma solidity ^0.8.3;
 
-//import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "./YourToken.sol";
 
-contract Vendor {
+contract Vendor is Ownable {
+    uint256 public rate;
+    Token public token;
+    event TokensPurchased(address account, address token, uint256 amount);
 
-  YourToken yourToken;
+    event TokensSold(address account, address token, uint256 amount);
 
-  constructor(address tokenAddress) public {
-    yourToken = YourToken(tokenAddress);
-  }
+    constructor(Token _token) public {
+        token = _token;
+    }
 
+    function withdraw() public payable onlyOwner {
+        payable(owner()).transfer(address(this).balance);
+    }
 
-  //ToDo: create a payable buyTokens() function:
-  
+    function buyTokens(uint256 _rate) public payable {
+        uint256 tokenAmount = (msg.value * _rate) / 100;
+        require(token.balanceOf(address(this)) >= tokenAmount);
+        token.transfer(msg.sender, tokenAmount);
+        emit TokensPurchased(msg.sender, address(token), tokenAmount);
+    }
 
-  //ToDo: create a withdraw() function that lets the owner withdraw ETH
-  
-
-  //ToDo: create a sellTokens() function:
-  
-
+    function sellTokens(uint256 _amount, uint256 _rate) public {
+        require(token.balanceOf(msg.sender) >= _amount);
+        uint256 etherAmount = (_amount * 100) / _rate;
+        require(address(this).balance >= etherAmount);
+        token.transferFrom(msg.sender, address(this), _amount);
+        (bool sent, ) = msg.sender.call{value: etherAmount}("");
+        require(sent, "Failed to send Ether");
+        emit TokensSold(msg.sender, address(token), _amount);
+    }
 }
+
