@@ -15,7 +15,7 @@
     "@nomiclabs/hardhat-etherscan": "^2.1.7",
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers",
     "@nomiclabs/hardhat-waffle": "^2.0.0",
-    "@openzeppelin/contracts": "^3.2.0",
+    "@openzeppelin/contracts": "^4.3.3",
     "@tenderly/hardhat-tenderly": "^1.0.10",
     "chai": "^4.2.0",
     "chalk": "^4.1.0",

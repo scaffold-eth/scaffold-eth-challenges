@@ -12,13 +12,13 @@ contract Vendor {
   }
 
 
-  //ToDo: create a payable buyTokens() function:
+  // ToDo: create a payable buyTokens() function:
   
 
-  //ToDo: create a withdraw() function that lets the owner withdraw ETH
+  // ToDo: create a withdraw() function that lets the owner withdraw ETH
   
 
-  //ToDo: create a sellTokens() function:
+  // ToDo: create a sellTokens() function:
   
 
 }
