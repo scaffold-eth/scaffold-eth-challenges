@@ -59,8 +59,9 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   //   }
   // }
 };
-module.exports.tags = ["YourToken"];
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+module.exports.tags = ["YourToken"];

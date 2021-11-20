@@ -53,8 +53,8 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   // }
 };
 
-module.exports.tags = ["Vendor"];
-
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+module.exports.tags = ["Vendor"];
