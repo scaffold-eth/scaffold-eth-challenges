@@ -1,4 +1,4 @@
-pragma solidity >=0.6.0 <0.7.0;
+pragma solidity 0.8.4;
 
 import "hardhat/console.sol";
 import "./ExampleExternalContract.sol";
