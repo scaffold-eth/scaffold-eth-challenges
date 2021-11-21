@@ -140,7 +140,6 @@ const main = async () => {
   await yourCollectible.mintItem(toAddress,uploadedfish.path,{gasLimit:400000})
 
 
-
   await sleep(delayMS)
 
 
@@ -171,7 +170,7 @@ const main = async () => {
   await yourCollectible.mintItem(toAddress,uploadedflamingo.path,{gasLimit:400000})
 
 
-
+  await sleep(delayMS)
 
 
   const godzilla = {
