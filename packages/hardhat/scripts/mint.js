@@ -16,7 +16,7 @@ const delayMS = 1000; // sometimes xDAI needs a 6000ms break lol 😅
 
 const main = async () => {
   // ADDRESS TO MINT TO:
-  const toAddress = "YOUR FRONTEND ADDRESS HERE!";
+  const toAddress = "0xA4ca1b15fE81F57cb2d3f686c7B13309906cd37B";
 
   // // // // // // // // // // // // // // // // // //
 
@@ -116,7 +116,6 @@ const main = async () => {
   await sleep(delayMS);
 
   const fish = {
-<<<<<<< HEAD
     description: "Is that an underbyte?",
     external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
     image: "https://austingriffith.com/images/paintings/fish.jpg",
@@ -143,127 +142,6 @@ const main = async () => {
   await yourCollectible.mintItem(toAddress, uploadedfish.path, {
     gasLimit: 400000,
   });
-=======
-    "description": "Is that an underbyte?",
-    "external_url": "https://austingriffith.com/portfolio/paintings/",// <-- this can link to a page for the specific file too
-    "image": "https://austingriffith.com/images/paintings/fish.jpg",
-    "name": "Fish",
-    "attributes": [
-       {
-         "trait_type": "BackgroundColor",
-         "value": "blue"
-       },
-       {
-         "trait_type": "Eyes",
-         "value": "googly"
-       },
-       {
-         "trait_type": "Stamina",
-         "value": 15
-       }
-    ]
-  }
-  console.log("Uploading fish...")
-  const uploadedfish = await ipfs.add(JSON.stringify(fish))
-
-  console.log("Minting fish with IPFS hash ("+uploadedfish.path+")")
-  await yourCollectible.mintItem(toAddress,uploadedfish.path,{gasLimit:400000})
-
-
-  await sleep(delayMS)
->>>>>>> 7c9b65cdbe11d4febe4dc930d96567aac295578e
-
-  await sleep(delayMS);
-
-  const flamingo = {
-<<<<<<< HEAD
-    description: "So delicate.",
-    external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
-    image: "https://austingriffith.com/images/paintings/flamingo.jpg",
-    name: "Flamingo",
-    attributes: [
-      {
-        trait_type: "BackgroundColor",
-        value: "black",
-      },
-      {
-        trait_type: "Eyes",
-        value: "googly",
-      },
-      {
-        trait_type: "Stamina",
-        value: 6,
-      },
-    ],
-  };
-  console.log("Uploading flamingo...");
-  const uploadedflamingo = await ipfs.add(JSON.stringify(flamingo));
-
-  console.log(
-    "Minting flamingo with IPFS hash (" + uploadedflamingo.path + ")"
-  );
-  await yourCollectible.mintItem(toAddress, uploadedflamingo.path, {
-    gasLimit: 400000,
-  });
-
-  const godzilla = {
-    description: "Raaaar!",
-    external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
-    image: "https://austingriffith.com/images/paintings/godzilla.jpg",
-    name: "Godzilla",
-    attributes: [
-      {
-        trait_type: "BackgroundColor",
-        value: "orange",
-      },
-      {
-        trait_type: "Eyes",
-        value: "googly",
-      },
-      {
-        trait_type: "Stamina",
-        value: 99,
-      },
-    ],
-  };
-  console.log("Uploading godzilla...");
-  const uploadedgodzilla = await ipfs.add(JSON.stringify(godzilla));
-
-  console.log(
-    "Minting godzilla with IPFS hash (" + uploadedgodzilla.path + ")"
-  );
-  await yourCollectible.mintItem(toAddress, uploadedgodzilla.path, {
-    gasLimit: 400000,
-  });
-=======
-    "description": "So delicate.",
-    "external_url": "https://austingriffith.com/portfolio/paintings/",// <-- this can link to a page for the specific file too
-    "image": "https://austingriffith.com/images/paintings/flamingo.jpg",
-    "name": "Flamingo",
-    "attributes": [
-       {
-         "trait_type": "BackgroundColor",
-         "value": "black"
-       },
-       {
-         "trait_type": "Eyes",
-         "value": "googly"
-       },
-       {
-         "trait_type": "Stamina",
-         "value": 6
-       }
-    ]
-  }
-  console.log("Uploading flamingo...")
-  const uploadedflamingo = await ipfs.add(JSON.stringify(flamingo))
-
-  console.log("Minting flamingo with IPFS hash ("+uploadedflamingo.path+")")
-  await yourCollectible.mintItem(toAddress,uploadedflamingo.path,{gasLimit:400000})
-
-
-  await sleep(delayMS)
->>>>>>> 7c9b65cdbe11d4febe4dc930d96567aac295578e
 
   await sleep(delayMS);
 
