@@ -17,6 +17,8 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   // Getting a previously deployed contract
   const yourCollectible = await ethers.getContract("YourCollectible", deployer);
 
+  sleep(1000);
+
   // ToDo: Verify your contract with Etherscan for public chains
   // if (chainId !== "31337") {
   //   try {
