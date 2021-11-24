@@ -2380,10 +2380,10 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@openzeppelin/contracts@^4.3.3":
-  version "4.3.3"
-  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-4.3.3.tgz#ff6ee919fc2a1abaf72b22814bfb72ed129ec137"
-  integrity sha512-tDBopO1c98Yk7Cv/PZlHqrvtVjlgK5R4J6jxLwoO7qxK4xqOiZG+zSkIvGFpPZ0ikc3QOED3plgdqjgNTnBc7g==
+"@openzeppelin/contracts@3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-3.2.0.tgz#3e6b3a7662d8ed64271ade96ef42655db983fd9d"
+  integrity sha512-bUOmkSoPkjnUyMiKo6RYnb0VHBk5D9KKDAgNLzF41aqAM3TeE0yGdFF5dVRcV60pZdJLlyFT/jjXIZCWyyEzAQ==
 
 "@pmmmwh/react-refresh-webpack-plugin@0.4.2":
   version "0.4.2"
@@ -8584,10 +8584,10 @@ eth-ens-namehash@2.0.8, eth-ens-namehash@^2.0.8:
     idna-uts46-hx "^2.3.1"
     js-sha3 "^0.5.7"
 
-eth-hooks@2.3.2:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/eth-hooks/-/eth-hooks-2.3.2.tgz#a274f96b1cb6629d409293d0c011a3074089aa33"
-  integrity sha512-b54iBk0yGEdyNbH2VzNk3bleh1A6Ak6jDpXZWUfV94yu2Ez4uMl+x9LYBrnysCkrULOz53JwocMvtqcGoaPtDQ==
+eth-hooks@2.3.14:
+  version "2.3.14"
+  resolved "https://registry.yarnpkg.com/eth-hooks/-/eth-hooks-2.3.14.tgz#b1cc495fc36410f67b4b661b5396da4877c50410"
+  integrity sha512-TXADvpC+IwOYy3hQIoeoi8Pxf1Uodqiuz3MCjI06mJcxXrOx8a72mUmaX/XnX+DiuFGbajnlNkbtYj4dZeDa/g==
   dependencies:
     "@ethersproject/address" "^5.4.0"
     "@ethersproject/bignumber" "^5.4.0"
