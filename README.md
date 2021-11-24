@@ -187,12 +187,15 @@ yarn surge
 
 (It can take a while before they show up, but here is an example:)
 https://testnets.opensea.io/assets/0xc2839329166d3d004aaedb94dde4173651babccf/1
+
 ## 🔍 Etherscan Contract Verification
-> run yarn flatten > flat.txt (You will need to clean up extra junk at the top and bottom of flat.txt. Sorry, rookie stuff here.)
+> Get a free [Etherscan](https://etherscan.io/) and update your hardhat.config.js file with it.
 
-> copy the contents of flat.txt to the block explorer and select compiler v0.6.7 and Yes to Optimization (200 runs if anyone asks)
+![Screen Shot 2021-11-24 at 9 13 40 AM](https://user-images.githubusercontent.com/9419140/143254420-1916d419-7477-4eec-b201-94166174d8c3.png)
 
-![nft12](https://user-images.githubusercontent.com/526558/124387153-c8bcb880-dcb3-11eb-8191-e53f87129b88.png)
+> You will need to uncomment the verify task in the deploy script to verify your contract(s). We will use your verified contract to check your work 👀
+
+![Screen Shot 2021-11-24 at 9 07 12 AM](https://user-images.githubusercontent.com/9419140/143253497-8f04b35d-89e2-4a96-b532-a8e48c99e482.png)
 
 ## 🔶 Infura
 > You will need to get a key from infura.io and paste it into constants.js in packages/react-app/src:

@@ -49,9 +49,9 @@ module.exports = {
 
   networks: {
     localhost: {
-      url: "http://localhost:8545",      
-        // notice no mnemonic here? it will just use account 0 of the hardhat node to deploy
-        // (you can put in a mnemonic here to set the deployer locally)
+      url: "http://localhost:8545",
+      // notice no mnemonic here? it will just use account 0 of the hardhat node to deploy
+      // (you can put in a mnemonic here to set the deployer locally)
     },
     rinkeby: {
       url: "https://rinkeby.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad", // <---- YOUR INFURA ID! (or it won't work)
@@ -252,7 +252,8 @@ module.exports = {
     },
   },
   etherscan: {
-    apiKey: "PSW8C433Q667DVEX5BCRMGNAH9FSGFZ7Q8", // your api key here
+    // your api key here.
+    apiKey: "PSW8C433Q667DVEX5BCRMGNAH9FSGFZ7Q8",
   },
 };
 
