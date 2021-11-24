@@ -113,6 +113,15 @@ If the balance is less than the `threshold`, you want to set a `openForWithdraw`
 
 > Use the [receive()](https://docs.soliditylang.org/en/v0.8.9/contracts.html?highlight=receive#receive-ether-function) function in solidity to "catch" ETH sent to the contract and call `stake()` to update `balances`.
 
+## 🔍 Etherscan Contract Verification
+> Get a free [Etherscan](https://etherscan.io/) and update your hardhat.config.js file with it.
+
+![Screen Shot 2021-11-24 at 9 13 40 AM](https://user-images.githubusercontent.com/9419140/143254420-1916d419-7477-4eec-b201-94166174d8c3.png)
+
+> You will need to uncomment the verify task in the deploy script to verify your contract(s). We will use your verified contract to check your work 👀
+
+![Screen Shot 2021-11-24 at 9 07 12 AM](https://user-images.githubusercontent.com/9419140/143253497-8f04b35d-89e2-4a96-b532-a8e48c99e482.png)
+
 #### 🥅 Goals
 - [ ] If you send ETH directly to the contract address does it update your `balance`?
 
