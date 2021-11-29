@@ -1,19 +1,19 @@
 # 🏗 Scaffold-ETH | 🏰 BuidlGuidl
 
-## 🇳🇵 Challenge 4: Oracles 🔮, Price Feeds 🤑 and VRF 🎲
+# 🇳🇵 Challenge 4: Oracles 🔮, Price Feeds 🤑 and VRF 🎲
 
 
 
 
 ---
-### Checkpoint 0: 📦 Install 📚
+## Checkpoint 0: 📦 Install 📚
 
 Prerequisites: 
 - [Node](https://nodejs.org/en/download/) 
 - [Yarn](https://classic.yarnpkg.com/en/docs/install/)
 - [Git](https://git-scm.com/downloads)
 
-(⚠️ Don't install the linux package `yarn` make sure you install yarn with `npm i -g yarn`)
+>(⚠️ Don't install the linux package `yarn` make sure you install yarn with `npm i -g yarn`)
 
 > clone/fork [🏗 challenge repository](https://github.com/scaffold-eth/scaffold-eth-challenges)
 
@@ -48,16 +48,47 @@ yarn deploy
 
 ---
 
-Checkpoint 1: 
+### Checkpoint 1: ⛽️  Gas & Wallets 👛
+
+> ⛽️ You'll need to get some funds from the faucet for gas. 
+
+![image](https://user-images.githubusercontent.com/2653167/142483294-ff4c305c-0f5e-4099-8c7d-11c142cb688c.png)
+
+> 🦊 At first, please **don't** connect MetaMask. If you already connected, please click **logout**:
+
+![image](https://user-images.githubusercontent.com/2653167/142484483-1439d925-8cef-4b1a-a4b2-0f022eebc0f6.png)
+
+> 🔥 We'll use **burner wallets** on localhost...
+
+> 👛 Explore how **burner wallets** work in 🏗 scaffold-eth by opening a new *incognito* window and navigate it to http://localhost:3000. You'll notice it has a new wallet address in the top right. Copy the incognito browsers' address and send localhost test funds to it from your first browser: 
+
+![image](https://user-images.githubusercontent.com/2653167/142483685-d5c6a153-da93-47fa-8caa-a425edba10c8.png)
+
+> 👨🏻‍🚒 When you close the incognito window, the account is gone forever. Burner wallets are great for local development but you'll move to more permanent wallets when you interact with public networks.
+---
+### Checkpoint 2: 
 
 
 ---
-Checkpoint 2:
+### Checkpoint 3: 
 
 
 ---
-Checkpoint 3:
+### Checkpoint 4: Deploy 🛰
 
+>🛰 Ready to deploy your contracts to kovan testnet? (we use kovan due to all the Chainlink contracts on kovan)
+
+```bash
+yarn deploy --network kovan
+```
+
+### Checkpoint 5: Ship 🚚
+> 🚚 Ready to ship your dapp
+
+```bash
+yarn surge --domain mydomain.surge.sh
+
+```
 
 ---
 ### 💬 Support Chat
