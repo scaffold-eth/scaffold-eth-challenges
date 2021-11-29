@@ -189,7 +189,7 @@ yarn surge
 https://testnets.opensea.io/assets/0xc2839329166d3d004aaedb94dde4173651babccf/1
 
 ## 🔍 Etherscan Contract Verification
-> Get a free [Etherscan](https://etherscan.io/) and update your hardhat.config.js file with it.
+> Get a free [Etherscan API Key](https://etherscan.io/apis) and update your hardhat.config.js file with it.
 
 ![Screen Shot 2021-11-24 at 9 13 40 AM](https://user-images.githubusercontent.com/9419140/143254420-1916d419-7477-4eec-b201-94166174d8c3.png)
 
