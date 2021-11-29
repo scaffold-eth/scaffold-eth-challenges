@@ -49,7 +49,7 @@ const { ethers } = require("ethers");
 */
 
 /// 📡 What chain are your contracts deployed to?
-const targetNetwork = NETWORKS.kovan; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+const targetNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
 const DEBUG = true;
@@ -425,7 +425,9 @@ function App(props) {
     );
   }
 
-  const price2 = useEthPriceFeed(mainnetProvider);
+  // Implementing the priceFeed Hook
+  let price2 = useEthPriceFeed(mainnetProvider);
+  price2 = ethers.utils.formatUnits(price2, 8);
 
   return (
     <div className="App">
@@ -488,12 +490,8 @@ function App(props) {
 
         <Switch>
           <Route exact path="/">
-            {/*
-                🎛 this scaffolding is full of commonly used components
-                this <Contract/> component will automatically parse your ABI
-                and give you a form to interact with it locally
-            */}
-            <span>ETH: {ethers.utils.formatUnits(price2, 8)}</span>
+            {/* display the ETH price, experiment with different price feeds */}
+            <span>ETH: {price2}</span>
             <br />
             <Contract
               name="YourContract"
@@ -521,6 +519,7 @@ function App(props) {
               localProvider={localProvider}
               yourLocalBalance={yourLocalBalance}
               price={price}
+              feed={price2}
               tx={tx}
               writeContracts={writeContracts}
               readContracts={readContracts}

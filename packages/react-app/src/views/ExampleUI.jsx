@@ -1,6 +1,6 @@
 import { SyncOutlined } from "@ant-design/icons";
-import { utils } from "ethers";
 import { Button, Card, DatePicker, Divider, Input, Progress, Slider, Spin, Switch } from "antd";
+import { utils } from "ethers";
 import React, { useState } from "react";
 import { Address, Balance, Events } from "../components";
 
@@ -11,6 +11,7 @@ export default function ExampleUI({
   localProvider,
   yourLocalBalance,
   price,
+  feed,
   tx,
   readContracts,
   writeContracts,
@@ -59,6 +60,9 @@ export default function ExampleUI({
             Set Purpose!
           </Button>
         </div>
+        <Divider />
+        {/* display your feed */}
+        <div>Price of ETH: {feed}</div>
         <Divider />
         Your Address:
         <Address address={address} ensProvider={mainnetProvider} fontSize={16} />
