@@ -13,6 +13,7 @@ contract YourContract {
 
   constructor() {
     // what should we do on deploy?
+    
   }
 
   function setPurpose(string memory newPurpose) public {
