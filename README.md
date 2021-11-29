@@ -66,11 +66,13 @@ yarn deploy
 
 > 👨🏻‍🚒 When you close the incognito window, the account is gone forever. Burner wallets are great for local development but you'll move to more permanent wallets when you interact with public networks.
 ---
-### Checkpoint 2: 
+### Checkpoint 2: Adding a new Chainlink🧊 price feed 💸
+
 
 
 ---
-### Checkpoint 3: 
+### Checkpoint 3: Using randomness 🎲
+
 
 
 ---
