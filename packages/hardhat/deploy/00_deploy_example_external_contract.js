@@ -23,7 +23,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   // await YourContract.setPurpose("Hello");
 
   // if you want to instantiate a version of a contract at a specific address!
-  // const yourContract = await ethers.getContractAt('YourContract', "0xaAC799eC2d00C013f1F11c37E654e59B0429DF6A") 
+  // const yourContract = await ethers.getContractAt('YourContract', "0xaAC799eC2d00C013f1F11c37E654e59B0429DF6A")
 
   // If you want to send value to an address from the deployer
   // const deployerWallet = ethers.provider.getSigner()
@@ -43,11 +43,26 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   //  LibraryName: **LibraryAddress**
   // });
 
+  // todo: verification with etherscan
   // Verification
-  // await run("verify:verify", {
-  //   address: ExampleExternalContract.address,
-  //   contract: "contracts/ExampleExternalContract.sol:ExampleExternalContract",
-  //   contractArguments: [],
-  // });
+  // if (chainId !== "31337") {
+  //   try {
+  //     console.log(" 🎫 Verifing Contract on Etherscan... ");
+  //     await sleep(5000); // wait 5 seconds for deployment to propagate
+  //     await run("verify:verify", {
+  //       address: ExampleExternalContract.address,
+  //       contract:
+  //         "contracts/ExampleExternalContract.sol:ExampleExternalContract",
+  //       contractArguments: [],
+  //     });
+  //   } catch (error) {
+  //     console.log("⚠️ Contract Verification Failed: ", error);
+  //   }
+  // }
 };
+
+// function sleep(ms) {
+//   return new Promise((resolve) => setTimeout(resolve, ms));
+// }
+
 module.exports.tags = ["ExampleExternalContract"];

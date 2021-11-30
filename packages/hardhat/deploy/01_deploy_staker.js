@@ -2,9 +2,10 @@
 
 // const { ethers } = require("hardhat");
 
-module.exports = async ({ getNamedAccounts, deployments }) => {
+module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
+  const chainId = await getChainId();
 
   const exampleExternalContract = await deployments.get(
     "ExampleExternalContract"
@@ -45,11 +46,21 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   //  LibraryName: **LibraryAddress**
   // });
 
-  // Verification
-  // await run("verify:verify", {
-  //   address: Staker.address,
-  //   contract: "contracts/Staker.sol:Staker",
-  //   contractArguments: [],
-  // });
+  // Verification method 2
+  // if (chainId !== "31337") {
+  //   try {
+  //     console.log(" 🎫 Verifing Contract on Etherscan... ");
+  //     await sleep(5000); // wait 5 seconds for deployment to propagate
+  //     await run("verify:verify", {
+  //       address: Staker.address,
+  //       contract:
+  //         "contracts/Staker.sol:Staker",
+  //       contractArguments: [exampleExternalContract.address],
+  //     });
+  //   } catch (error) {
+  //     console.log("⚠️ Contract Verification Failed: ", error);
+  //   }
+  // }
 };
+
 module.exports.tags = ["Staker"];
