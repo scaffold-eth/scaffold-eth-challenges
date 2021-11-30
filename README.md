@@ -113,6 +113,7 @@ If the balance is less than the `threshold`, you want to set a `openForWithdraw`
 
 > Use the [receive()](https://docs.soliditylang.org/en/v0.8.9/contracts.html?highlight=receive#receive-ether-function) function in solidity to "catch" ETH sent to the contract and call `stake()` to update `balances`.
 
+---
 #### 🥅 Goals
 - [ ] If you send ETH directly to the contract address does it update your `balance`?
 
@@ -143,11 +144,22 @@ If the balance is less than the `threshold`, you want to set a `openForWithdraw`
 
  >  🚀 Run `yarn deploy` to deploy your smart contract to a public network (selected in hardhat.config.js)
 
+---
+
+## 🔍 Etherscan Contract Verification
+> Get a free [Etherscan API Key](https://etherscan.io/apis) and update your hardhat.config.js file with it.
+
+![Screen Shot 2021-11-24 at 9 13 40 AM](https://user-images.githubusercontent.com/9419140/143254420-1916d419-7477-4eec-b201-94166174d8c3.png)
+
+> You will need to uncomment the verify task in the deploy script to verify your contract(s). We will use your verified contract to check your work 👀
+
+![Screen Shot 2021-11-24 at 9 25 44 AM](https://user-images.githubusercontent.com/9419140/143256354-29675a6d-5e3e-421b-800f-7c35ced5e6f4.png)
+
  ---
 
 ### Checkpoint 6: 🎚 Frontend 🧘‍♀️
 
- > 📝 Edit the `targetNetwork` in `app.jsx` (in `packages/ract-app/src`) to be the public network where you deployed your smart contract.
+ > 📝 Edit the `targetNetwork` in `App.jsx` (in `packages/react-app/src`) to be the public network where you deployed your smart contract.
 
 > 💻 View your frontend at http://localhost:3000/
 

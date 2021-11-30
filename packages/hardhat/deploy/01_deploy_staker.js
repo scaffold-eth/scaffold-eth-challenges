@@ -46,19 +46,18 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   //  LibraryName: **LibraryAddress**
   // });
 
-  // Verification method 2
+  // todo: uncomment to verify your contract
   // if (chainId !== "31337") {
   //   try {
   //     console.log(" 🎫 Verifing Contract on Etherscan... ");
-  //     await sleep(5000); // wait 5 seconds for deployment to propagate
-  //     await run("verify:verify", {
-  //       address: Staker.address,
-  //       contract:
-  //         "contracts/Staker.sol:Staker",
-  //       contractArguments: [exampleExternalContract.address],
-  //     });
-  //   } catch (error) {
-  //     console.log("⚠️ Contract Verification Failed: ", error);
+  //     await sleep(3000); // wait 3 seconds for deployment to propagate bytecode
+  //      await run("verify:verify", {
+  //        address: Staker.address,
+  //        contract: "contracts/Staker.sol:Staker",
+  //        contractArguments: [],
+  //      });
+  //   } catch (e) {
+  //     console.log(" ⚠️ Failed to verify contract on Etherscan ");
   //   }
   // }
 };

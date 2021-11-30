@@ -14,6 +14,8 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     log: true,
   });
 
+  const exampleExternalContract = await ethers.getContract("ExampleExternalContract");
+
   // Getting a previously deployed contract
   // const ExampleExternalContract = await ethers.getContract(
   //   "ExampleExternalContract",
