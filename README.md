@@ -180,7 +180,26 @@ at around line 258. The verify script is at the bottom of `00_deploy_your_token.
 > 🎖 Show off your app by pasting the url in the [Challenge 2 telegram channel](https://t.me/joinchat/IfARhZFc5bfPwpjq)
 
 ---
+## 🔍 Etherscan Contract Verification
+>1. Verify in deploy script
 
+> Get a free [Etherscan API Key](https://etherscan.io/apis) and update your hardhat.config.js file with it.
+
+![Screen Shot 2021-11-24 at 9 13 40 AM](https://user-images.githubusercontent.com/9419140/143254420-1916d419-7477-4eec-b201-94166174d8c3.png)
+
+> You will need to uncomment the verify task in the deploy script to verify your contract(s). We will use your verified contract to check your work 👀
+
+![Screen Shot 2021-11-24 at 9 25 44 AM](https://user-images.githubusercontent.com/9419140/143256354-29675a6d-5e3e-421b-800f-7c35ced5e6f4.png)
+
+>2. Verify in console
+
+Update the api-key
+
+![Screen Shot 2021-11-30 at 10 21 01 AM](https://user-images.githubusercontent.com/9419140/144075208-c50b70aa-345f-4e36-81d6-becaa5f74857.png)
+
+Run `yarn verify --network your_network` from the terminal. This will verify all of your contracts for the network you selected.
+
+ ---
 > 🏰 Buidl Guidl Discord Server [Join Here](https://discord.gg/ZnFs36fbbU)
 
 > 💬 Problems, questions, comments on the stack? Post them to the [🏗 scaffold-eth developers chat](https://t.me/joinchat/F7nCRK3kI93PoCOk)
