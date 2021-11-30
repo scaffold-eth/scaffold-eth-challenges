@@ -165,10 +165,21 @@ yarn surge
 ```
 (You could also `yarn s3` or maybe even `yarn ipfs`?)
 
+# Checkpoint 5: 📜 Contract Verification
+
+Update the api-key in packages/hardhat/package.json file. You can get your key [here](https://etherscan.io/myapikey).
+
+![Screen Shot 2021-11-30 at 10 21 01 AM](https://user-images.githubusercontent.com/9419140/144075208-c50b70aa-345f-4e36-81d6-becaa5f74857.png)
+
+> Now you are ready to run the `yarn verify --network your_network` command to verify your contracts on etherscan 🛰
+
+This will be the URL you submit to [SpeedRun](https://speedrunethereum.com).
 
 ---
 
-# Checkpoint 5: 💪 Flex!
+---
+
+# Checkpoint 6: 💪 Flex!
 
 > 🎖 Show off your app by pasting the surge url in the [Challenge 0 telegram channel](https://t.me/joinchat/Y2vqXZZ_pEFhMGMx)
 
@@ -187,15 +198,6 @@ yarn surge
 
 (It can take a while before they show up, but here is an example:)
 https://testnets.opensea.io/assets/0xc2839329166d3d004aaedb94dde4173651babccf/1
-
-## 🔍 Etherscan Contract Verification
-> Get a free [Etherscan API Key](https://etherscan.io/apis) and update your hardhat.config.js file with it.
-
-![Screen Shot 2021-11-24 at 9 13 40 AM](https://user-images.githubusercontent.com/9419140/143254420-1916d419-7477-4eec-b201-94166174d8c3.png)
-
-> You will need to uncomment the verify task in the deploy script to verify your contract(s). We will use your verified contract to check your work 👀
-
-![Screen Shot 2021-11-24 at 9 07 12 AM](https://user-images.githubusercontent.com/9419140/143253497-8f04b35d-89e2-4a96-b532-a8e48c99e482.png)
 
 ## 🔶 Infura
 > You will need to get a key from infura.io and paste it into constants.js in packages/react-app/src:
