@@ -1,37 +1,28 @@
+import Portis from "@portis/web3";
 import WalletConnectProvider from "@walletconnect/web3-provider";
-//import Torus from "@toruslabs/torus-embed"
-import WalletLink from "walletlink";
 import { Alert, Button, Col, Menu, Row } from "antd";
 import "antd/dist/antd.css";
-import React, { useCallback, useEffect, useState } from "react";
-import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
-import Web3Modal from "web3modal";
-import "./App.css";
-import { Account, Contract, Faucet, GasGauge, Header, Ramp, ThemeSwitch, TokenBalance, Dex } from "./components";
-import { INFURA_ID, NETWORK, NETWORKS } from "./constants";
-import { Transactor } from "./helpers";
+import Authereum from "authereum";
 import {
   useBalance,
   useContractLoader,
   useContractReader,
   useGasPrice,
   useOnBlock,
-  useUserProviderAndSigner,
+  useUserProviderAndSigner
 } from "eth-hooks";
-import { useEventListener } from "eth-hooks/events/useEventListener";
 import { useExchangeEthPrice } from "eth-hooks/dapps/dex";
-// import Hints from "./Hints";
-import { ExampleUI, Hints, Subgraph } from "./views";
-
-import { useContractConfig } from "./hooks";
-
-// contracts
-import deployedContracts from "./contracts/hardhat_contracts.json";
-import externalContracts from "./contracts/external_contracts";
-
-import Portis from "@portis/web3";
 import Fortmatic from "fortmatic";
-import Authereum from "authereum";
+import React, { useCallback, useEffect, useState } from "react";
+import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
+//import Torus from "@toruslabs/torus-embed"
+import WalletLink from "walletlink";
+import Web3Modal from "web3modal";
+import "./App.css";
+import { Account, Contract, Faucet, GasGauge, Header, Ramp, ThemeSwitch, TokenBalance, Dex } from "./components";
+import { INFURA_ID, NETWORK, NETWORKS } from "./constants";
+import { Transactor } from "./helpers";
+import { useContractConfig } from "./hooks";
 
 const { ethers } = require("ethers");
 /*
@@ -247,7 +238,6 @@ function App(props) {
   const myMainnetDAIBalance = useContractReader(mainnetContracts, "DAI", "balanceOf", [
     "0x34aA3F359A9D614239015126635CE7732c18fDF3",
   ]);
-
 
   /*
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
@@ -470,23 +460,23 @@ function App(props) {
 
         <Switch>
           <Route exact path="/">
-
             {/* Uncomment below to view front end */}
-            {/* { readContracts && readContracts.DEX && address && localProvider ?
-                <Dex
-              address={address}
-              tx={tx}
-              writeContracts={writeContracts}
-              localProvider={localProvider}
-              mainnetProvider={mainnetProvider}
-              readContracts={readContracts}
-              blockExplorer={blockExplorer}
-              contractConfig={contractConfig}
-              signer={userSigner}
-              price={price}
-            /> : ""
-             }  */}
-           
+            {readContracts && readContracts.DEX && address && localProvider ? (
+              <Dex
+                address={address}
+                tx={tx}
+                writeContracts={writeContracts}
+                localProvider={localProvider}
+                mainnetProvider={mainnetProvider}
+                readContracts={readContracts}
+                blockExplorer={blockExplorer}
+                contractConfig={contractConfig}
+                signer={userSigner}
+                price={price}
+              />
+            ) : (
+              ""
+            )}
           </Route>
 
           <Route path="/contracts">
