@@ -160,7 +160,7 @@ If the balance is less than the `threshold`, you want to set a `openForWithdraw`
 
 ### Checkpoint 6: 🎚 Frontend 🧘‍♀️
 
- > 📝 Edit the `targetNetwork` in `app.jsx` (in `packages/ract-app/src`) to be the public network where you deployed your smart contract.
+ > 📝 Edit the `targetNetwork` in `App.jsx` (in `packages/react-app/src`) to be the public network where you deployed your smart contract.
 
 > 💻 View your frontend at http://localhost:3000/
 
