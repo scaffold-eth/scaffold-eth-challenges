@@ -307,6 +307,9 @@ module.exports = {
       default: 0, // here this will by default take the first account as deployer
     },
   },
+  etherscan: {
+    apiKey: "PSW8C433Q667DVEX5BCRMGNAH9FSGFZ7Q8",
+  },
 };
 
 const DEBUG = false;
