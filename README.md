@@ -36,7 +36,7 @@ yarn install
 
 You'll have three terminals up for:
 
-`yarn chain` (harthat backend)
+`yarn chain` (hardhat backend)
 
 `yarn start` (react app frontend)
 
