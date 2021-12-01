@@ -67,7 +67,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   // }
 
   // to verify from the console ->
-  //    yarn etherscan-verify --network network
+  //    yarn verify --network network
 };
 
 module.exports.tags = ["YourContract", "EthPriceFeed"];
