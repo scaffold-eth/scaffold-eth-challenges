@@ -25,6 +25,7 @@
     "deploy": "yarn workspace @scaffold-eth/hardhat deploy",
     "watch": "yarn workspace @scaffold-eth/hardhat watch",
     "accounts": "yarn workspace @scaffold-eth/hardhat accounts",
+    "verify": "yarn workspace @scaffold-eth/hardhat verify",
     "balance": "yarn workspace @scaffold-eth/hardhat balance",
     "send": "yarn workspace @scaffold-eth/hardhat send",
     "ipfs": "yarn workspace @scaffold-eth/react-app ipfs",
