@@ -70,6 +70,7 @@ yarn deploy
 
 
 
+
 ---
 ### Checkpoint 3: Using randomness 🎲
 
@@ -103,7 +104,9 @@ yarn surge --domain mydomain.surge.sh
 ```
 
 ---
-### 💬 Support Chat
+### 💬 Support & Chat
+
+🏰  Buidl Guidl Discord Server Join [Here](https://discord.gg/ZnFs36fbbU)
 
 Join the telegram [support chat 💬](https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA) to ask questions and find others building with 🏗 scaffold-eth!
 
