@@ -173,15 +173,11 @@ Update the api-key in packages/hardhat/package.json file. You can get your key [
 
 > Now you are ready to run the `yarn verify --network your_network` command to verify your contracts on etherscan 🛰
 
-This will be the URL you submit to [SpeedRun](https://speedrunethereum.com).
-
----
-
 ---
 
 # Checkpoint 6: 💪 Flex!
 
-> 🎖 Show off your app by pasting the surge url in the [Challenge 0 telegram channel](https://t.me/joinchat/Y2vqXZZ_pEFhMGMx)
+> 🎖 Show off your app by pasting the surge url in the [Challenge 0 telegram channel](https://t.me/+Y2vqXZZ_pEFhMGMx) 🎖
 
 ---
 
