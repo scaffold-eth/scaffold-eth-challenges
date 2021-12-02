@@ -11,7 +11,7 @@
 
 > 🔍 It will be important to verify your token's source code in the block explorer after you deploy. Supporters will want to be sure that it has a fixed supply and you can't just mint more.
 
-> 🏆 The final **deliverable** is an app that lets users purchase and transfer your token. Deploy your contracts on your public chain of choice and then `yarn build` and `yarn surge` your app to a public web server. Share the url in the [Challenge 2 telegram channel](https://t.me/joinchat/IfARhZFc5bfPwpjq).
+> 🏆 The final **deliverable** is an app that lets users purchase and transfer your token. Deploy your contracts on your public chain of choice and then `yarn build` and `yarn surge` your app to a public web server. Share the url in the [Challenge 2 telegram channel](https://t.me/joinchat/IfARhZFc5bfPwpjq).🍾
 
 > 📱 Part of the challenge is making the **UI/UX** enjoyable and clean! 🤩
 
@@ -177,7 +177,7 @@ at around line 258. The verify script is at the bottom of `00_deploy_your_token.
 
 🚔 Traffic to your url might break the [Infura](https://infura.io/) rate limit, edit your key: `constants.js` in `packages/ract-app/src`.
 
-> 🎖 Show off your app by pasting the url in the [Challenge 2 telegram channel](https://t.me/joinchat/IfARhZFc5bfPwpjq)
+🎖 Show off your app by pasting the url in the [Challenge 2 telegram channel](https://t.me/joinchat/IfARhZFc5bfPwpjq) 🎖
 
 ---
 ### Checkpoint 7: 📜 Contract Verification
@@ -192,6 +192,6 @@ This will be the URL you submit to [SpeedRun](https://speedrunethereum.com).
 
 ---
 
-> 🏰 Buidl Guidl Discord Server [Join Here](https://discord.gg/ZnFs36fbbU)
+> 🏃 Head to your next challenge [here](https://speedrunethereum.com).
 
 > 💬 Problems, questions, comments on the stack? Post them to the [🏗 scaffold-eth developers chat](https://t.me/joinchat/F7nCRK3kI93PoCOk)
