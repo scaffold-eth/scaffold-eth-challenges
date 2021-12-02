@@ -1,9 +1,6 @@
 # 🏗 Scaffold-ETH | 🏰 BuidlGuidl
 
-# 🇳🇵 Challenge 4: Oracles 🔮, Price Feeds 🤑 and VRF 🎲
-
-
-
+# 🚩 Challenge 4: Oracles 🔮, Price Feeds 🤑 and VRF 🎲
 
 ---
 ## Checkpoint 0: 📦 Install 📚
