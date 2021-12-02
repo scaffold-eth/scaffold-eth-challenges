@@ -1,4 +1,5 @@
 pragma solidity 0.8.4;
+// SPDX-License-Identifier: MIT
 
 //import "@openzeppelin/contracts/access/Ownable.sol";
 import "./YourToken.sol";
@@ -13,12 +14,12 @@ contract Vendor {
 
 
   // ToDo: create a payable buyTokens() function:
-  
+
 
   // ToDo: create a withdraw() function that lets the owner withdraw ETH
-  
+
 
   // ToDo: create a sellTokens() function:
-  
+
 
 }
