@@ -8,7 +8,7 @@
 
 > 🎛 Building the frontend to display the information and UI is just as important as writing the contract. The goal is to deploy the contract and the app to allow anyone to stake using your app. Use a `Stake(address,uint256)` event to <List/> all stakes.
 
-> 🏆 The final **deliverable** is deploying a decentralized application to a public blockchain and then `yarn build` and `yarn surge` your app to a public webserver. Share the url in the [Challenge 1 telegram channel](https://t.me/joinchat/E6r91UFt4oMJlt01) to earn a collectible and cred! Part of the challenge is making the **UI/UX** enjoyable and clean! 🤩
+> 🏆 The final **deliverable** is deploying a decentralized application to a public blockchain and then `yarn build` and `yarn surge` your app to a public webserver. Share the url in the [Challenge 1 telegram channel](https://t.me/joinchat/E6r91UFt4oMJlt01) to earn a collectible and cred! || Part of the challenge is making the **UI/UX** enjoyable and clean! 🍾
 
 
 🧫 Everything starts by ✏️ Editing `Staker.sol` in `packages/hardhat/contracts`
@@ -188,6 +188,7 @@ Update the api-key in packages/hardhat/package.json file. You can get your key [
 > Now you are ready to run the `yarn verify --network your_network` command to verify your contracts on etherscan 🛰
 
 ---
+
 > 🏃 Head to your next challenge [here](https://speedrunethereum.com).
 
 > 💬 Problems, questions, comments on the stack? Post them to the [🏗 scaffold-eth developers chat](https://t.me/joinchat/F7nCRK3kI93PoCOk)
