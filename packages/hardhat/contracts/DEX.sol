@@ -11,6 +11,6 @@ contract DEX {
     token = IERC20(token_addr);
   }
 
-  // write your funcitons here...
+  // write your functions here...
 
 }
