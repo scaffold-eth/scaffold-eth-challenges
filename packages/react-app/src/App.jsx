@@ -460,7 +460,6 @@ function App(props) {
 
         <Switch>
           <Route exact path="/">
-            {/* Uncomment below to view front end */}
             {readContracts && readContracts.DEX && address && localProvider ? (
               <Dex
                 address={address}
