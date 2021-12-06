@@ -514,10 +514,11 @@ function App(props) {
   const [ipfsContent, setIpfsContent] = useState();
   const [transferToAddresses, setTransferToAddresses] = useState({});
   const [minting, setMinting] = useState(false);
+  const [count, setCount] = useState(1);
 
   // the json for the nfts
   const json = {
-    0: {
+    1: {
       description: "It's actually a bison?",
       external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
       image: "https://austingriffith.com/images/paintings/buffalo.jpg",
@@ -537,7 +538,7 @@ function App(props) {
         },
       ],
     },
-    1: {
+    2: {
       description: "What is it so worried about?",
       external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
       image: "https://austingriffith.com/images/paintings/zebra.jpg",
@@ -557,7 +558,7 @@ function App(props) {
         },
       ],
     },
-    2: {
+    3: {
       description: "What a horn!",
       external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
       image: "https://austingriffith.com/images/paintings/rhino.jpg",
@@ -577,7 +578,7 @@ function App(props) {
         },
       ],
     },
-    3: {
+    4: {
       description: "Is that an underbyte?",
       external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
       image: "https://austingriffith.com/images/paintings/fish.jpg",
@@ -599,12 +600,11 @@ function App(props) {
     },
   };
 
-  let count = 0;
   const mintItem = async () => {
     // upload to ipfs
     const uploaded = await ipfs.add(JSON.stringify(json[count]));
+    setCount(count + 1);
     console.log("Uploaded Hash: ", uploaded);
-    count = count + 1;
     const result = tx(
       writeContracts &&
         writeContracts.YourCollectible &&
