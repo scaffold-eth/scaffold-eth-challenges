@@ -14,6 +14,8 @@ import {
 import { useExchangeEthPrice } from "eth-hooks/dapps/dex";
 import { useEventListener } from "eth-hooks/events/useEventListener";
 import Fortmatic from "fortmatic";
+// https://www.npmjs.com/package/ipfs-http-client
+// import { create } from "ipfs-http-client";
 import React, { useCallback, useEffect, useState } from "react";
 import ReactJson from "react-json-view";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
@@ -28,7 +30,6 @@ import { useContractConfig } from "./hooks";
 // import Hints from "./Hints";
 
 const { BufferList } = require("bl");
-// https://www.npmjs.com/package/ipfs-http-client
 const ipfsAPI = require("ipfs-http-client");
 const ipfs = ipfsAPI({ host: "ipfs.infura.io", port: "5001", protocol: "https" });
 
@@ -38,7 +39,7 @@ const { ethers } = require("ethers");
     Welcome to 🏗 scaffold-eth !
 
     Code:
-    https://github.com/austintgriffith/scaffold-eth
+    https://github.com/scaffold-eth/scaffold-eth
 
     Support:
     https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA
@@ -509,11 +510,122 @@ function App(props) {
   const [sending, setSending] = useState();
   const [ipfsHash, setIpfsHash] = useState();
   const [ipfsDownHash, setIpfsDownHash] = useState();
-
   const [downloading, setDownloading] = useState();
   const [ipfsContent, setIpfsContent] = useState();
-
   const [transferToAddresses, setTransferToAddresses] = useState({});
+  const [minting, setMinting] = useState(false);
+
+  // the json for the nfts
+  const json = {
+    0: {
+      description: "It's actually a bison?",
+      external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
+      image: "https://austingriffith.com/images/paintings/buffalo.jpg",
+      name: "Buffalo",
+      attributes: [
+        {
+          trait_type: "BackgroundColor",
+          value: "green",
+        },
+        {
+          trait_type: "Eyes",
+          value: "googly",
+        },
+        {
+          trait_type: "Stamina",
+          value: 42,
+        },
+      ],
+    },
+    1: {
+      description: "What is it so worried about?",
+      external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
+      image: "https://austingriffith.com/images/paintings/zebra.jpg",
+      name: "Zebra",
+      attributes: [
+        {
+          trait_type: "BackgroundColor",
+          value: "blue",
+        },
+        {
+          trait_type: "Eyes",
+          value: "googly",
+        },
+        {
+          trait_type: "Stamina",
+          value: 38,
+        },
+      ],
+    },
+    2: {
+      description: "What a horn!",
+      external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
+      image: "https://austingriffith.com/images/paintings/rhino.jpg",
+      name: "Rhino",
+      attributes: [
+        {
+          trait_type: "BackgroundColor",
+          value: "pink",
+        },
+        {
+          trait_type: "Eyes",
+          value: "googly",
+        },
+        {
+          trait_type: "Stamina",
+          value: 22,
+        },
+      ],
+    },
+    3: {
+      description: "Is that an underbyte?",
+      external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
+      image: "https://austingriffith.com/images/paintings/fish.jpg",
+      name: "Fish",
+      attributes: [
+        {
+          trait_type: "BackgroundColor",
+          value: "blue",
+        },
+        {
+          trait_type: "Eyes",
+          value: "googly",
+        },
+        {
+          trait_type: "Stamina",
+          value: 15,
+        },
+      ],
+    },
+  };
+
+  let count = 0;
+  const mintItem = async () => {
+    // upload to ipfs
+    const uploaded = await ipfs.add(JSON.stringify(json[count]));
+    console.log("Uploaded Hash: ", uploaded);
+    count = count + 1;
+    const result = tx(
+      writeContracts &&
+        writeContracts.YourCollectible &&
+        writeContracts.YourCollectible.mintItem(address, uploaded.path),
+      update => {
+        console.log("📡 Transaction Update:", update);
+        if (update && (update.status === "confirmed" || update.status === 1)) {
+          console.log(" 🍾 Transaction " + update.hash + " finished!");
+          console.log(
+            " ⛽️ " +
+              update.gasUsed +
+              "/" +
+              (update.gasLimit || update.gas) +
+              " @ " +
+              parseFloat(update.gasPrice) / 1000000000 +
+              " gwei",
+          );
+        }
+      },
+    );
+  };
 
   return (
     <div className="App">
@@ -577,18 +689,14 @@ function App(props) {
           <Route exact path="/">
             <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
               <Button
+                disabled={minting}
                 shape="round"
                 size="large"
                 onClick={() => {
-                  // mint the nft
-                  tx(
-                    writeContracts &&
-                      writeContracts.YourCollectible &&
-                      writeContracts.YourCollectible.mintItem("TO", "URI"),
-                  );
+                  mintItem();
                 }}
               >
-                MINT
+                MINT NFT
               </Button>
             </div>
             <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>

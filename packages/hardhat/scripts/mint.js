@@ -18,8 +18,6 @@ const main = async () => {
   // ADDRESS TO MINT TO:
   const toAddress = "YOUR_FRONTEND_ADDRESS";
 
-  // // // // // // // // // // // // // // // // // //
-
   console.log("\n\n 🎫 Minting to " + toAddress + "...\n");
 
   const { deployer } = await getNamedAccounts();
