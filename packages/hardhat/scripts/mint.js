@@ -7,17 +7,24 @@ const R = require("ramda");
 const ipfsAPI = require("ipfs-http-client");
 const path = require('path');
 
+/*
 const ipfs = ipfsAPI({
   host: "ipfs.infura.io",
   port: "5001",
   protocol: "https",
+});
+*/
+const ipfs = ipfsAPI({
+  host: "localhost",
+  port: "5001",
+  protocol: "http",
 });
 
 const delayMS = 1000; // sometimes xDAI needs a 6000ms break lol 😅
 
 const main = async () => {
   // ADDRESS TO MINT TO:
-  const toAddress = "0xE4363d4DB052F644bc75d60eC4aa07d14fdF2176";
+  const toAddress = "YOUR FRONTEND ADDRESS HERE";
 
   // // // // // // // // // // // // // // // // // //
 
@@ -29,12 +36,40 @@ const main = async () => {
   const files = await fs.readdirSync( assetDirectory )
 
 
-  console.log("FILES!",files)
+  for (let f in files) {
+
+    if(files[f].indexOf(".png")>=0){
+
+      const osMetaDataFile = assetDirectory+"/"+files[f].replace(".png"," - OS metadata.json")
+      //console.log("osMetaDataFile",osMetaDataFile)
+      const osMetaData = await fs.readFileSync(osMetaDataFile)
+      
+      const fileNameCleaned = files[f].substr(files[f].indexOf("#")+1)
+      //console.log("filename: ",files[f])
+      //console.log("fileNameCleaned: ",fileNameCleaned)
+      const uploaded = await ipfs.add(await fs.readFileSync(assetDirectory+"/"+files[f]))
+      //console.log(uploaded.path)
+
+      let metadata = JSON.parse(osMetaData.toString())
+      
+      metadata.image = "https://ipfs.io/ipfs/"+uploaded.path;
+
+      //console.log("osMetaData",metadata)
+
+      const metaDataUploaded = await ipfs.add(JSON.stringify(metadata))
+
+      console.log("\""+metaDataUploaded.path+"\",")
+
+    }
+  }
 
 
   //const { deployer } = await getNamedAccounts();
   //const yourCollectible = await ethers.getContract("YourCollectible", deployer);
-
+  //console.log("minting to ",toAddress)
+  //await yourCollectible.mintItem(toAddress, {
+  //  gasLimit: 400000,
+  //});
   /*
 
   const buffalo = {
