@@ -5,6 +5,7 @@ const { config, ethers } = require("hardhat");
 const { utils } = require("ethers");
 const R = require("ramda");
 const ipfsAPI = require("ipfs-http-client");
+const path = require('path');
 
 const ipfs = ipfsAPI({
   host: "ipfs.infura.io",
@@ -16,14 +17,25 @@ const delayMS = 1000; // sometimes xDAI needs a 6000ms break lol 😅
 
 const main = async () => {
   // ADDRESS TO MINT TO:
-  const toAddress = "YOUR_FRONTEND_ADDRESS";
+  const toAddress = "0xE4363d4DB052F644bc75d60eC4aa07d14fdF2176";
 
   // // // // // // // // // // // // // // // // // //
 
   console.log("\n\n 🎫 Minting to " + toAddress + "...\n");
 
-  const { deployer } = await getNamedAccounts();
-  const yourCollectible = await ethers.getContract("YourCollectible", deployer);
+  const assetDirectory = "./assets";
+
+  console.log("READING ",assetDirectory)
+  const files = await fs.readdirSync( assetDirectory )
+
+
+  console.log("FILES!",files)
+
+
+  //const { deployer } = await getNamedAccounts();
+  //const yourCollectible = await ethers.getContract("YourCollectible", deployer);
+
+  /*
 
   const buffalo = {
     description: "It's actually a bison?",
@@ -152,6 +164,7 @@ const main = async () => {
   await yourCollectible.transferOwnership(toAddress, { gasLimit: 400000 });
 
   await sleep(delayMS);
+  */
 
   /*
 
