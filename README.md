@@ -170,7 +170,7 @@ If the balance is less than the `threshold`, you want to set a `openForWithdraw`
 
  📦  Run `yarn build` to package up your frontend.
  
- > 📝 If you plan on submitting this challenge, be sure to set your ```deadline``` to at least 24 hours.
+ > 📝 If you plan on submitting this challenge, be sure to set your ```deadline``` to at least ```block.timestamp + 24 hours```
 
 💽 Upload your app to surge with `yarn surge` (you could also `yarn s3` or maybe even `yarn ipfs`?)
 
