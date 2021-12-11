@@ -145,7 +145,7 @@ await vendor.transferOwnership("**YOUR FRONTEND ADDRESS**");
 #### ⚔️ Side Quest
 
 - [ ] Should we disable the `owner` withdraw to keep liquidity in the `Vendor`?
-- [ ] It would be a good idea to display Sell Token Events.  Create the `event` and `emit` in your `Vendor.sol` and look at `buyTokenEvents` in your `App.jsx` for an example of how to update your frontend.
+- [ ] It would be a good idea to display Sell Token Events.  Create the `event` and `emit` in your `Vendor.sol` and look at `buyTokensEvents` in your `App.jsx` for an example of how to update your frontend.
 
 ----
 
