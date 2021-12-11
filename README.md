@@ -143,9 +143,7 @@ You should see the correct network in the frontend (http://localhost:3000):
 
 🎫 Ready to mint a batch of NFTs for reals?  Use the `MINT NFT` button.
 
-
-![nft11](https://user-images.githubusercontent.com/526558/124387132-b04c9e00-dcb3-11eb-95d1-03b8c272e52f.png)
-
+![MintNFT2](https://user-images.githubusercontent.com/12072395/145692572-d61c971d-7452-4218-9c66-d675bb78a9dc.PNG)
 
 
 📦 Build your frontend:
