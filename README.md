@@ -4,7 +4,9 @@
 
 🎫 Create a simple NFT to learn basics of 🏗 scaffold-eth. You'll use [👷‍♀️ HardHat](https://hardhat.org/getting-started/) to compile and deploy smart contracts. Then, you'll use a template React app full of important Ethereum components and hooks. Finally, you'll deploy an NFT to a public network to share with friends! 🚀
 
-🏆 The final deliverable is an app that lets users purchase and transfer NFTs. Deploy your contracts to Rinkeby and then build and upload your app to a public web server. Share the url in the [Challenge 0 telegram channel](https://t.me/+Y2vqXZZ_pEFhMGMx)!!! 🍾
+
+🏆 The final deliverable is an app that lets users purchase and transfer NFTs. Deploy your contracts to Rinkeby and then build and upload your app to a public web server. Share the url in the Challenge 0 telegram channel!!! 🍾
+
 
 ---
 
@@ -177,7 +179,9 @@ Update the api-key in packages/hardhat/package.json file. You can get your key [
 
 # Checkpoint 6: 💪 Flex!
 
-> 🎖 Show off your app by pasting the surge url in the [Challenge 0 telegram channel](https://t.me/+Y2vqXZZ_pEFhMGMx) 🎖
+
+> 🎖 Show off your app by pasting the surge url in the [Challenge 0 telegram channel](https://t.me/joinchat/Y2vqXZZ_pEFhMGMx)🎖
+
 
 ---
 

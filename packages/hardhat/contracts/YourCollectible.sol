@@ -20,7 +20,6 @@ contract YourCollectible is ERC721, Ownable {
 
   function mintItem(address to, string memory tokenURI)
       public
-      onlyOwner
       returns (uint256)
   {
       _tokenIds.increment();
