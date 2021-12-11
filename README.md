@@ -4,9 +4,7 @@
 
 🎫 Create a simple NFT to learn basics of 🏗 scaffold-eth. You'll use [👷‍♀️ HardHat](https://hardhat.org/getting-started/) to compile and deploy smart contracts. Then, you'll use a template React app full of important Ethereum components and hooks. Finally, you'll deploy an NFT to a public network to share with friends! 🚀
 
-
-🏆 The final deliverable is an app that lets users purchase and transfer NFTs. Deploy your contracts to Rinkeby and then build and upload your app to a public web server. Share the url in the Challenge 0 telegram channel!!! 🍾
-
+🏆 The final deliverable is an app that lets users purchase and transfer NFTs. Deploy your contracts to Rinkeby and then build and upload your app to a public web server. Share the url in the [Challenge 0 telegram channel](https://t.me/+Y2vqXZZ_pEFhMGMx)!!! 🍾
 
 ---
 
@@ -74,18 +72,12 @@ yarn deploy
 
 # Checkpoint 2: 🖨 Minting 
 
-> ✏️ Edit the script `mint.js` in `packages/hardhat/scripts` and update the `toAddress` to your frontend address (in the top right of http://localhost:3000).
+> ✏️ Mint some NFTs!  Click the `MINT NFT` button in the YourCollectables tab.  
 
-![nft1](https://user-images.githubusercontent.com/526558/124386962-37e5dd00-dcb3-11eb-911e-0afce760d7ee.png)
+![MintNFT](https://user-images.githubusercontent.com/12072395/145692116-bebcb514-e4f0-4492-bd10-11e658abaf75.PNG)
 
-> in a terminal window run the mint script:
 
-```sh
-yarn mint
-```
-![nft2](https://user-images.githubusercontent.com/526558/124386972-3d432780-dcb3-11eb-933e-dad7dfd313b2.png)
-
-👀 You should see your collectibles show up if you minted to the correct address:
+👀 You should see your collectibles start to show up:
 
 ![nft3](https://user-images.githubusercontent.com/526558/124386983-48965300-dcb3-11eb-88a7-e88ad6307976.png)
 
@@ -94,6 +86,10 @@ yarn mint
 🎟 Transfer an NFT to the incognito window address using the UI:
 
 ![nft5](https://user-images.githubusercontent.com/526558/124387008-58ae3280-dcb3-11eb-920d-07b6118f1ab2.png)
+
+👛 Try to mint an NFT from the incognito window. 
+
+> Can you mint an NFT with no funds in this address?  You might need to grab funds from the faucet to pay the gas!
 
 🕵🏻‍♂️ Inspect the `Debug Contracts` tab to figure out what address is the `owner` of `YourCollectible`?
 
@@ -145,11 +141,8 @@ You should see the correct network in the frontend (http://localhost:3000):
 
 ![nft10](https://user-images.githubusercontent.com/526558/124387099-9a3edd80-dcb3-11eb-9a57-54a7d370589a.png)
 
-🎫 Ready to mint a batch of NFTs for reals?
+🎫 Ready to mint a batch of NFTs for reals?  Use the `MINT NFT` button.
 
-```sh
-yarn mint
-```
 
 ![nft11](https://user-images.githubusercontent.com/526558/124387132-b04c9e00-dcb3-11eb-95d1-03b8c272e52f.png)
 
@@ -179,9 +172,7 @@ Update the api-key in packages/hardhat/package.json file. You can get your key [
 
 # Checkpoint 6: 💪 Flex!
 
-
-> 🎖 Show off your app by pasting the surge url in the [Challenge 0 telegram channel](https://t.me/joinchat/Y2vqXZZ_pEFhMGMx)🎖
-
+> 🎖 Show off your app by pasting the surge url in the [Challenge 0 telegram channel](https://t.me/+Y2vqXZZ_pEFhMGMx) 🎖
 
 ---
 
