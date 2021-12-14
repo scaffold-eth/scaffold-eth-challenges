@@ -502,6 +502,10 @@ function App(props) {
     tokenBuyAmount && tokensPerEth && ethers.utils.parseEther("" + tokenBuyAmount / parseFloat(tokensPerEth));
   console.log("ethCostToPurchaseTokens:", ethCostToPurchaseTokens);
 
+  const ethValueToSellTokens =
+    tokenSellAmount && tokensPerEth && ethers.utils.parseEther("" + tokenSellAmount / parseFloat(tokensPerEth));
+  console.log("ethValueToSellTokens:", ethValueToSellTokens);
+
   const [tokenSendToAddress, setTokenSendToAddress] = useState();
   const [tokenSendAmount, setTokenSendAmount] = useState();
 
@@ -637,7 +641,7 @@ function App(props) {
                       setTokenSellAmount(e.target.value);
                     }}
                   />
-                  <Balance balance={ethCostToPurchaseTokens} dollarMultiplier={price} />
+                  <Balance balance={ethValueToSellTokens} dollarMultiplier={price} />
                 </div>
                 {isSellAmountApproved?
 
