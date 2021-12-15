@@ -165,7 +165,7 @@ await vendor.transferOwnership("**YOUR FRONTEND ADDRESS**");
 
 👮 Your token contract source needs to be **verified** 🔃 (source code publicly available on the block explorer).
 
-📠 You will need a Etherscan API key for this and you can get on by creating a free account at [etherscan.io](https://etherscan.io). Add your key to the `hardhat.config` file
+📠 You will need an Etherscan API key for this and you can get one by creating a free account at [etherscan.io](https://etherscan.io). Add your key to the `hardhat.config` file
 at around line 258. The verify script is at the bottom of `00_deploy_your_token.js`. You will see something like this after successful completion.
 
 ⚔️ Side Quest: 🔂 use this same methodology to verify the Vendor contract.
