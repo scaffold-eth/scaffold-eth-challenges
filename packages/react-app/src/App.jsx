@@ -652,6 +652,7 @@ function App(props) {
                         setBuying(true);
                         await tx(writeContracts.Vendor.sellTokens(tokenSellAmount && ethers.utils.parseEther(tokenSellAmount)));
                         setBuying(false);
+                        setTokenSellAmount("");
                       }}
                     >
                       Sell Tokens
@@ -666,6 +667,7 @@ function App(props) {
                         setBuying(true);
                         await tx(writeContracts.YourToken.approve(readContracts.Vendor.address, tokenSellAmount && ethers.utils.parseEther(tokenSellAmount)));
                         setBuying(false);
+                        setTokenSellAmount("");
                       }}
                     >
                       Approve Tokens
