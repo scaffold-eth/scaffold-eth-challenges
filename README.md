@@ -105,9 +105,9 @@ yarn deploy
 
 🛰 Ready to deploy to a public testnet?!?
 
-> Change the `defaultNetwork` in `packages/hardhat/hardhat.config.js` to `NETWORKS.rinkeby`
+> Change the `defaultNetwork` in `packages/hardhat/hardhat.config.js` to `rinkeby`
 
-![image](https://user-images.githubusercontent.com/2653167/142488032-fd3bd75f-34d0-46fc-be63-5d66e09174e6.png)
+![networkSelect](https://user-images.githubusercontent.com/12072395/146871168-29b3d87a-7d25-4972-9b3c-0ec8c979171b.PNG)
 
 🔐 Generate a **deployer address** with `yarn generate`
 
