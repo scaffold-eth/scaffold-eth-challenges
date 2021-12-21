@@ -16,7 +16,7 @@ Required:
 * [Node](https://nodejs.org/dist/latest-v12.x/)
 * [Yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable)
 
-(⚠️ Don't install the linux package `yarn` make sure you install yarn with `npm i -g yarn`)
+(⚠️ Don't install the linux package `yarn` make sure you install yarn with `npm i -g yarn` or even `sudo npm i -g yarn`!)
 
 ```sh
 git clone https://github.com/scaffold-eth/scaffold-eth-challenges.git challenge-0-simple-nft
