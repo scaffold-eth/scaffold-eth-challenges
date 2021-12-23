@@ -67,6 +67,7 @@ yarn deploy
 
 
 
+
 ---
 ### Checkpoint 3: Using randomness 🎲
 
@@ -81,6 +82,16 @@ yarn deploy
 yarn deploy --network kovan
 ```
 
+#### Verify Your Contract(s)
+
+> update your api-key in the package.json file
+
+![Screen Shot 2021-11-30 at 8 46 22 AM](https://user-images.githubusercontent.com/9419140/144058738-e4fe7446-1cd0-4a16-b6bd-f3c6562738b2.png)
+
+```bash
+yarn verify --network YOUR_NETWORK
+```
+
 ### Checkpoint 5: Ship 🚚
 > 🚚 Ready to ship your dapp
 
@@ -90,7 +101,9 @@ yarn surge --domain mydomain.surge.sh
 ```
 
 ---
-### 💬 Support Chat
+### 💬 Support & Chat
+
+🏰  Buidl Guidl Discord Server Join [Here](https://discord.gg/ZnFs36fbbU)
 
 Join the telegram [support chat 💬](https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA) to ask questions and find others building with 🏗 scaffold-eth!
 

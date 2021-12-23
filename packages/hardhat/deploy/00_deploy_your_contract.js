@@ -53,18 +53,21 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   //  LibraryName: **LibraryAddress**
   // });
 
-  // Verify your contracts with Etherscan
+  // Verify your contracts with Etherscan during deploy
   // You don't want to verify on localhost
-  if (chainId !== localChainId) {
-    run("verify:verify", {
-      address: YourContract.address,
-      contract: "contracts/YourContract.sol:YourContract",
-      contractArguments: [],
-    });
+  // if (chainId !== localChainId) {
+  //   run("verify:verify", {
+  //     address: YourContract.address,
+  //     contract: "contracts/YourContract.sol:YourContract",
+  //     contractArguments: [],
+  //   });
 
-    // Add verification for your price feed contract here
-    // ...
-  }
+  //   // Add verification for your price feed contract here
+  //   // ...
+  // }
+
+  // to verify from the console ->
+  //    yarn verify --network network
 };
 
 module.exports.tags = ["YourContract", "EthPriceFeed"];
