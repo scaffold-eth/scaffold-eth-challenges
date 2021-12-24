@@ -49,7 +49,7 @@ describe("🚩 Challenge 0: 🎟 Simple NFT Example 🤓", function () {
 
         console.log('\t'," ⏳ Waiting for confirmation...")
         const txResult =  await mintResult.wait()
-        expect(txResult.status).to.equal(2);
+        expect(txResult.status).to.equal(1);
 
         console.log('\t'," 🔎 Checking new balance: ",startingBalance.toNumber())
         expect(await myContract.balanceOf(owner.address)).to.equal(startingBalance.add(1));
