@@ -16,6 +16,9 @@ const { solidity } = require("ethereum-waffle");
 use(solidity);
 
 describe("🚩 Challenge 0: 🎟 Simple NFT Example 🤓", function () {
+
+  this.timeout(45000);
+
   let myContract;
 
   //console.log("hre:",Object.keys(hre)) // <-- you can access the hardhat runtime env here
