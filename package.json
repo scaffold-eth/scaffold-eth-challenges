@@ -52,7 +52,9 @@
     "deploy-and-graph": "yarn deploy && yarn graph-ship-local",
     "mint": "yarn workspace @scaffold-eth/hardhat mint",
     "theme": "yarn workspace @scaffold-eth/react-app theme",
-    "watch-theme": "yarn workspace @scaffold-eth/react-app watch"
+    "watch-theme": "yarn workspace @scaffold-eth/react-app watch",
+    "backend": "cd packages/backend && nodemon index.js --watch index.js",
+    "geth": "cd packages/geth && ./light.sh"
   },
   "workspaces": {
     "packages": [
