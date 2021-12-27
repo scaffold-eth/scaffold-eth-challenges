@@ -18,7 +18,8 @@ const main = async () => {
   //const mainnetProvider = new ethers.providers.JsonRpcProvider("https://rpc.scaffoldeth.io:48544")
   //const mainnetProvider = new ethers.providers.JsonRpcProvider("http://10.0.0.127:8545")
   //const mainnetProvider = new ethers.providers.JsonRpcProvider("http://localhost:48545")
-  const mainnetProvider = new ethers.providers.JsonRpcProvider("http://localhost:8545")
+  //const mainnetProvider = new ethers.providers.JsonRpcProvider("http://localhost:8545")
+  const mainnetProvider = new ethers.providers.JsonRpcProvider("http://localhost:48545")
 
   console.log(" 📡  getting current blocknumber...")
 
