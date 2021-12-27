@@ -27,24 +27,31 @@ const main = async () => {
 
   let currentBlockNumber = await mainnetProvider.getBlockNumber()
 
-  while(currentBlockNumber>13883317){
+  let transactionCount = 0
+  let blockCount = 0
+
+  while(currentBlockNumber>13865351){
 
     if (fs.existsSync("blocks/"+currentBlockNumber+".json")){
-        console.log("currentBlockNumber",currentBlockNumber)
+      blockCount++
+        //console.log("currentBlockNumber",currentBlockNumber)
         let currentBlock = JSON.parse((await fs.readFileSync("blocks/"+currentBlockNumber+".json")).toString())
         if(currentBlock && currentBlock.transactions){
-          console.log("transactions: ",currentBlock.transactions.length)
+          //console.log("transactions: ",currentBlock.transactions.length)
           for(let t in currentBlock.transactions){
             const transaction = currentBlock.transactions[t];
             if(transaction.to==addressList[0]||transaction.from==addressList[0]){
               console.log(transaction)
             }
+            transactionCount++;
           }
         }
     }
 
     currentBlockNumber--;
   }
+
+  console.log("Checked ",transactionCount,"transactions","from",blockCount,"blocks")
 
 }
 

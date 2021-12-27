@@ -24,24 +24,14 @@ const main = async () => {
 
   let currentBlockNumber = await mainnetProvider.getBlockNumber()
 
+  // 11566960 is the first block of 2021
+
   while(currentBlockNumber>=11566960){
 
-    if (!fs.existsSync("blocks/"+currentBlockNumber+".json")){
+    let currentBlock = await mainnetProvider.getBlock(currentBlockNumber)
+    console.log(" 📦  BLOCK #",currentBlockNumber," -- ",currentBlock.timestamp,timeConverter(currentBlock.timestamp)," -- ",currentBlock.transactions.length," transactions")
 
-        let currentBlock = await mainnetProvider.getBlock(currentBlockNumber)
-        console.log(" 📦  BLOCK #",currentBlockNumber," -- ",currentBlock.timestamp,timeConverter(currentBlock.timestamp)," -- ",currentBlock.transactions.length," transactions")
-
-        let loadedTransactions = []
-        for(let t in currentBlock.transactions){
-          const transaction = currentBlock.transactions[t]
-          const txData = await mainnetProvider.getTransaction(transaction)
-          loadedTransactions.push(txData)
-        }
-        currentBlock.transactions = loadedTransactions
-        fs.writeFileSync("blocks/"+currentBlockNumber+".json",JSON.stringify(currentBlock))
-    }
-
-    currentBlockNumber--;
+    currentBlockNumber-=1;
   }
 
 }
