@@ -17,21 +17,21 @@ const main = async () => {
   //const mainnetProvider = new ethers.providers.JsonRpcProvider("https://eth-mainnet.gateway.pokt.network/v1/lb/611156b4a585a20035148406")
   //const mainnetProvider = new ethers.providers.JsonRpcProvider("https://rpc.scaffoldeth.io:48544")
   //const mainnetProvider = new ethers.providers.JsonRpcProvider("http://10.0.0.127:8545")
-  //const mainnetProvider = new ethers.providers.JsonRpcProvider("http://localhost:48545")
-  const mainnetProvider = new ethers.providers.JsonRpcProvider("http://localhost:8545")
+  const mainnetProvider = new ethers.providers.JsonRpcProvider("http://localhost:48545")
+  //const mainnetProvider = new ethers.providers.JsonRpcProvider("http://localhost:8545")
 
   console.log(" 📡  getting current blocknumber...")
 
-  let currentBlockNumber = await mainnetProvider.getBlockNumber()
+  let currentBlockNumber = 11566960 //await mainnetProvider.getBlockNumber()
 
   // 11566960 is the first block of 2021
 
-  while(currentBlockNumber>=11566960){
+  while(currentBlockNumber>=0){
 
     let currentBlock = await mainnetProvider.getBlock(currentBlockNumber)
     console.log(" 📦  BLOCK #",currentBlockNumber," -- ",currentBlock.timestamp,timeConverter(currentBlock.timestamp)," -- ",currentBlock.transactions.length," transactions")
 
-    currentBlockNumber-=1;
+    currentBlockNumber-=1000;
   }
 
 }

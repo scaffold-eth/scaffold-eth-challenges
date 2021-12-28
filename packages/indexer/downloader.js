@@ -25,7 +25,18 @@ const main = async () => {
 
   let currentBlockNumber = await mainnetProvider.getBlockNumber()
 
-  while(currentBlockNumber>=11566960){
+  let lowerLimit = 11566960
+
+  //fs.writeFileSync("limit.hardcode",JSON.stringify([currentBlockNumber,lowerLimit],null,2))
+
+  try{
+    [currentBlockNumber,lowerLimit] = JSON.parse(fs.readFileSync("limit.hardcode").toString())
+    console.log("FOUND HARDCODE LIMITS",currentBlockNumber,lowerLimit)
+  }catch(e){
+    console.log("NO HARDCODE LIMITS")
+  }
+
+  while(currentBlockNumber>=lowerLimit){
 
     if (!fs.existsSync("blocks/"+currentBlockNumber+".json")){
 
