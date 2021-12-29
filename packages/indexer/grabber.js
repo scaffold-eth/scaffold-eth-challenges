@@ -45,11 +45,11 @@ const main = async (s3) => {
       }
     }
 
-    //const STARTBLOCK = 11566960
-    //const ENDBLOCK = 13811960
-
     const STARTBLOCK = 11566960
     const ENDBLOCK = 13811960
+
+    //const STARTBLOCK = 11566960
+    //const ENDBLOCK = 13811960
 
     for(let b=11775328;b<=11775348;b++){
       console.log(" 🕵️ checking block ",b)
