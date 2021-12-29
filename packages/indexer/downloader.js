@@ -25,6 +25,8 @@ const main = async () => {
 
   let currentBlockNumber = await mainnetProvider.getBlockNumber()
 
+  console.log("currentBlockNumber",currentBlockNumber)
+
   let lowerLimit = 11566960
 
   //fs.writeFileSync("limit.hardcode",JSON.stringify([currentBlockNumber,lowerLimit],null,2))

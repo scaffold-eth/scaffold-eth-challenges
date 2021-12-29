@@ -59,6 +59,10 @@ const main = async (s3) => {
           Key: blocks[b],
           Body: await fs.readFileSync("blocks/"+blocks[b])
         }
+        //console.log("params",params)
+        const uploadResult = await s3.putObject(params).promise();
+        console.log("uploadResult",uploadResult)
+
       }
     }
 }
