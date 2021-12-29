@@ -22,7 +22,7 @@ const main = async () => {
   //console.log(" 📡  getting current blocknumber...")
 
   let getBlockNumber = await mainnetProvider.getBlockNumber()
-  console.log(getBlockNumber)
+  console.log(" 📮 current block:",getBlockNumber)
 
 }
 
