@@ -19,6 +19,8 @@ const main = async () => {
   const fullList = fs.readdirSync(testFolder)
   console.log(" 🔍 found "+fullList.length+" items")
 
+  console.log(" that means about ",2340658-fullList.length," to go...")
+
 }
 
 function sleep(ms) {
