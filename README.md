@@ -13,8 +13,6 @@
 
 > 🏆 The final **deliverable** is an app that lets users purchase and transfer your token. Deploy your contracts on your public chain of choice and then `yarn build` and `yarn surge` your app to a public web server. Share the url in the [Challenge 2 telegram channel](https://t.me/joinchat/IfARhZFc5bfPwpjq).🍾
 
-> 📱 Part of the challenge is making the **UI/UX** enjoyable and clean! 🤩
-
 🧫 Everything starts by ✏️ Editing `YourToken.sol` in `packages/hardhat/contracts`
 
 ---
