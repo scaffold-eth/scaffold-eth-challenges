@@ -23,6 +23,8 @@ try {
 const main = async () => {
   const testFolder = 'grabbed/';
 
+  const mainnetProvider = new ethers.providers.JsonRpcProvider("http://localhost:48545")
+
   console.log("  📋  looking through all possible blocks...")
 
   const FIRSTBLOCK = 11566960
@@ -46,6 +48,17 @@ const main = async () => {
     }
     if(!found){
       console.log('\t'," 🕵️ MISSING ",i)
+      let currentBlock = await mainnetProvider.getBlock(i)
+      console.log(" 📦  BLOCK #",i," -- ",currentBlock.timestamp,timeConverter(currentBlock.timestamp)," -- ",currentBlock.transactions.length," transactions")
+
+      let loadedTransactions = []
+      for(let t in currentBlock.transactions){
+        const transaction = currentBlock.transactions[t]
+        const txData = await mainnetProvider.getTransaction(transaction)
+        loadedTransactions.push(txData)
+      }
+      currentBlock.transactions = loadedTransactions
+      fs.writeFileSync("grabbed/"+i+".json",JSON.stringify(currentBlock))
     }
   }
 
