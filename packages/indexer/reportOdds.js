@@ -29,36 +29,38 @@ const main = async () => {
 
   const FIRSTBLOCK = 11566960
 
-  const LASTBLOCK = 13910705
+  const LASTBLOCK = 13915765
 
   for(let i=FIRSTBLOCK;i<=LASTBLOCK;i++){
-    //console.log("I",)
-    let found = false
-    try {
-      if (await fs.existsSync(testFolder+""+i+".json")) {
-        //file exists
-        found=true
-        //console.log("FOUND",i)
+    if(i%2==1){
+      //console.log("I",)
+      let found = false
+      try {
+        if (await fs.existsSync(testFolder+""+i+".json")) {
+          //file exists
+          found=true
+          //console.log("FOUND",i)
+        }
+        else{
+          //console.log("NOT FOUND")
+        }
+      } catch(err) {
+        //console.log("ERR ")
       }
-      else{
-        //console.log("NOT FOUND")
-      }
-    } catch(err) {
-      //console.log("ERR ")
-    }
-    if(!found){
-      console.log('\t'," 🕵️ MISSING ",i)
-      /*let currentBlock = await mainnetProvider.getBlock(i)
-      console.log(" 📦  BLOCK #",i," -- ",currentBlock.timestamp,timeConverter(currentBlock.timestamp)," -- ",currentBlock.transactions.length," transactions")
+      if(!found){
+        console.log('\t'," 🕵️ MISSING ",i)
+        let currentBlock = await mainnetProvider.getBlock(i)
+        console.log(" 📦  BLOCK #",i," -- ",currentBlock.timestamp,timeConverter(currentBlock.timestamp)," -- ",currentBlock.transactions.length," transactions")
 
-      let loadedTransactions = []
-      for(let t in currentBlock.transactions){
-        const transaction = currentBlock.transactions[t]
-        const txData = await mainnetProvider.getTransaction(transaction)
-        loadedTransactions.push(txData)
+        let loadedTransactions = []
+        for(let t in currentBlock.transactions){
+          const transaction = currentBlock.transactions[t]
+          const txData = await mainnetProvider.getTransaction(transaction)
+          loadedTransactions.push(txData)
+        }
+        currentBlock.transactions = loadedTransactions
+        fs.writeFileSync("grabbed/"+i+".json",JSON.stringify(currentBlock))
       }
-      currentBlock.transactions = loadedTransactions
-      fs.writeFileSync("grabbed/"+i+".json",JSON.stringify(currentBlock))*/
     }
   }
 

@@ -25,11 +25,17 @@ const main = async () => {
 
   const mainnetProvider = new ethers.providers.JsonRpcProvider("http://localhost:48545")
 
-  console.log("  📋  looking through all possible blocks...")
+  console.log("  📋  looking through RECENT HEAD blocks...")
 
-  const FIRSTBLOCK = 11566960
+  console.log(" 📡  getting current blocknumber...")
 
-  const LASTBLOCK = 13915765
+  let currentBlockNumber = await mainnetProvider.getBlockNumber()
+
+  console.log("LONGEST BLOCK:",currentBlockNumber)
+
+  const LASTBLOCK = currentBlockNumber
+
+  const FIRSTBLOCK = LASTBLOCK-3600;
 
   for(let i=LASTBLOCK;i>=FIRSTBLOCK;i--){
     //console.log("I",)
