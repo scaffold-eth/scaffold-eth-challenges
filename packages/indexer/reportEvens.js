@@ -32,7 +32,7 @@ const main = async () => {
   const LASTBLOCK = 13915765
 
   for(let i=FIRSTBLOCK;i<=LASTBLOCK;i++){
-    if(i%2==1){
+    if(i%2==0){
       //console.log("I",)
       let found = false
       try {
