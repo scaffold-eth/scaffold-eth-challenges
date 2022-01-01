@@ -22,7 +22,7 @@ const main = async () => {
 
   console.log(" 📡  getting current blocknumber...")
 
-  let currentBlockNumber = 11566960 //await mainnetProvider.getBlockNumber()
+  let currentBlockNumber = await mainnetProvider.getBlockNumber()
 
   // 12 11766960 to 11661960  + 11661960 to 11566960
   // 11 11946960 to 11861960 + 11861960 to 11766960
@@ -44,7 +44,7 @@ const main = async () => {
     let currentBlock = await mainnetProvider.getBlock(currentBlockNumber)
     console.log(" 📦  BLOCK #",currentBlockNumber," -- ",currentBlock.timestamp,timeConverter(currentBlock.timestamp)," -- ",currentBlock.transactions.length," transactions")
 
-    currentBlockNumber+=5000;
+    currentBlockNumber--;
   }
 
 }
