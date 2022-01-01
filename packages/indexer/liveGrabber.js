@@ -25,22 +25,21 @@ const main = async () => {
 
   console.log(" 📡  getting current blocknumber...")
 
-  let currentBlockNumber = await mainnetProvider.getBlockNumber()
+  //let currentBlockNumber = await mainnetProvider.getBlockNumber()
 
-  console.log("currentBlockNumber",currentBlockNumber)
 
   let lowerLimit = 11566960
 
-  let total = console.log("There should end up being a total of ",currentBlockNumber-11566960,"blocks grabbed")
+  let lastBlockNumber = 13916165
+
+  let currentBlockNumber = lastBlockNumber
+
+  console.log("currentBlockNumber",currentBlockNumber)
+
+
+  let total = console.log("There should end up being a total of ",lastBlockNumber-lowerLimit,"blocks grabbed")
 
   //fs.writeFileSync("limit.hardcode",JSON.stringify([currentBlockNumber,lowerLimit],null,2))
-
-  try{
-    [currentBlockNumber,lowerLimit] = JSON.parse(fs.readFileSync("limit.hardcode").toString())
-    console.log("FOUND HARDCODE LIMITS",currentBlockNumber,lowerLimit)
-  }catch(e){
-    console.log("NO HARDCODE LIMITS")
-  }
 
   while(currentBlockNumber>=lowerLimit){
 

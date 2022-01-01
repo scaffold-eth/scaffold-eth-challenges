@@ -46,7 +46,7 @@ const main = async (s3) => {
     }
 
     let STARTBLOCK = 11566960
-    const ENDBLOCK = 13811960
+    const ENDBLOCK = 13916165
 
     //const STARTBLOCK = 11566960
     //const ENDBLOCK = 13811960
@@ -55,7 +55,7 @@ const main = async (s3) => {
       STARTBLOCK = process.argv[2];
     }
 
-    for(let b=STARTBLOCK;b<=ENDBLOCK;b++){
+    for(let b=ENDBLOCK;b>=STARTBLOCK;b--){
       console.log(" 🕵️ checking block ",b)
       const blockExists = await exists(b+".json")
       if( blockExists ){

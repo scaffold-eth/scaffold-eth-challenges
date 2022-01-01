@@ -29,7 +29,10 @@ const main = async () => {
 
   const FIRSTBLOCK = 11566960
 
-  const LASTBLOCK = 13910705
+  const LASTBLOCK = 13916165
+
+  let missing = 0
+  let foundCount = 0
 
   for(let i=FIRSTBLOCK;i<=LASTBLOCK;i++){
     //console.log("I",)
@@ -38,6 +41,7 @@ const main = async () => {
       if (await fs.existsSync(testFolder+""+i+".json")) {
         //file exists
         found=true
+        foundCount++
         //console.log("FOUND",i)
       }
       else{
@@ -48,6 +52,7 @@ const main = async () => {
     }
     if(!found){
       console.log('\t'," 🕵️ MISSING ",i)
+      missing++;
       /*let currentBlock = await mainnetProvider.getBlock(i)
       console.log(" 📦  BLOCK #",i," -- ",currentBlock.timestamp,timeConverter(currentBlock.timestamp)," -- ",currentBlock.transactions.length," transactions")
 
@@ -63,6 +68,9 @@ const main = async () => {
   }
 
 
+
+  console.log("TOTAL MISSING:",missing)
+  console.log("TOTAL FOUND:",foundCount)
 }
 
 

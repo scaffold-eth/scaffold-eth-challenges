@@ -18,11 +18,11 @@ const main = async () => {
   //const mainnetProvider = new ethers.providers.JsonRpcProvider("https://rpc.scaffoldeth.io:48544")
   //const mainnetProvider = new ethers.providers.JsonRpcProvider("http://10.0.0.127:8545")
   //const mainnetProvider = new ethers.providers.JsonRpcProvider("http://localhost:48545")
-  const mainnetProvider = new ethers.providers.JsonRpcProvider("http://localhost:8545")
+  const mainnetProvider = new ethers.providers.JsonRpcProvider("http://localhost:48545")
 
   console.log(" 📡  getting current blocknumber...")
 
-  let currentBlockNumber = await mainnetProvider.getBlockNumber()
+  let currentBlockNumber = 13915915//await mainnetProvider.getBlockNumber()
 
   // 12 11766960 to 11661960  + 11661960 to 11566960
   // 11 11946960 to 11861960 + 11861960 to 11766960
@@ -44,7 +44,7 @@ const main = async () => {
     let currentBlock = await mainnetProvider.getBlock(currentBlockNumber)
     console.log(" 📦  BLOCK #",currentBlockNumber," -- ",currentBlock.timestamp,timeConverter(currentBlock.timestamp)," -- ",currentBlock.transactions.length," transactions")
 
-    currentBlockNumber--;
+    currentBlockNumber--;;
   }
 
 }
