@@ -31,7 +31,7 @@ const main = async () => {
         //file exists
         //found=true
         foundCount++
-        if(foundCount%100000==0){
+        if(foundCount%10000==0){
           console.log(" * checkpoint",foundCount)
           console.log("SO FAR ",foundTransactions.length,"FOR ADDRESS",SEARCHADDRESS)
         }
