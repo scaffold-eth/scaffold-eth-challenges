@@ -24,8 +24,11 @@ const main = async (s3) => {
 
     const addresses = fs.readdirSync("addresses")
     for(let a in addresses){
-      if(addresses[a].indexOf("0x3")===0){
-        console.log("3 🕵️",addresses[a])
+      if(addresses[a].indexOf("0xe")===0||addresses[a].indexOf("0xE")===0
+        || addresses[a].indexOf("0xf")===0||addresses[a].indexOf("0xF")===0
+        || addresses[a].indexOf("0x0")===0
+        || addresses[a].indexOf("0x1")===0){
+        console.log("EF01 🕵️",addresses[a])
 
           const params = {
             Bucket: BUCKETNAME,
