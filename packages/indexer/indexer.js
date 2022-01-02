@@ -39,34 +39,32 @@ const main = async () => {
   for(let i=LASTBLOCK;i>=FIRSTBLOCK;i--){
     //console.log("I",)
     let found = false
-    try {
-      if (await fs.existsSync(testFolder+""+i+".json")) {
-        //file exists
-        found=true
-        foundCount++
-        //console.log("FOUND",i)
-        let contents = await fs.readFileSync(testFolder+""+i+".json")
-        let obj = JSON.parse(contents.toString())
-        totalTxCount+=obj.transactions.length
-        console.log(" 💻  PARSING TRANSACTIONS FROM BLOCK ",i," -- ",obj.transactions.length,"transactions -- ",foundCount," out of ",total,parseInt(foundCount*100/total)+"% -- ",totalTxCount,"total txns");
-        for(let t in obj.transactions) {
-          let transaction = obj.transactions[t]
-          //console.log(transaction)
 
-          let toAddress = transaction.to
-          let fromAddress = transaction.from
+    if (await fs.existsSync(testFolder+""+i+".json")) {
+      //file exists
+      found=true
+      foundCount++
+      //console.log("FOUND",i)
+      let contents = await fs.readFileSync(testFolder+""+i+".json")
+      let obj = JSON.parse(contents.toString())
+      totalTxCount+=obj.transactions.length
+      console.log(" 💻  PARSING TRANSACTIONS FROM BLOCK ",i," -- ",obj.transactions.length,"transactions -- ",foundCount," out of ",total,parseInt(foundCount*100/total)+"% -- ",totalTxCount,"total txns");
+      for(let t in obj.transactions) {
+        let transaction = obj.transactions[t]
+        //console.log(transaction)
 
-          addTransaction(toAddress, transaction)
-          addTransaction(fromAddress, transaction)
-        }
-        //process.exit(0)
+        let toAddress = transaction.to
+        let fromAddress = transaction.from
+
+        addTransaction(toAddress, transaction)
+        addTransaction(fromAddress, transaction)
       }
-      else{
-        //console.log("NOT FOUND")
-      }
-    } catch(err) {
-      //console.log("ERR ")
+      //process.exit(0)
     }
+    else{
+      //console.log("NOT FOUND")
+    }
+
     if(!found){
       console.log('\t'," 🕵️ MISSING ",i)
       missing++;
