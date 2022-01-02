@@ -24,8 +24,7 @@ const main = async (s3) => {
 
     const addresses = fs.readdirSync("addresses")
     for(let a in addresses){
-    if(addresses[a].indexOf("0x5")===0
-      || addresses[a].indexOf("0x6")===0
+    if(addresses[a].indexOf("0x6")===0
       || addresses[a].indexOf("0x7")===0
       || addresses[a].indexOf("0x8")===0
       || addresses[a].indexOf("0x9")===0
