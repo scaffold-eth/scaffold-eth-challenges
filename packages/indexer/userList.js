@@ -23,18 +23,7 @@ try {
 const main = async (s3) => {
 
     const addresses = fs.readdirSync("addresses")
-    for(let a in addresses){
-      console.log(" 🕵️",addresses[a])
-
-        const params = {
-          Bucket: BUCKETNAME,
-          Key: addresses[a],
-          Body: await fs.readFileSync("addresses/"+addresses[a])
-        }
-        //console.log("params",params)
-        const uploadResult = await s3.putObject(params).promise();
-        console.log("uploadResult",uploadResult)
-   }
+    console.log("Found ",addresses.length," addresses")
 }
 
 
