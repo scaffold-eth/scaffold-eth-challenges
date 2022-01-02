@@ -1,4 +1,5 @@
 *.DS_Store
+packages/indexer/found/
 packages/indexer/addresses/
 packages/indexer/grabbed/
 packages/indexer/blocks/
