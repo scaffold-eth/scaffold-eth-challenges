@@ -25,12 +25,16 @@ const main = async () => {
 
   for(let i=LASTBLOCK;i>=FIRSTBLOCK;i--){
     //console.log("I",)
-    let found = false
-    try {
-      if (await fs.existsSync(testFolder+""+i+".json")) {
+    //let found = false
+    //try {
+      //if (await fs.existsSync(testFolder+""+i+".json")) {
         //file exists
-        found=true
+        //found=true
         foundCount++
+        if(foundCount%100000==0){
+          console.log(" * checkpoint",foundCount)
+          console.log("SO FAR ",foundTransactions.length,"FOR ADDRESS",SEARCHADDRESS)
+        }
         //console.log("FOUND",i)
         let contents = await fs.readFileSync(testFolder+""+i+".json")
         let obj = JSON.parse(contents.toString())
@@ -47,16 +51,16 @@ const main = async () => {
           }
         }
         //process.exit(0)
-      }
-      else{
+      //}
+      //else{
         //console.log("NOT FOUND")
-      }
-    } catch(err) {
+      //}
+    //} catch(err) {
       //console.log("ERR ")
-    }
-    if(!found){
+    //}
+    //if(!found){
       //console.log('\t'," 🕵️ MISSING ",i)
-      missing++;
+      //missing++;
       /*let currentBlock = await mainnetProvider.getBlock(i)
       console.log(" 📦  BLOCK #",i," -- ",currentBlock.timestamp,timeConverter(currentBlock.timestamp)," -- ",currentBlock.transactions.length," transactions")
 
@@ -68,14 +72,13 @@ const main = async () => {
       }
       currentBlock.transactions = loadedTransactions
       fs.writeFileSync("grabbed/"+i+".json",JSON.stringify(currentBlock))*/
-    }
+    //}
   }
 
   console.log("FOUND",foundTransactions.length,"FOR ADDRESS",SEARCHADDRESS)
 
   fs.writeFileSync("found/"+SEARCHADDRESS+".json",JSON.stringify(foundTransactions,null,2))
   console.log("-------")
-  console.log("TOTAL MISSING:",missing)
   console.log("TOTAL FOUND:",foundCount)
   console.log("TOTAL TXNS of 2021:",totalTxCount)
   //fs.writeFileSync("report.txt",missing+","+foundCount+","+totalTxCount)
