@@ -2,7 +2,7 @@ var fs = require("fs");
 var ethers = require("ethers");
 const AWS = require('aws-sdk');
 
-const BUCKETNAME = "jsonethblocks2021";
+const BUCKETNAME = "ethtransactions2021";
 
 if (!BUCKETNAME) {
   console.log("☢️   Enter a bucket name in packages/react-app/scripts/s3.js ");
@@ -22,49 +22,19 @@ try {
 
 const main = async (s3) => {
 
-    const exists = async (name)=>{
-      try{
-        return await s3
-          .headObject({
-            Bucket: BUCKETNAME,
-            Key: name,
-          })
-          .promise()
-          .then(
-            () => true,
-            err => {
-              if (err.code === 'NotFound') {
-                return false;
-              }
-              throw err;
-            }
-          );
-      }catch(e){
-        console.log(e)
-        return false
-      }
-    }
+    const addresses = fs.readdirSync("addresses")
+    for(let a in addresses){
+      console.log(" 🕵️",addresses[a])
 
-    const blocks = fs.readdirSync("blocks")
-    for(let b in blocks){
-      console.log(" 📋",blocks[b])
-      const blockExists = await exists(blocks[b])
-      console.log("blockExists",blockExists)
-      if( blockExists ){
-        console.log(" ✅",blocks[b])
-      }else{
-        console.log(" 📡",blocks[b])
         const params = {
           Bucket: BUCKETNAME,
-          Key: blocks[b],
-          Body: await fs.readFileSync("blocks/"+blocks[b])
+          Key: addresses[a],
+          Body: await fs.readFileSync("addresses/"+addresses[a])
         }
         //console.log("params",params)
         const uploadResult = await s3.putObject(params).promise();
         console.log("uploadResult",uploadResult)
-
-      }
-    }
+   }
 }
 
 
