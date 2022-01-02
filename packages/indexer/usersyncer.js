@@ -45,8 +45,7 @@ const main = async (s3) => {
       }
     }
 
-    let blocks = fs.readdirSync("grabbed")
-    blocks = blocks.reverse()
+    const blocks = fs.readdirSync("blocks")
     for(let b in blocks){
       console.log(" 📋",blocks[b])
       const blockExists = await exists(blocks[b])
@@ -58,7 +57,7 @@ const main = async (s3) => {
         const params = {
           Bucket: BUCKETNAME,
           Key: blocks[b],
-          Body: await fs.readFileSync("grabbed/"+blocks[b])
+          Body: await fs.readFileSync("blocks/"+blocks[b])
         }
         //console.log("params",params)
         const uploadResult = await s3.putObject(params).promise();

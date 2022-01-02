@@ -31,24 +31,14 @@ const main = async () => {
 
   const LASTBLOCK = 13916165
 
-  let total = LASTBLOCK-FIRSTBLOCK
-  let missing = 0
-  let foundCount = 0
-  let totalTxCount = 0
-
-  for(let i=LASTBLOCK;i>=FIRSTBLOCK;i--){
+  for(let i=LASTBLOCK+1;i<=LASTBLOCK+100000;i++){
     //console.log("I",)
     let found = false
     try {
       if (await fs.existsSync(testFolder+""+i+".json")) {
         //file exists
-        found=true
-        foundCount++
-        //console.log("FOUND",i)
-        let contents = await fs.readFileSync(testFolder+""+i+".json")
-        let obj = JSON.parse(contents.toString())
-        totalTxCount+=obj.transactions.length
-        console.log(" ✅ BLOCK ",i," -- ",obj.transactions.length,"transactions -- ",foundCount," out of ",total,parseInt(foundCount*100/total,2)+"% -- ",totalTxCount,"total txns");
+        console.log("REMOVING 2022 block",i)
+        await fs.unlinkSync(testFolder+""+i+".json")
       }
       else{
         //console.log("NOT FOUND")
@@ -56,29 +46,10 @@ const main = async () => {
     } catch(err) {
       //console.log("ERR ")
     }
-    if(!found){
-      console.log('\t'," 🕵️ MISSING ",i)
-      missing++;
-      /*let currentBlock = await mainnetProvider.getBlock(i)
-      console.log(" 📦  BLOCK #",i," -- ",currentBlock.timestamp,timeConverter(currentBlock.timestamp)," -- ",currentBlock.transactions.length," transactions")
 
-      let loadedTransactions = []
-      for(let t in currentBlock.transactions){
-        const transaction = currentBlock.transactions[t]
-        const txData = await mainnetProvider.getTransaction(transaction)
-        loadedTransactions.push(txData)
-      }
-      currentBlock.transactions = loadedTransactions
-      fs.writeFileSync("grabbed/"+i+".json",JSON.stringify(currentBlock))*/
-    }
   }
 
 
-
-  console.log("TOTAL MISSING:",missing)
-  console.log("TOTAL FOUND:",foundCount)
-  console.log("TOTAL TXNS of 2021:",totalTxCount)
-  fs.writeFileSync("report.txt",missing+","+foundCount+","+totalTxCount)
 }
 
 

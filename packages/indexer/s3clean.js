@@ -45,25 +45,31 @@ const main = async (s3) => {
       }
     }
 
-    let blocks = fs.readdirSync("grabbed")
-    blocks = blocks.reverse()
-    for(let b in blocks){
-      console.log(" 📋",blocks[b])
-      const blockExists = await exists(blocks[b])
-      console.log("blockExists",blockExists)
+    const ENDBLOCK = 13916165
+
+    //const STARTBLOCK = 11566960
+    //const ENDBLOCK = 13916165
+
+    if(process.argv[2]){
+      STARTBLOCK = process.argv[2];
+    }
+
+    for(let b=ENDBLOCK+1;b<=ENDBLOCK+250000;b++){
+      console.log(" 🕵️ checking 2022 block ",b)
+      const blockExists = await exists(b+".json")
       if( blockExists ){
-        console.log(" ✅",blocks[b])
-      }else{
-        console.log(" 📡",blocks[b])
+
+        const destination = "grabbed/"+b+".json"
+
+        console.log(" 🧹 deleting block",b+".json")
         const params = {
           Bucket: BUCKETNAME,
-          Key: blocks[b],
-          Body: await fs.readFileSync("grabbed/"+blocks[b])
+          Key: b+".json"
         }
-        //console.log("params",params)
-        const uploadResult = await s3.putObject(params).promise();
-        console.log("uploadResult",uploadResult)
-
+        const deleteResult = await s3.deleteObject(params).promise();
+        console.log(deleteResult)
+      }else{
+        //console.log(" does not exist:",b+".json")
       }
     }
 }
@@ -87,8 +93,8 @@ function timeConverter(UNIX_timestamp){
   return time;
 }
 
-if (!fs.existsSync("blocks")){
-    fs.mkdirSync("blocks");
+if (!fs.existsSync("grabbed")){
+    fs.mkdirSync("grabbed");
 }
 
 console.log("syncing blocks up to s3...")

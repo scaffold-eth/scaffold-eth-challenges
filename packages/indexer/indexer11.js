@@ -29,7 +29,7 @@ const main = async () => {
 
   const FIRSTBLOCK = 11566960
 
-  const LASTBLOCK = 13916165
+  const LASTBLOCK = 11766960
 
   let total = LASTBLOCK-FIRSTBLOCK
   let missing = 0
@@ -48,7 +48,18 @@ const main = async () => {
         let contents = await fs.readFileSync(testFolder+""+i+".json")
         let obj = JSON.parse(contents.toString())
         totalTxCount+=obj.transactions.length
-        console.log(" ✅ BLOCK ",i," -- ",obj.transactions.length,"transactions -- ",foundCount," out of ",total,parseInt(foundCount*100/total,2)+"% -- ",totalTxCount,"total txns");
+        console.log(" 💻  PARSING TRANSACTIONS FROM BLOCK ",i," -- ",obj.transactions.length,"transactions -- ",foundCount," out of ",total,parseInt(foundCount*100/total)+"% -- ",totalTxCount,"total txns");
+        for(let t in obj.transactions) {
+          let transaction = obj.transactions[t]
+          //console.log(transaction)
+
+          let toAddress = transaction.to
+          let fromAddress = transaction.from
+
+          addTransaction(toAddress, transaction)
+          addTransaction(fromAddress, transaction)
+        }
+        //process.exit(0)
       }
       else{
         //console.log("NOT FOUND")
@@ -82,6 +93,38 @@ const main = async () => {
 }
 
 
+function addTransaction(address, transaction){
+  //console.log("ADDING TX FOR",address,"WITH HASH",transaction.hash)
+  let currentTransactionsForAddress = []
+  let fileContents
+  try{
+    fileContents = fs.readFileSync("addresses/"+address+".json")
+  }catch(e){
+    //console.log(e)
+  }
+  //console.log("HEREH")
+  if(fileContents){
+    //console.log("PARSING")
+    currentTransactionsForAddress = JSON.parse(fileContents.toString())
+  }else{
+    //console.log("no file contents")
+  }
+  //console.log("currentTransactionsForAddress",currentTransactionsForAddress)
+  let exists = false
+  //console.log("looking for existing tx...")
+  for(let tx in currentTransactionsForAddress){
+    //console.log("COMPARE",currentTransactionsForAddress[tx].hash,transaction.hash)
+    if(currentTransactionsForAddress[tx].hash == transaction.hash){
+      exists=true;
+    }
+  }
+  if(!exists){
+    //console.log("💾 doesn't exist, adding tx...")
+    currentTransactionsForAddress.push(transaction)
+    fs.writeFileSync("addresses/"+address+".json",JSON.stringify(currentTransactionsForAddress,null,2))
+  }
+}
+
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -100,8 +143,8 @@ function timeConverter(UNIX_timestamp){
   return time;
 }
 
-if (!fs.existsSync("grabbed")){
-    fs.mkdirSync("grabbed");
+if (!fs.existsSync("addresses")){
+    fs.mkdirSync("addresses");
 }
 
 main()
