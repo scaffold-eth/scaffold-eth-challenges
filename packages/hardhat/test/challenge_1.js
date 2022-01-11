@@ -17,7 +17,7 @@ use(solidity);
 
 describe("🚩 Challenge 1: 🥩 Decentralized Staking App", function () {
 
-  this.timeout(45000);
+  this.timeout(120000);
 
   let stakerContract;
   let exampleExternalContract;
