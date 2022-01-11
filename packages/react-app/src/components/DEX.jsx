@@ -105,16 +105,17 @@ export default function Dex(props) {
 
         {rowForm("deposit", "📥", async value => {
           let valueInEther = ethers.utils.parseEther("" + value);
-          let valuePlusExtra = ethers.utils.parseEther("" + value * 1.03);
-          console.log("valuePlusExtra", valuePlusExtra);
+
+          let expectedTokenAmount = valueInEther.mul(tokenBalance).div(contractBalance).add(1);
+          console.log("expectedTokenAmount", expectedTokenAmount);
           let allowance = await props.readContracts[tokenName].allowance(
             props.address,
             props.readContracts[contractName].address,
           );
           console.log("allowance", allowance);
-          if (allowance.lt(valuePlusExtra)) {
+          if (allowance.lt(expectedTokenAmount)) {
             await tx(
-              writeContracts[tokenName].approve(props.readContracts[contractName].address, valuePlusExtra, {
+              writeContracts[tokenName].approve(props.readContracts[contractName].address, expectedTokenAmount, {
                 gasLimit: 200000,
               }),
             );
