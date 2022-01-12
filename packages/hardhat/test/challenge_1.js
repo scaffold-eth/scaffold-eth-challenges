@@ -29,7 +29,7 @@ describe("🚩 Challenge 1: 🥩 Decentralized Staking App", function () {
     if(process.env.CONTRACT_ADDRESS){
       it("Should connect to external contract", async function () {
         stakerContract = await ethers.getContractAt("Staker",process.env.CONTRACT_ADDRESS);
-        console.log("     🛰 Connected to external contract",myContract.address)
+        console.log("     🛰 Connected to external contract",stakerContract.address)
       });
     }else{
       it("Should deploy ExampleExternalContract", async function () {
