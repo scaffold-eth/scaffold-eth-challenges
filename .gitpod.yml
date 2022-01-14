@@ -9,7 +9,7 @@ tasks:
     command: yarn chain
     openMode: split-right
   - name: Deployment
-    init: gp sync-await install
+    init: gp await-port 8545
     command: yarn deploy
     openMode: split-right
 ports:
@@ -17,6 +17,7 @@ ports:
     onOpen: open-preview
   - port: 8545
     onOpen: ignore
+    visibility: public
 github:
   prebuilds:
     pullRequestsFromForks: true
