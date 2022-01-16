@@ -625,7 +625,10 @@ function App(props) {
               </Card>
             </div>
 
-            {/*Extra UI for buying the tokens back from the user using "approve" and "sellTokens"
+            {/*Extra UI for buying the tokens back from the user using "approve" and "sellTokens"*/}
+            
+            {/*
+
             <Divider />
             <div style={{ padding: 8, marginTop: 32, width: 300, margin: "auto" }}>
               <Card title="Sell Tokens">
@@ -645,6 +648,12 @@ function App(props) {
                 {isSellAmountApproved?
 
                   <div style={{ padding: 8 }}>
+                    <Button
+                      disabled={true}
+                      type={"primary"}
+                    >
+                      Approve Tokens
+                    </Button>
                     <Button
                       type={"primary"}
                       loading={buying}
@@ -667,10 +676,20 @@ function App(props) {
                         setBuying(true);
                         await tx(writeContracts.YourToken.approve(readContracts.Vendor.address, tokenSellAmount && ethers.utils.parseEther(tokenSellAmount)));
                         setBuying(false);
+                        let resetAmount = tokenSellAmount
                         setTokenSellAmount("");
+                        setTimeout(()=>{
+                          setTokenSellAmount(resetAmount)
+                        },1500)
                       }}
                     >
                       Approve Tokens
+                    </Button>
+                    <Button
+                      disabled={true}
+                      type={"primary"}
+                    >
+                      Sell Tokens
                     </Button>
                   </div>
                 }
@@ -710,8 +729,6 @@ function App(props) {
             </div>
 
             {/*
-
-
 
                 🎛 this scaffolding is full of commonly used components
                 this <Contract/> component will automatically parse your ABI
