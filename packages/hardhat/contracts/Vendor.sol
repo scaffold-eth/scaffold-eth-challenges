@@ -6,15 +6,13 @@ import "./YourToken.sol";
 
 contract Vendor is Ownable {
 
-  event BuyTokens(address buyer, uint256 amountOfETH, uint256 amountOfTokens);
+  //event BuyTokens(address buyer, uint256 amountOfETH, uint256 amountOfTokens);
 
   YourToken yourToken;
 
   constructor(address tokenAddress) {
     yourToken = YourToken(tokenAddress);
   }
-
-  uint256 public constant tokensPerEth = 100;
 
   // ToDo: create a payable buyTokens() function:
 
