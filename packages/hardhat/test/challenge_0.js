@@ -17,7 +17,7 @@ use(solidity);
 
 describe("🚩 Challenge 0: 🎟 Simple NFT Example 🤓", function () {
 
-  this.timeout(45000);
+  this.timeout(120000);
 
   let myContract;
 
