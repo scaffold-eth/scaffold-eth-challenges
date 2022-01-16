@@ -201,4 +201,6 @@ Update the `api-key` in `packages/hardhat/package.json`. You can get your key [h
 
 👉 This will be the URL you submit to 🏃‍♀️[SpeedRunEthereum.com](https://speedrunethereum.com).
 
+---
+
 💬 Problems, questions, comments on the stack? Post them to the [Challenge 2 telegram channel](https://t.me/joinchat/IfARhZFc5bfPwpjq)
