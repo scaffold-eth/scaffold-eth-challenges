@@ -8,7 +8,7 @@ contract Vendor is Ownable {
 
   //event BuyTokens(address buyer, uint256 amountOfETH, uint256 amountOfTokens);
 
-  YourToken yourToken;
+  YourToken public yourToken;
 
   constructor(address tokenAddress) {
     yourToken = YourToken(tokenAddress);
