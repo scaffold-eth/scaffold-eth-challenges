@@ -17,7 +17,7 @@ use(solidity);
 
 describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
 
-  this.timeout(45000);
+  this.timeout(125000);
 
   let yourToken;
 
@@ -51,6 +51,14 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
     it("Should connect to external contract", async function () {
       vendor = await ethers.getContractAt("Vendor",process.env.CONTRACT_ADDRESS);
       console.log(`\t`,"🛰 Connected to:",vendor.address)
+
+      console.log(`\t`,"📡 Loading the yourToken address from the Vendor...")
+      console.log(`\t`,"⚠️ Make sure *yourToken* is public in the Vendor.sol!")
+      let tokenAddress = await vendor.yourToken();
+      console.log('\t',"🏷 Token Address:",tokenAddress)
+
+      yourToken = await ethers.getContractAt("YourToken",tokenAddress);
+      console.log(`\t`,"🛰 Connected to YourToken at:",yourToken.address)
     });
   }else{
     it("Should deploy YourToken", async function () {
@@ -102,6 +110,10 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
       console.log('\t'," 🙄 Approving...")
       const approveTokensResult = await yourToken.approve(vendor.address, ethers.utils.parseEther("0.1"));
       console.log('\t'," 🏷  approveTokens Result Result: ",approveTokensResult.hash)
+
+      console.log('\t'," ⏳ Waiting for confirmation...")
+      const atxResult =  await approveTokensResult.wait()
+      expect(atxResult.status).to.equal(1);
 
       console.log('\t'," 🍾 Selling...")
       const sellTokensResult = await vendor.sellTokens(ethers.utils.parseEther("0.1"));
