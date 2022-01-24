@@ -1,5 +1,5 @@
 {
-   "solidity.packageDefaultDependenciesDirectory": "packages/hardhat-ts/node_modules",
+   "solidity.packageDefaultDependenciesDirectory": "packages/hardhat/node_modules",
    "solidity-va.test.defaultUnittestTemplate": "hardhat",
    "files.exclude": {
       "**/.git": true,
@@ -25,7 +25,7 @@
    "eslint.workingDirectories": [
    
       { "directory": "packages/eth-hooks", "changeProcessCWD": true },
-      { "directory": "packages/hardhat-ts", "changeProcessCWD": true },
+      { "directory": "packages/hardhat", "changeProcessCWD": true },
       { "directory": "packages/vite-app-ts", "changeProcessCWD": true },
    ],
    "search.exclude": {
