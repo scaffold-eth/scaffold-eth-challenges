@@ -24,8 +24,8 @@ contract YourCollectible is
     }
 
     function mintItem(address to, string memory uri) public returns (uint256) {
-        uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
+        uint256 tokenId = _tokenIdCounter.current();
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
         return tokenId;
