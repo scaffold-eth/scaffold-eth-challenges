@@ -229,7 +229,7 @@ yarn ipfs
 
 > 👩‍❤️‍👨 Share your public url with friends, add signers and send some tasty ETH to a few lucky ones 😉!!
 
-(Written by: @Steve0xp on Twitter)
+(Written by: @umphams)
 
 # 💬 Support Chat
 
