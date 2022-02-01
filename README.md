@@ -141,7 +141,7 @@ await vendor.transferOwnership("**YOUR FRONTEND ADDRESS**");
 
 👩‍🏫 The hardest part of this challenge is to build your `Vendor` to buy the tokens back.
 
-🧐 The reason why this is hard is the `approve()` pattern in ERC20s.
+🧐 The reason why this is hard is the `approve()` pattern in ERC20s. You can read more about the `approve()` pattern [here](https://docs.ethhub.io/guides/a-straightforward-guide-erc20-tokens/).
 
 😕 First, the user has to call `approve()` on the `YourToken` contract, approving the `Vendor` contract address to take some amount of tokens.
 
