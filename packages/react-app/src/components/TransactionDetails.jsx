@@ -162,7 +162,7 @@ export default function Wallet(props) {
           <hr />
 
           <i>
-            Point your camera phone at qr code to open in
+            TD Point your camera phone at qr code to open in
             <a target="_blank" href={"https://xdai.io/" + pk} rel="noopener noreferrer">
               burner wallet
             </a>

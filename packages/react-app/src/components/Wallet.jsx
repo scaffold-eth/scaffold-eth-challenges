@@ -156,7 +156,7 @@ export default function Wallet(props) {
 
           <hr/>
 
-         <i>Point your camera phone at qr code to open in
+         <i>Point your kcamera phone at qr code to open in
            <a target="_blank" href={"https://xdai.io/"+pk} rel="noopener noreferrer">burner wallet</a>:
          </i>
          <QR value={"https://xdai.io/"+pk} size={"450"} level={"H"} includeMargin={true} renderAs={"svg"} imageSettings={{excavate:false}}/>

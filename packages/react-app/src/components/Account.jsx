@@ -90,8 +90,8 @@ export default function Account({
     <span>
       {address ? <Address address={address} ensProvider={mainnetProvider} blockExplorer={blockExplorer} /> : "Connecting..."}
       <Balance address={address} provider={localProvider} price={price} />
-      <Wallet address={address} provider={userProvider} ensProvider={mainnetProvider} price={price} color={currentTheme == "light" ? "#1890ff" : "#2caad9"} />
-      <TransactionDetails address={address} provider={userProvider} ensProvider={mainnetProvider} price={price} />
+      <Wallet address={address} provider={userProvider} ensProvider={mainnetProvider} price={price} color={currentTheme == "light" ? "#1890ff" : "#2caad9"}/>
+      <TransactionDetails />
     </span>
   );
 
