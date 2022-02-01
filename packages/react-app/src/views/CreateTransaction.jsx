@@ -53,15 +53,15 @@ export default function CreateTransaction({
     const inputTimer = setTimeout(async () => {
       console.log("EFFECT RUNNING");
       try {
-        if(methodName == "transferFunds"){
-          console.log("Send transaction selected")
-          console.log("🔥🔥🔥🔥🔥🔥",amount)
-            const calldata = readContracts[contractName].interface.encodeFunctionData("transferFunds",[to,parseEther("" + parseFloat(amount).toFixed(12))])
-            setData(calldata);  
-        }
-        decodedDataObject = readContracts ? await readContracts[contractName].interface.parseTransaction({ data }) : "";
-        console.log("decodedDataObject", decodedDataObject);
-        setCreateTxnEnabled(true);
+        // if(methodName == "transferFunds"){
+        //   console.log("Send transaction selected")
+        //   console.log("🔥🔥🔥🔥🔥🔥",amount)
+        //     const calldata = readContracts[contractName].interface.encodeFunctionData("transferFunds",[to,parseEther("" + parseFloat(amount).toFixed(12))])
+        //     setData(calldata);
+        // }
+        // decodedDataObject = readContracts ? await readContracts[contractName].interface.parseTransaction({ data }) : "";
+        // console.log("decodedDataObject", decodedDataObject);
+        // setCreateTxnEnabled(true);
         if(decodedDataObject.signature === "addSigner(address,uint256)"){
           setMethodName("addSigner")
           setSelectDisabled(true)
@@ -156,7 +156,7 @@ export default function CreateTransaction({
           </div>
                   <div style={{margin:8,padding:8}}>
           <Select value={methodName} disabled={selectDisabled} style={{ width: "100%" }} onChange={ setMethodName }>
-            <Option key="transferFunds">transferFunds()</Option>
+            //<Option key="transferFunds">transferFunds()</Option>
             <Option disabled={true} key="addSigner">addSigner()</Option>
             <Option disabled={true} key="removeSigner">removeSigner()</Option>
           </Select>
