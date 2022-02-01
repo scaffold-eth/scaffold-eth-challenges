@@ -18,7 +18,6 @@ contract MetaMultiSigWallet {
     event Deposit(address indexed sender, uint amount, uint balance);
     event ExecuteTransaction( address indexed owner, address payable to, uint256 value, bytes data, uint256 nonce, bytes32 hash, bytes result);
     event Owner( address indexed owner, bool added);
-    event TransferFunds(address indexed reciever, uint256 value);
     mapping(address => bool) public isOwner;
     uint public signaturesRequired;
     uint public nonce;
@@ -59,12 +58,6 @@ contract MetaMultiSigWallet {
         emit Owner(oldSigner,isOwner[oldSigner]);
     }
 
-    function transferFunds(address payable to, uint256 value) public onlySelf {
-        require(address(this).balance > value, "Not enough funds in Wallet");
-        emit TransferFunds(to, value);
-        to.transfer(value);
-
-    }
     function updateSignaturesRequired(uint256 newSignaturesRequired) public onlySelf {
         require(newSignaturesRequired>0,"updateSignaturesRequired: must be non-zero sigs required");
         signaturesRequired = newSignaturesRequired;
