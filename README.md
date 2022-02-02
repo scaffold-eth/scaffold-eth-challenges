@@ -91,7 +91,9 @@ Edit `deploy/01_deploy_vendor.js` to deploy the `Vendor` (uncomment Vendor deplo
 
 ⚔️ Side Quest: send tokens from your frontend address to the Vendor contract address and *then* try to buy them.
 
-> ✏️ Edit `YourToken.sol` to transfer the tokens to the `msg.sender` (deployer) in the **constructor()**.
+> ✏️ We can't hard code the vendor address like we did above when deploying to the network because we won't know the vender address at the time we create the token contract. 
+
+> ✏️ So instead, edit `YourToken.sol` to transfer the tokens to the `msg.sender` (deployer) in the **constructor()**.
 
 > ✏️ Then, edit `deploy/01_deploy_vendor.js` to transfer 1000 tokens to `vendor.address`.
 
@@ -139,7 +141,7 @@ await vendor.transferOwnership("**YOUR FRONTEND ADDRESS**");
 
 👩‍🏫 The hardest part of this challenge is to build your `Vendor` to buy the tokens back.
 
-🧐 The reason why this is hard is the `approve()` pattern in ERC20s.
+🧐 The reason why this is hard is the `approve()` pattern in ERC20s. You can read more about the `approve()` pattern [here](https://docs.ethhub.io/guides/a-straightforward-guide-erc20-tokens/).
 
 😕 First, the user has to call `approve()` on the `YourToken` contract, approving the `Vendor` contract address to take some amount of tokens.
 
