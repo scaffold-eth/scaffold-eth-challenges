@@ -13,8 +13,6 @@
 
 > 🏆 The final **deliverable** is an app that lets users purchase and transfer your token. Deploy your contracts on your public chain of choice and then `yarn build` and `yarn surge` your app to a public web server. Share the url in the [Challenge 2 telegram channel](https://t.me/joinchat/IfARhZFc5bfPwpjq).🍾
 
-> 📱 Part of the challenge is making the **UI/UX** enjoyable and clean! 🤩
-
 🧫 Everything starts by ✏️ Editing `YourToken.sol` in `packages/hardhat/contracts`
 
 ---
@@ -54,16 +52,11 @@ You'll have three terminals up for:
 
 > 👩‍💻 Edit `YourToken.sol` to inherit the **ERC20** token standard from OpenZeppelin
 
-Mint **1000** (\* 10 \*\* 18) in the constructor (to the `msg.sender`) and then send them to your frontend address in the `deploy/00_deploy_your_token.js`:
+> Mint **1000** (\* 10 \*\* 18) to your frontend address using the `constructor()`.
 
-```javascript
-const result = await yourToken.transfer(
-  "**YOUR FRONTEND ADDRESS**",
-  ethers.utils.parseEther("1000")
-);
-```
+(Your frontend address is the address in the top right of http://localhost:3000)
 
-(Your frontend address is the address in the top right of your frontend. Go to localhost:3000 and copy the address from the top right.)
+> You can `yarn deploy --reset` to deploy your contract until you get it right.
 
 #### 🥅 Goals
 
@@ -76,7 +69,7 @@ const result = await yourToken.transfer(
 
 ### Checkpoint 3: ⚖️ Vendor 🤖
 
-> 👩‍💻 Create a `Vendor.sol` contract with a **payable** `buyTokens()` function
+> 👩‍💻 Edit the `Vendor.sol` contract with a **payable** `buyTokens()` function
 
 Use a price variable named `tokensPerEth` set to **100**:
 
@@ -90,13 +83,34 @@ uint256 public constant tokensPerEth = 100;
 
 Edit `deploy/01_deploy_vendor.js` to deploy the `Vendor` (uncomment Vendor deploy lines).
 
-You will also want to change `00_deploy_your_token.js` and `01_deploy_vendor.js` so you transfer the tokens to the `vendor.address` instead of your frontend address.
+#### 🥅 Goals
+
+- [ ] When you try to buy tokens from the vendor, you should get an error: **'ERC20: transfer amount exceeds balance'**
+
+⚠️ this is because the Vendor contract doesn't have any YourTokens yet!
+
+⚔️ Side Quest: send tokens from your frontend address to the Vendor contract address and *then* try to buy them.
+
+> ✏️ We can't hard code the vendor address like we did above when deploying to the network because we won't know the vender address at the time we create the token contract. 
+
+> ✏️ So instead, edit `YourToken.sol` to transfer the tokens to the `msg.sender` (deployer) in the **constructor()**.
+
+> ✏️ Then, edit `deploy/01_deploy_vendor.js` to transfer 1000 tokens to `vendor.address`.
 
 ```js
-const result = await yourToken.transfer( vendor.address, ethers.utils.parseEther("1000") );
+await yourToken.transfer( vendor.address, ethers.utils.parseEther("1000") );
 ```
 
+> You can `yarn deploy --reset` to deploy your contract until you get it right.
+
 (You will use the `YourToken` UI tab and the frontend for most of your testing. Most of the UI is already built for you for this challenge.)
+
+#### 🥅 Goals
+
+- [ ] Does the `Vendor` address start with a `balanceOf` **1000** in `YourToken` on the `Debug Contracts` tab?
+- [ ] Can you buy **10** tokens for **0.1** ETH?
+- [ ] Can you transfer tokens to a different account?
+
 
 > 📝 Edit `Vendor.sol` to inherit *Ownable*.
 
@@ -106,15 +120,15 @@ In `deploy/01_deploy_vendor.js` you will need to call `transferOwnership()` on t
 await vendor.transferOwnership("**YOUR FRONTEND ADDRESS**");
 ```
 
-> 📝 Finally, add a `withdraw()` function in `Vendor.sol` that lets the owner withdraw ETH from the vendor.
+#### 🥅 Goals
 
+- [ ] Is your frontend address the `owner` of the `Vendor`?
+
+> 📝 Finally, add a `withdraw()` function in `Vendor.sol` that lets the owner withdraw ETH from the vendor.
 
 #### 🥅 Goals
 
-- [ ] Does the `Vendor` address start with a `balanceOf` **1000** in `YourToken` on the `Debug Contracts` tab?
-- [ ] Can you buy **10** tokens for **0.1** ETH?
-- [ ] Can you transfer tokens to a different account?
-- [ ] Can the `owner` withdraw the ETH from the `Vendor`?
+- [ ] Can **only** the `owner` withdraw the ETH from the `Vendor`?
 
 #### ⚔️ Side Quests
 
@@ -127,24 +141,31 @@ await vendor.transferOwnership("**YOUR FRONTEND ADDRESS**");
 
 👩‍🏫 The hardest part of this challenge is to build your `Vendor` to buy the tokens back.
 
-🧐 The reason why this is hard is the `approve()` pattern in ERC20s.
+🧐 The reason why this is hard is the `approve()` pattern in ERC20s. You can read more about the `approve()` pattern [here](https://docs.ethhub.io/guides/a-straightforward-guide-erc20-tokens/).
 
 😕 First, the user has to call `approve()` on the `YourToken` contract, approving the `Vendor` contract address to take some amount of tokens.
 
-🤨 Then, the user makes a *second transaction* to the `Vendor` contract to `sellTokens()`.
+🤨 Then, the user makes a *second transaction* to the `Vendor` contract to `sellTokens(uint256 amount)`.
 
 🤓 The `Vendor` should call `yourToken.transferFrom(msg.sender, address(this), theAmount)` and if the user has approved the `Vendor` correctly, tokens should transfer to the `Vendor` and ETH should be sent to the user.
 
-(Use the `Debug Contracts` tab to call the approve and sellTokens() at first but then look in the `App.jsx` for the extra approve/sell UI to uncomment.)
+> 📝 Edit `Vendor.sol` and add a `sellTokens()` function!
 
+⚠️ You will need extra UI for calling `approve()` before calling `sellTokens(uint256 amount)`.
+
+🔨 Use the `Debug Contracts` tab to call the approve and sellTokens() at first but then...
+
+🔍 Look in the `App.jsx` for the extra approve/sell UI to uncomment!
 
 #### 🥅 Goal
 
-- [ ] Can you sell tokens back to the vendor and receive ETH?
+- [ ] Can you sell tokens back to the vendor?
+- [ ] Do you receive the right amount of ETH for the tokens?
 
 #### ⚔️ Side Quest
 
 - [ ] Should we disable the `owner` withdraw to keep liquidity in the `Vendor`?
+- [ ] It would be a good idea to display Sell Token Events.  Create the `event` and `emit` it in your `Vendor.sol` and look at `buyTokensEvents` in your `App.jsx` for an example of how to update your frontend.
 
 ----
 
@@ -162,13 +183,7 @@ await vendor.transferOwnership("**YOUR FRONTEND ADDRESS**");
 
 🔬 Inspect the block explorer for the network you deployed to... make sure your contract is there.
 
-👮 Your token contract source needs to be **verified** 🔃 (source code publicly available on the block explorer).
-
-📠 You will need a Etherscan API key for this and you can get on by creating a free account at [etherscan.io](https://etherscan.io). Add your key to the `hardhat.config` file
-at around line 258. The verify script is at the bottom of `00_deploy_your_token.js`. You will see something like this after successful completion.
-
-⚔️ Side Quest: 🔂 use this same methodology to verify the Vendor contract.
-
+---
 ### Checkpoint 6: 🚢 Ship it! 🚁
 
 📦 Run `yarn build` to package up your frontend.
@@ -182,16 +197,12 @@ at around line 258. The verify script is at the bottom of `00_deploy_your_token.
 ---
 ### Checkpoint 7: 📜 Contract Verification
 
-Update the api-key in packages/hardhat/package.json file. You can get your key [here](https://etherscan.io/myapikey).
-
-![Screen Shot 2021-11-30 at 10 21 01 AM](https://user-images.githubusercontent.com/9419140/144075208-c50b70aa-345f-4e36-81d6-becaa5f74857.png)
+Update the `api-key` in `packages/hardhat/package.json`. You can get your key [here](https://etherscan.io/myapikey).
 
 > Now you are ready to run the `yarn verify --network your_network` command to verify your contracts on etherscan 🛰
 
-This will be the URL you submit to [SpeedRun](https://speedrunethereum.com).
+👉 This will be the URL you submit to 🏃‍♀️[SpeedRunEthereum.com](https://speedrunethereum.com).
 
 ---
 
-> 🏃 Head to your next challenge [here](https://speedrunethereum.com).
-
-> 💬 Problems, questions, comments on the stack? Post them to the [🏗 scaffold-eth developers chat](https://t.me/joinchat/F7nCRK3kI93PoCOk)
+💬 Problems, questions, comments on the stack? Post them to the [Challenge 2 telegram channel](https://t.me/joinchat/IfARhZFc5bfPwpjq)

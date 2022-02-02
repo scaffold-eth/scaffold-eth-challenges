@@ -10,11 +10,8 @@ import { ethers } from "ethers";
 
 /*
   ~ What it does? ~
-
   Displays an address input with QR scan option
-
   ~ How can I use? ~
-
   <AddressInput
     autoFocus
     ensProvider={mainnetProvider}
@@ -22,9 +19,7 @@ import { ethers } from "ethers";
     value={toAddress}
     onChange={setToAddress}
   />
-
   ~ Features ~
-
   - Provide ensProvider={mainnetProvider} and your address will be replaced by ENS name
               (ex. "0xa870" => "user.eth") or you can enter directly ENS name instead of address
   - Provide placeholder="Enter address" value for the input

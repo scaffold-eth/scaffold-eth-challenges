@@ -508,6 +508,10 @@ function App(props) {
     tokenBuyAmount.valid && tokensPerEth && ethers.utils.parseEther("" + tokenBuyAmount.value / parseFloat(tokensPerEth));
   console.log("ethCostToPurchaseTokens:", ethCostToPurchaseTokens);
 
+  const ethValueToSellTokens =
+    tokenSellAmount && tokensPerEth && ethers.utils.parseEther("" + tokenSellAmount / parseFloat(tokensPerEth));
+  console.log("ethValueToSellTokens:", ethValueToSellTokens);
+
   const [tokenSendToAddress, setTokenSendToAddress] = useState();
   const [tokenSendAmount, setTokenSendAmount] = useState();
 
@@ -633,8 +637,9 @@ function App(props) {
             </div>
           
             
-            Extra UI for buying the tokens back from the user using "approve" and "sellTokens"
-            {/*
+            
+            {/*Extra UI for buying the tokens back from the user using "approve" and "sellTokens"
+
             <Divider />
             <div style={{ padding: 8, marginTop: 32, width: 300, margin: "auto" }}>
               <Card title="Sell Tokens">
@@ -654,11 +659,17 @@ function App(props) {
                       setTokenSellAmount(sellAmount);
                     }}
                   />
-                  <Balance balance={ethCostToPurchaseTokens} dollarMultiplier={price} />
+                  <Balance balance={ethValueToSellTokens} dollarMultiplier={price} />
                 </div>
                 {isSellAmountApproved?
 
                   <div style={{ padding: 8 }}>
+                    <Button
+                      disabled={true}
+                      type={"primary"}
+                    >
+                      Approve Tokens
+                    </Button>
                     <Button
                       type={"primary"}
                       loading={buying}
@@ -666,6 +677,7 @@ function App(props) {
                         setBuying(true);
                         await tx(writeContracts.Vendor.sellTokens(tokenSellAmount.valid && ethers.utils.parseEther(tokenSellAmount.value)));
                         setBuying(false);
+                        setTokenSellAmount("");
                       }}
                       disabled={!tokenSellAmount.valid}
                     >
@@ -681,10 +693,21 @@ function App(props) {
                         setBuying(true);
                         await tx(writeContracts.YourToken.approve(readContracts.Vendor.address, tokenSellAmount && ethers.utils.parseEther(tokenSellAmount)));
                         setBuying(false);
+                        let resetAmount = tokenSellAmount
+                        setTokenSellAmount("");
+                        setTimeout(()=>{
+                          setTokenSellAmount(resetAmount)
+                        },1500)
                       }}
                       disabled={!tokenSellAmount.valid}
                       >
                       Approve Tokens
+                    </Button>
+                    <Button
+                      disabled={true}
+                      type={"primary"}
+                    >
+                      Sell Tokens
                     </Button>
                   </div>
                     }
@@ -692,7 +715,6 @@ function App(props) {
 
               </Card>
             </div>
-            
             */}
             <div style={{ padding: 8, marginTop: 32 }}>
               <div>Vendor Token Balance:</div>
@@ -723,8 +745,6 @@ function App(props) {
             </div>
 
             {/*
-
-
 
                 🎛 this scaffolding is full of commonly used components
                 this <Contract/> component will automatically parse your ABI
