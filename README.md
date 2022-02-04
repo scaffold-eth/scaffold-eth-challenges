@@ -161,6 +161,15 @@ yarn surge
 ```
 (You could also `yarn s3` or maybe even `yarn ipfs`?)
 
+⚠️ Run the automated testing function to make sure your app passes
+
+```sh
+yarn test
+```
+![testOutput](https://user-images.githubusercontent.com/12072395/152587433-8314f0f1-5612-44ae-bedb-4b3292976a9f.PNG)
+
+---
+
 # Checkpoint 5: 📜 Contract Verification
 
 Update the `api-key` in `packages/hardhat/package.json` file. You can get your key [here](https://etherscan.io/myapikey).
