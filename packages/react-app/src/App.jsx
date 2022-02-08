@@ -509,7 +509,7 @@ function App(props) {
   console.log("ethCostToPurchaseTokens:", ethCostToPurchaseTokens);
 
   const ethValueToSellTokens =
-    tokenSellAmount && tokensPerEth && ethers.utils.parseEther("" + tokenSellAmount / parseFloat(tokensPerEth));
+    tokenSellAmount.valid && tokensPerEth && ethers.utils.parseEther("" + tokenSellAmount.value / parseFloat(tokensPerEth));
   console.log("ethValueToSellTokens:", ethValueToSellTokens);
 
   const [tokenSendToAddress, setTokenSendToAddress] = useState();
