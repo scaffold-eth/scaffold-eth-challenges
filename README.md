@@ -167,6 +167,9 @@ await vendor.transferOwnership("**YOUR FRONTEND ADDRESS**");
 - [ ] Should we disable the `owner` withdraw to keep liquidity in the `Vendor`?
 - [ ] It would be a good idea to display Sell Token Events.  Create the `event` and `emit` it in your `Vendor.sol` and look at `buyTokensEvents` in your `App.jsx` for an example of how to update your frontend.
 
+#### ⚠️ Test it!
+-  Now is a good time to run `yarn test` to run the automated testing function. It will test that you hit the core checkpoints.  You are looking for all green checkmarks and passing tests!
+
 ----
 
 ### Checkpoint 5: 💾 Deploy it! 🛰
