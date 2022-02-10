@@ -691,7 +691,7 @@ function App(props) {
                       loading={buying}
                       onClick={async () => {
                         setBuying(true);
-                        await tx(writeContracts.YourToken.approve(readContracts.Vendor.address, tokenSellAmount && ethers.utils.parseEther(tokenSellAmount)));
+                        await tx(writeContracts.YourToken.approve(readContracts.Vendor.address, tokenSellAmount.valid && ethers.utils.parseEther(tokenSellAmount.value)));
                         setBuying(false);
                         let resetAmount = tokenSellAmount
                         setTokenSellAmount("");
