@@ -172,6 +172,8 @@ If the balance is less than the `threshold`, you want to set a `openForWithdraw`
 
 💽 Upload your app to surge with `yarn surge` (you could also `yarn s3` or maybe even `yarn ipfs`?)
 
+>  😬 Windows users beware!  You may have to change the surge code in `packages/react-app/package.json` to just `"surge": "surge ./build",`
+
 ⚙ If you get a permissions error `yarn surge` again until you get a unique URL, or customize it in the command line.
 
 > 📝 you will use this deploy URL to submit to [SpeedRun](https://speedrunethereum.com).
