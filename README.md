@@ -161,6 +161,8 @@ yarn surge
 ```
 (You could also `yarn s3` or maybe even `yarn ipfs`?)
 
+⚙ If you get a permissions error `yarn deploy` again until you get a unique URL, or customize it in the command line. 
+
 ⚠️ Run the automated testing function to make sure your app passes
 
 ```sh
