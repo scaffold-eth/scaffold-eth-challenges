@@ -193,6 +193,8 @@ await vendor.transferOwnership("**YOUR FRONTEND ADDRESS**");
 
 💽 Upload your app to surge with `yarn surge` (you could also `yarn s3` or maybe even `yarn ipfs`?)
 
+⚙ If you get a permissions error `yarn surge` again until you get a unique URL, or customize it in the command line.
+
 🚔 Traffic to your url might break the [Infura](https://infura.io/) rate limit, edit your key: `constants.js` in `packages/ract-app/src`.
 
 🎖 Show off your app by pasting the url in the [Challenge 2 telegram channel](https://t.me/joinchat/IfARhZFc5bfPwpjq) 🎖
