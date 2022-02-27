@@ -68,10 +68,10 @@ contract DEX {
 
     /**
      * @notice returns liquidity for a user. Note this is not needed typically due to the `liquidity()` mapping variable being public and having a getter as a result. This is left though as it is used within the front end code (App.jsx).
+     * if you are using a mapping liquidity, then you can use `return liquidity[lp]` to get the liquidity for a user.
+     *
      */
-    function getLiquidity(address lp) public view returns (uint256) {
-        return liquidity[lp];
-    }
+    function getLiquidity(address lp) public view returns (uint256) {}
 
     /**
      * @notice sends Ether to DEX in exchange for $BAL
