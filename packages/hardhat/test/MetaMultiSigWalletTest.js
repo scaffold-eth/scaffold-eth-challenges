@@ -27,4 +27,27 @@ describe("MetaMultiSigWallet Test", () => {
       expect(await metaMultiSigWallet.isOwner(owner.address)).to.equal(true);
     });
   });
+
+  describe("Testing MetaMultiSigWallet functionality", () => {
+    it("Adding a new signer", async () => {
+      let newSigner = addr1.address;
+
+      let nonce = await metaMultiSigWallet.nonce();
+      let to = metaMultiSigWallet.address;
+      let value = 0;
+
+      let callData = metaMultiSigWallet.interface.encodeFunctionData("addSigner",[newSigner, 1]);
+      
+      let hash = await metaMultiSigWallet.getTransactionHash(nonce, to, value, callData);
+
+      const signature = await owner.provider.send("personal_sign", [hash, owner.address]);
+
+      // Double checking if owner address is recovered properly, executeTransaction would fail anyways
+      expect(await metaMultiSigWallet.recover(hash, signature)).to.equal(owner.address);
+
+      await metaMultiSigWallet.executeTransaction(metaMultiSigWallet.address, value, callData, [signature]);
+
+      expect(await metaMultiSigWallet.isOwner(newSigner)).to.equal(true);
+    });
+  });
 });
