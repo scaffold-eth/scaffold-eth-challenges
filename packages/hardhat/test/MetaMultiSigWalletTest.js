@@ -109,5 +109,29 @@ describe("MetaMultiSigWallet Test", () => {
 
       expect(addr1Balance).to.equal(addr1BeforeBalance.add(value));
     });
+
+    it("Allowing addr1 to spend 10 Monyo tokens. Then addr1 transfers the Monyo tokens to addr2", async () => {
+      let nonce = await metaMultiSigWallet.nonce();
+      let to = monyo.address;
+      let value = 0
+
+      let amount = ethers.utils.parseEther("10");
+
+      let callData = monyo.interface.encodeFunctionData("approve",[addr1.address, amount]);
+      
+      let hash = await metaMultiSigWallet.getTransactionHash(nonce, to, value.toString(), callData);
+
+      const signature = await owner.provider.send("personal_sign", [hash, owner.address]);
+
+      await metaMultiSigWallet.executeTransaction(to, value.toString(), callData, [signature]);
+
+      let metaMultiSigWallet_addr1Allowance = await monyo.allowance(metaMultiSigWallet.address, addr1.address);
+      expect(metaMultiSigWallet_addr1Allowance).to.equal(amount);
+
+      await monyo.connect(addr1).transferFrom(metaMultiSigWallet.address, addr2.address, amount);
+
+      let addr2MonyoBalance = await monyo.balanceOf(addr2.address);
+      expect(addr2MonyoBalance).to.equal(amount);
+    });
   });
 });
