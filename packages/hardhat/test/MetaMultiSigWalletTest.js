@@ -14,6 +14,9 @@ describe("MetaMultiSigWallet Test", () => {
   const CHAIN_ID = 1; // I guess this number doesn't really matter
   let signatureRequired = 1; // Starting with something straithforward
 
+  let monyo; // ERC20 token
+  const MONYO_TOKEN_TOTAL_SUPPLY = "100";
+
   // Running this before each test
   // Deploys MetaMultiSigWallet and sets up some addresses for easier testing
   beforeEach(async function () {
@@ -29,11 +32,20 @@ describe("MetaMultiSigWallet Test", () => {
     });
 
     provider = owner.provider;
+
+    let monyoFactory = await ethers.getContractFactory("Monyo");
+    monyo = await monyoFactory.deploy(metaMultiSigWallet.address, ethers.utils.parseEther(MONYO_TOKEN_TOTAL_SUPPLY)); // Create Monyo ERC20 token, mint 100 to the multiSigWallet
   });
 
   describe("Deployment", () => {
     it("isOwner should return true for the owner address", async () => {     
       expect(await metaMultiSigWallet.isOwner(owner.address)).to.equal(true);
+    });
+
+    it("Multi Sig Wallet should own all the monyo token", async () => {
+      let metaMultiSigWalletMonyoBalance = await monyo.balanceOf(metaMultiSigWallet.address);
+
+      expect(metaMultiSigWalletMonyoBalance).to.equal(ethers.utils.parseEther(MONYO_TOKEN_TOTAL_SUPPLY));
     });
   });
 
