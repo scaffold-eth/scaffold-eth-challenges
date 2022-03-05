@@ -49,5 +49,24 @@ describe("MetaMultiSigWallet Test", () => {
 
       expect(await metaMultiSigWallet.isOwner(newSigner)).to.equal(true);
     });
+
+    it("Update Signatures Required to 2 - locking all the funds in the wallet, becasuse there is only 1 signer", async () => {
+      let nonce = await metaMultiSigWallet.nonce();
+      let to = metaMultiSigWallet.address;
+      let value = 0;
+
+      let callData = metaMultiSigWallet.interface.encodeFunctionData("updateSignaturesRequired",[2]);
+      
+      let hash = await metaMultiSigWallet.getTransactionHash(nonce, to, value, callData);
+
+      const signature = await owner.provider.send("personal_sign", [hash, owner.address]);
+
+      // Double checking if owner address is recovered properly, executeTransaction would fail anyways
+      expect(await metaMultiSigWallet.recover(hash, signature)).to.equal(owner.address);
+
+      await metaMultiSigWallet.executeTransaction(metaMultiSigWallet.address, value, callData, [signature]);
+
+      expect(await metaMultiSigWallet.signaturesRequired()).to.equal(2);
+    });
   });
 });
