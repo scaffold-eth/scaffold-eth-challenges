@@ -9,6 +9,8 @@ describe("MetaMultiSigWallet Test", () => {
   let addr3;
   let addrs;
 
+  let provider;
+
   const CHAIN_ID = 1; // I guess this number doesn't really matter
   let signatureRequired = 1; // Starting with something straithforward
 
@@ -20,6 +22,13 @@ describe("MetaMultiSigWallet Test", () => {
     let metaMultiSigWalletFactory = await ethers.getContractFactory("MetaMultiSigWallet");
 
     metaMultiSigWallet = await metaMultiSigWalletFactory.deploy(CHAIN_ID, [owner.address], signatureRequired);
+
+    await owner.sendTransaction({
+      to: metaMultiSigWallet.address,
+      value: ethers.utils.parseEther("1.0")
+    });
+
+    provider = owner.provider;
   });
 
   describe("Deployment", () => {
@@ -67,6 +76,26 @@ describe("MetaMultiSigWallet Test", () => {
       await metaMultiSigWallet.executeTransaction(metaMultiSigWallet.address, value, callData, [signature]);
 
       expect(await metaMultiSigWallet.signaturesRequired()).to.equal(2);
+    });
+
+    it("Transferring 0.1 eth to addr1", async () => {
+      let addr1BeforeBalance = await provider.getBalance(addr1.address);
+
+      let nonce = await metaMultiSigWallet.nonce();
+      let to = addr1.address;
+      let value = ethers.utils.parseEther("0.1");
+
+      let callData = "0x00"; // This can be anything, we could send a message 
+      
+      let hash = await metaMultiSigWallet.getTransactionHash(nonce, to, value.toString(), callData);
+
+      const signature = await owner.provider.send("personal_sign", [hash, owner.address]);
+
+      await metaMultiSigWallet.executeTransaction(to, value.toString(), callData, [signature]);
+
+      let addr1Balance = await provider.getBalance(addr1.address);
+
+      expect(addr1Balance).to.equal(addr1BeforeBalance.add(value));
     });
   });
 });
