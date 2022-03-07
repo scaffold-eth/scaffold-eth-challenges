@@ -152,6 +152,8 @@ If the balance is less than the `threshold`, you want to set a `openForWithdraw`
 
 ⛽️ You will need to send ETH to your **deployer address** with your wallet.
 
+ > 📝 If you plan on submitting this challenge, be sure to set your ```deadline``` to at least ```block.timestamp + 72 hours```
+
  >  🚀 Run `yarn deploy` to deploy your smart contract to a public network (selected in hardhat.config.js)
 
 ---
@@ -168,8 +170,6 @@ If the balance is less than the `threshold`, you want to set a `openForWithdraw`
 
  📦  Run `yarn build` to package up your frontend.
  
- > 📝 If you plan on submitting this challenge, be sure to set your ```deadline``` to at least ```block.timestamp + 72 hours```
-
 💽 Upload your app to surge with `yarn surge` (you could also `yarn s3` or maybe even `yarn ipfs`?)
 
 >  😬 Windows users beware!  You may have to change the surge code in `packages/react-app/package.json` to just `"surge": "surge ./build",`
