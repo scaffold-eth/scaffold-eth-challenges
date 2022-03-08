@@ -4,9 +4,9 @@
 
 🎫 Create a simple NFT to learn basics of 🏗 scaffold-eth. You'll use [👷‍♀️ HardHat](https://hardhat.org/getting-started/) to compile and deploy smart contracts. Then, you'll use a template React app full of important Ethereum components and hooks. Finally, you'll deploy an NFT to a public network to share with friends! 🚀
 
-🌟 The final deliverable is an app that lets users purchase and transfer NFTs. Deploy your contracts to Rinkeby and then build and upload your app to a public web server. Share the url on [SpeedRunEthereum.com](https://speedrunethereum.com)!
+🌟 The final deliverable is an app that lets users purchase and transfer NFTs. Deploy your contracts to Rinkeby and then build and upload your app to a public web server. Submit the url on [SpeedRunEthereum.com](https://speedrunethereum.com)!
 
-💬 Meet other builders working on this challenge in the [Challenge 0 telegram channel](https://t.me/+Y2vqXZZ_pEFhMGMx)!!!
+💬 Meet other builders working on this challenge and get help in the [Challenge 0 telegram channel](https://t.me/+Y2vqXZZ_pEFhMGMx)!!!
 
 ---
 
@@ -18,7 +18,7 @@ Want a fresh cloud environment? Click this to open a gitpod workspace, then skip
 
 Required: 
 * [Git](https://git-scm.com/downloads)
-* [Node](https://nodejs.org/dist/latest-v12.x/)
+* [Node](https://nodejs.org/dist/latest-v16.x/)
 * [Yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable)
 
 (⚠️ Don't install the linux package `yarn` make sure you install yarn with `npm i -g yarn` or even `sudo npm i -g yarn`!)
@@ -187,10 +187,6 @@ Update the `api-key` in `packages/hardhat/package.json` file. You can get your k
 ---
 
 # Checkpoint 6: 💪 Flex!
-
-> 🎖 Show off your app by pasting the surge url in the [Challenge 0 telegram channel](https://t.me/+Y2vqXZZ_pEFhMGMx) 🎖
-
----
 
 👩‍❤️‍👨 Share your public url with a friend and ask them for their address to send them a collectible :)
 
