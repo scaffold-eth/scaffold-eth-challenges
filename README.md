@@ -8,7 +8,9 @@
 
 > 🎛 Building the frontend to display the information and UI is just as important as writing the contract. The goal is to deploy the contract and the app to allow anyone to stake using your app. Use a `Stake(address,uint256)` event to <List/> all stakes.
 
-> 🏆 The final **deliverable** is deploying a decentralized application to a public blockchain and then `yarn build` and `yarn surge` your app to a public webserver. Share the url in the [Challenge 1 telegram channel](https://t.me/joinchat/E6r91UFt4oMJlt01) to earn a collectible and cred! || Part of the challenge is making the **UI/UX** enjoyable and clean! 🍾
+> 🌟 The final deliverable is deploying a decentralized application to a public blockchain and then `yarn build` and `yarn surge` your app to a public webserver.  Submit the url on [SpeedRunEthereum.com](https://speedrunethereum.com)!
+
+> 💬 Meet other builders working on this challenge and get help in the [Challenge 1 telegram](https://t.me/joinchat/E6r91UFt4oMJlt01)!
 
 
 🧫 Everything starts by ✏️ Editing `Staker.sol` in `packages/hardhat/contracts`
@@ -176,11 +178,9 @@ If the balance is less than the `threshold`, you want to set a `openForWithdraw`
 
 ⚙ If you get a permissions error `yarn surge` again until you get a unique URL, or customize it in the command line.
 
-> 📝 you will use this deploy URL to submit to [SpeedRun](https://speedrunethereum.com).
+> 📝 you will use this deploy URL to submit to [SpeedRunEthereum.com](https://speedrunethereum.com).
 
 🚔 Traffic to your url might break the [Infura](https://infura.io/) rate limit, edit your key: `constants.js` in `packages/ract-app/src`.
-
-🎖 Show off your app by pasting the url in the [Challenge 1 telegram channel](https://t.me/joinchat/E6r91UFt4oMJlt01) 🎖
 
 ---
 ### Checkpoint 7: 📜 Contract Verification
