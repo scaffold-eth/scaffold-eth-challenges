@@ -4,19 +4,24 @@
 
 🎫 Create a simple NFT to learn basics of 🏗 scaffold-eth. You'll use [👷‍♀️ HardHat](https://hardhat.org/getting-started/) to compile and deploy smart contracts. Then, you'll use a template React app full of important Ethereum components and hooks. Finally, you'll deploy an NFT to a public network to share with friends! 🚀
 
-🏆 The final deliverable is an app that lets users purchase and transfer NFTs. Deploy your contracts to Rinkeby and then build and upload your app to a public web server. Share the url in the Challenge 0 telegram channel!!!
+🌟 The final deliverable is an app that lets users purchase and transfer NFTs. Deploy your contracts to Rinkeby and then build and upload your app to a public web server. Submit the url on [SpeedRunEthereum.com](https://speedrunethereum.com)!
+
+💬 Meet other builders working on this challenge and get help in the [Challenge 0 telegram](https://t.me/+Y2vqXZZ_pEFhMGMx)!!!
 
 ---
 
 # Checkpoint 0: 📦 Install 📚
 
+Want a fresh cloud environment? Click this to open a gitpod workspace, then skip to Checkpoint 1 after the tasks are complete.
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-0-simple-nft)
 
 Required: 
 * [Git](https://git-scm.com/downloads)
-* [Node](https://nodejs.org/dist/latest-v12.x/)
+* [Node](https://nodejs.org/dist/latest-v16.x/)  (🧨 Use Node v16 or a previous version as v17 may cause errors 🧨)
 * [Yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable)
 
-(⚠️ Don't install the linux package `yarn` make sure you install yarn with `npm i -g yarn`)
+(⚠️ Don't install the linux package `yarn` make sure you install yarn with `npm i -g yarn` or even `sudo npm i -g yarn`!)
 
 ```sh
 git clone https://github.com/scaffold-eth/scaffold-eth-challenges.git challenge-0-simple-nft
@@ -72,18 +77,12 @@ yarn deploy
 
 # Checkpoint 2: 🖨 Minting 
 
-> ✏️ Edit the script `mint.js` in `packages/hardhat/scripts` and update the `toAddress` to your frontend address (in the top right of http://localhost:3000).
+> ✏️ Mint some NFTs!  Click the `MINT NFT` button in the YourCollectables tab.  
 
-![nft1](https://user-images.githubusercontent.com/526558/124386962-37e5dd00-dcb3-11eb-911e-0afce760d7ee.png)
+![MintNFT](https://user-images.githubusercontent.com/12072395/145692116-bebcb514-e4f0-4492-bd10-11e658abaf75.PNG)
 
-> in a terminal window run the mint script:
 
-```sh
-yarn mint
-```
-![nft2](https://user-images.githubusercontent.com/526558/124386972-3d432780-dcb3-11eb-933e-dad7dfd313b2.png)
-
-👀 You should see your collectibles show up if you minted to the correct address:
+👀 You should see your collectibles start to show up:
 
 ![nft3](https://user-images.githubusercontent.com/526558/124386983-48965300-dcb3-11eb-88a7-e88ad6307976.png)
 
@@ -92,6 +91,10 @@ yarn mint
 🎟 Transfer an NFT to the incognito window address using the UI:
 
 ![nft5](https://user-images.githubusercontent.com/526558/124387008-58ae3280-dcb3-11eb-920d-07b6118f1ab2.png)
+
+👛 Try to mint an NFT from the incognito window. 
+
+> Can you mint an NFT with no funds in this address?  You might need to grab funds from the faucet to pay the gas!
 
 🕵🏻‍♂️ Inspect the `Debug Contracts` tab to figure out what address is the `owner` of `YourCollectible`?
 
@@ -107,9 +110,9 @@ yarn mint
 
 🛰 Ready to deploy to a public testnet?!?
 
-> Change the `defaultNetwork` in `packages/hardhat/hardhat.config.js` to `NETWORKS.rinkeby`
+> Change the `defaultNetwork` in `packages/hardhat/hardhat.config.js` to `rinkeby`
 
-![image](https://user-images.githubusercontent.com/2653167/142488032-fd3bd75f-34d0-46fc-be63-5d66e09174e6.png)
+![networkSelect](https://user-images.githubusercontent.com/12072395/146871168-29b3d87a-7d25-4972-9b3c-0ec8c979171b.PNG)
 
 🔐 Generate a **deployer address** with `yarn generate`
 
@@ -129,7 +132,7 @@ yarn mint
 yarn deploy
 ```
 
-> 💬 Hint: You can set the `defaultNetwork` in `hardhat.config.js` to `Rinkeby` OR you can `yarn deploy --network Rinkeby`. 
+> 💬 Hint: You can set the `defaultNetwork` in `hardhat.config.js` to `Rinkeby` OR you can `yarn deploy --network rinkeby`. 
 
 ---
 
@@ -143,14 +146,9 @@ You should see the correct network in the frontend (http://localhost:3000):
 
 ![nft10](https://user-images.githubusercontent.com/526558/124387099-9a3edd80-dcb3-11eb-9a57-54a7d370589a.png)
 
-🎫 Ready to mint a batch of NFTs for reals?
+🎫 Ready to mint a batch of NFTs for reals?  Use the `MINT NFT` button.
 
-```sh
-yarn mint
-```
-
-![nft11](https://user-images.githubusercontent.com/526558/124387132-b04c9e00-dcb3-11eb-95d1-03b8c272e52f.png)
-
+![MintNFT2](https://user-images.githubusercontent.com/12072395/145692572-d61c971d-7452-4218-9c66-d675bb78a9dc.PNG)
 
 
 📦 Build your frontend:
@@ -165,14 +163,30 @@ yarn surge
 ```
 (You could also `yarn s3` or maybe even `yarn ipfs`?)
 
+>  😬 Windows users beware!  You may have to change the surge code in `packages/react-app/package.json` to just `"surge": "surge ./build",`
+
+⚙ If you get a permissions error `yarn surge` again until you get a unique URL, or customize it in the command line. 
+
+⚠️ Run the automated testing function to make sure your app passes
+
+```sh
+yarn test
+```
+![testOutput](https://user-images.githubusercontent.com/12072395/152587433-8314f0f1-5612-44ae-bedb-4b3292976a9f.PNG)
 
 ---
 
-# Checkpoint 5: 💪 Flex!
+# Checkpoint 5: 📜 Contract Verification
 
-> 🎖 Show off your app by pasting the surge url in the [Challenge 0 telegram channel](https://t.me/joinchat/Y2vqXZZ_pEFhMGMx)
+Update the `api-key` in `packages/hardhat/package.json` file. You can get your key [here](https://etherscan.io/myapikey).
+
+![Screen Shot 2021-11-30 at 10 21 01 AM](https://user-images.githubusercontent.com/9419140/144075208-c50b70aa-345f-4e36-81d6-becaa5f74857.png)
+
+> Now you are ready to run the `yarn verify --network your_network` command to verify your contracts on etherscan 🛰
 
 ---
+
+# Checkpoint 6: 💪 Flex!
 
 👩‍❤️‍👨 Share your public url with a friend and ask them for their address to send them a collectible :)
 
@@ -183,16 +197,19 @@ yarn surge
 # ⚔️ Side Quests
 
 ## 🐟 Open Sea
-> Add your contract to OpenSea ( create -> submit NFTs -> "or add an existing contract")
+> Add your contract to OpenSea
+> 1. hover over your profile photo in the top right and navigate to `Collections` or go to `https://opensea.io/collections`
+> ![my_collections](https://user-images.githubusercontent.com/46639943/150223014-92a2e32d-d2a2-4fd4-ac3b-bd2d0fcb5840.png)
+> 2. click the vertical elipsis and select `Import an existing smart contract`
+> ![import_contract](https://user-images.githubusercontent.com/46639943/150225448-815a17c1-4ea6-4663-8aff-8f757bebbb54.png)
+> 3. select `Live on a testnet`
+> ![live_on_testnet](https://user-images.githubusercontent.com/46639943/150229334-038100bb-22e0-4240-a293-c2b88adc1219.png)
+> 4. be sure you're on the same network you deployed to and enter your contract address!
+> ![contract_address](https://user-images.githubusercontent.com/46639943/150229361-e50e8c57-3918-450f-8bee-29cf42d65b52.png)
+
 
 (It can take a while before they show up, but here is an example:)
 https://testnets.opensea.io/assets/0xc2839329166d3d004aaedb94dde4173651babccf/1
-## 🔍 Etherscan Contract Verification
-> run yarn flatten > flat.txt (You will need to clean up extra junk at the top and bottom of flat.txt. Sorry, rookie stuff here.)
-
-> copy the contents of flat.txt to the block explorer and select compiler v0.6.7 and Yes to Optimization (200 runs if anyone asks)
-
-![nft12](https://user-images.githubusercontent.com/526558/124387153-c8bcb880-dcb3-11eb-8191-e53f87129b88.png)
 
 ## 🔶 Infura
 > You will need to get a key from infura.io and paste it into constants.js in packages/react-app/src:
@@ -201,6 +218,8 @@ https://testnets.opensea.io/assets/0xc2839329166d3d004aaedb94dde4173651babccf/1
 
 ---
 
-> 🏰 Buidl Guidl Discord Server [Join Here](https://discord.gg/ZnFs36fbbU)
+> 🏃 Head to your next challenge [here](https://speedrunethereum.com).
 
-> 💬 Problems, questions, comments on the stack? Post them to the [🏗 scaffold-eth developers chat](https://t.me/joinchat/F7nCRK3kI93PoCOk)
+> 💬 Meet other builders working on this challenge in the [Challenge 0 telegram channel](https://t.me/+Y2vqXZZ_pEFhMGMx)!!!
+
+> 👉 Problems, questions, comments on the stack? Post them to the [🏗 scaffold-eth developers chat](https://t.me/joinchat/F7nCRK3kI93PoCOk)
