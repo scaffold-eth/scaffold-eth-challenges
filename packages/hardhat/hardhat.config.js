@@ -20,7 +20,7 @@ const { isAddress, getAddress, formatUnits, parseUnits } = utils;
 */
 
 // Select the network you want to deploy to here:
-const defaultNetwork = "rinkeby";
+const defaultNetwork = "localhost";
 
 const mainnetGwei = 115;
 
@@ -50,13 +50,8 @@ module.exports = {
   networks: {
     localhost: {
       url: "http://localhost:8545",
-
       // notice no mnemonic here? it will just use account 0 of the hardhat node to deploy
       // (you can put in a mnemonic here to set the deployer locally)
-
-        // notice no mnemonic here? it will just use account 0 of the hardhat node to deploy
-        // (you can put in a mnemonic here to set the deployer locally)
-
     },
     rinkeby: {
       url: "https://rinkeby.infura.io/v3/ec6a8acd1d354717acec099ad46a0bab", // <---- YOUR INFURA ID! (or it won't work)
