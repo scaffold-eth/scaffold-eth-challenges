@@ -8,28 +8,55 @@ contract Staker {
 
   ExampleExternalContract public exampleExternalContract;
 
+  mapping (address => uint256) public balances;
+  uint256 public constant threshold = 1 ether;
+  uint256 public deadline = block.timestamp + 30 seconds;
+  bool openToWithdraw = false;
+
   constructor(address exampleExternalContractAddress) public {
       exampleExternalContract = ExampleExternalContract(exampleExternalContractAddress);
   }
 
-  // Collect funds in a payable `stake()` function and track individual `balances` with a mapping:
-  //  ( make sure to add a `Stake(address,uint256)` event and emit it for the frontend <List/> display )
+  event Stake(address _from, uint256 _value);
 
+  modifier allowWithdraw {
+    require(openToWithdraw == true);
+    _;
+  }
 
-  // After some `deadline` allow anyone to call an `execute()` function
-  //  It should either call `exampleExternalContract.complete{value: address(this).balance}()` to send all the value
+  function stake() public payable {
+      balances[msg.sender] += msg.value;
+      emit Stake(address(this), msg.value);
+  }
 
+  function execute() public {
+    if(address(this).balance >= threshold) {
+      exampleExternalContract.complete{value: address(this).balance}();
+    } else {
+      openToWithdraw = true;
+    }
+  }
 
-  // if the `threshold` was not met, allow everyone to call a `withdraw()` function
+  function timeLeft() public view returns (uint256) {
+    if (block.timestamp >= deadline) {
+      return 0;
+    } else {
+      return deadline - block.timestamp;
+    }
+  }
 
+  function withdraw(address payable _to) public allowWithdraw {
+    uint256 amount = balances[msg.sender];
+    if(amount > 0) {
+      balances[msg.sender] = 0;
+      (bool sent,) = _to.call{value: amount}("");
+      if(!sent) {
+        balances[msg.sender] = amount;
+      }
+    }
+  }
 
-  // Add a `withdraw(address payable)` function lets users withdraw their balance
-
-
-  // Add a `timeLeft()` view function that returns the time left before the deadline for the frontend
-
-
-  // Add the `receive()` special function that receives eth and calls stake()
-
-
+  function receive() external payable {
+    this.stake();
+  }
 }
