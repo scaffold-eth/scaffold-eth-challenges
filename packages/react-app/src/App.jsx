@@ -546,7 +546,7 @@ function App(props) {
               <Button
                 type={"default"}
                 onClick={() => {
-                  tx(writeContracts.Staker.withdraw(address));
+                  tx(writeContracts.Staker.withdraw());
                 }}
               >
                 🏧 Withdraw
