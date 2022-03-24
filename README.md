@@ -97,7 +97,7 @@ uint256 public deadline = block.timestamp + 30 seconds;
 
 If the `address(this).balance` of the contract is over the `threshold` by the `deadline`, you will want to call: ```exampleExternalContract.complete{value: address(this).balance}()```
 
-If the balance is less than the `threshold`, you want to set a `openForWithdraw` bool to `true` and allow users to `withdraw(address payable)` their funds.
+If the balance is less than the `threshold`, you want to set a `openForWithdraw` bool to `true` and allow users to `withdraw()` their funds.
 
 (You'll have 30 seconds after deploying until the deadline is reached, you can adjust this in the contract.)
 
@@ -112,7 +112,7 @@ If the balance is less than the `threshold`, you want to set a `openForWithdraw`
 #### 🥅 Goals
 - [ ] Can you see `timeLeft` counting down in the `Staker UI` tab when you trigger a transaction with the faucet?
 - [ ] If you `stake()` enough ETH before the `deadline`, does it call `complete()`?
-- [ ] If you don't `stake()` enough can you `withdraw(address payable)` your funds?
+- [ ] If you don't `stake()` enough can you `withdraw()` your funds?
 
 
 ---
