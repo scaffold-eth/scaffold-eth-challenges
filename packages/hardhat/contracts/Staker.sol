@@ -23,7 +23,7 @@ contract Staker {
   // if the `threshold` was not met, allow everyone to call a `withdraw()` function
 
 
-  // Add a `withdraw(address payable)` function lets users withdraw their balance
+  // Add a `withdraw()` function to let users withdraw their balance
 
 
   // Add a `timeLeft()` view function that returns the time left before the deadline for the frontend
