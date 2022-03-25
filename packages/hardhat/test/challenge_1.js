@@ -111,7 +111,7 @@ describe("🚩 Challenge 1: 🥩 Decentralized Staking App", function () {
           stakerContract = await Staker.deploy(exampleExternalContract.address);
 
           console.log('\t'," 🔨 Staking...")
-          const stakeResult = await stakerContract.stake({value: ethers.utils.parseEther("0.001")});
+          const stakeResult = await stakerContract.connect(secondAccount).stake({value: ethers.utils.parseEther("0.001")});
           console.log('\t'," 🏷  stakeResult: ",stakeResult.hash)
 
           console.log('\t'," ⏳ Waiting for confirmation...")
