@@ -281,8 +281,8 @@ function App(props) {
   let completeDisplay = "";
   if (complete) {
     completeDisplay = (
-      <div style={{ padding: 64, backgroundColor: "#eeffef", fontWeight: "bolder" }}>
-        🚀 🎖 👩‍🚀 - Staking App triggered `ExampleExternalContract` -- 🎉 🍾 🎊
+      <div style={{ padding: 64, backgroundColor: "#eeffef", fontWeight: "bolder", color: "rgba(0, 0, 0, 0.85)" }}>
+        🚀 🎖 👩‍🚀 -- Staking App triggered `ExampleExternalContract` -- 🎉 🍾 🎊
         <Balance balance={exampleExternalContractBalance} fontSize={64} /> ETH staked!
       </div>
     );
