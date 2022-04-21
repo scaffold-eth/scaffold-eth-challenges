@@ -199,7 +199,7 @@ await vendor.transferOwnership("**YOUR FRONTEND ADDRESS**");
 
 ⚙ If you get a permissions error `yarn surge` again until you get a unique URL, or customize it in the command line.
 
-🚔 Traffic to your url might break the [Infura](https://infura.io/) rate limit, edit your key: `constants.js` in `packages/ract-app/src`.
+🚔 Traffic to your url might break the [Infura](https://infura.io/) rate limit, edit your key: `constants.js` in `packages/react-app/src`.
 
 ---
 ### Checkpoint 7: 📜 Contract Verification
