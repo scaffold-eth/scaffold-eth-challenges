@@ -1,11 +1,17 @@
 // MY INFURA_ID, SWAP IN YOURS FROM https://infura.io/dashboard/ethereum
-export const INFURA_ID = "460f40a260564ac4a4f4b3fffb032dad";
+//export const INFURA_ID = "460f40a260564ac4a4f4b3fffb032dad";
+
+export const INFURA_ID = "9f925102a62a4ac3839706633e1f7b15";
 
 // MY ETHERSCAN_ID, SWAP IN YOURS FROM https://etherscan.io/myapikey
-export const ETHERSCAN_KEY = "PSW8C433Q667DVEX5BCRMGNAH9FSGFZ7Q8";
+//export const ETHERSCAN_KEY = "PSW8C433Q667DVEX5BCRMGNAH9FSGFZ7Q8";
+
+export const ETHERSCAN_KEY = "XN94PWYMFC6PENDS3AKQP97NMBUVVQR1V3";
 
 // BLOCKNATIVE ID FOR Notify.js:
-export const BLOCKNATIVE_DAPPID = "0b58206a-f3c0-4701-a62f-73c7243e8c77";
+//export const BLOCKNATIVE_DAPPID = "0b58206a-f3c0-4701-a62f-73c7243e8c77";
+
+export const BLOCKNATIVE_DAPPID = "41bf12fb-36a1-4ee0-ab10-2f65dbcbf52e";
 
 export const NETWORKS = {
   localhost: {

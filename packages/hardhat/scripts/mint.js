@@ -24,10 +24,10 @@ const main = async () => {
   const yourCollectible = await ethers.getContract("YourCollectible", deployer);
 
   const buffalo = {
-    description: "It's actually a bison?",
-    external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
-    image: "https://austingriffith.com/images/paintings/buffalo.jpg",
-    name: "Buffalo",
+    description: "Abstract painting artwork.",
+    external_url: "https://62714c3f10e86900954c6936--stupendous-arithmetic-eecd1c.netlify.app/", // <-- this can link to a page for the specific file too
+    image: "https://62714c3f10e86900954c6936--stupendous-arithmetic-eecd1c.netlify.app/images/gallery/abstract.png",
+    name: "Abstract",
     attributes: [
       {
         trait_type: "BackgroundColor",
@@ -54,10 +54,10 @@ const main = async () => {
   await sleep(delayMS);
 
   const zebra = {
-    description: "What is it so worried about?",
-    external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
-    image: "https://austingriffith.com/images/paintings/zebra.jpg",
-    name: "Zebra",
+    description: "Bee hive combs shaped like polygon.",
+    external_url: "https://62714c3f10e86900954c6936--stupendous-arithmetic-eecd1c.netlify.app/", // <-- this can link to a page for the specific file too
+    image: "https://62714c3f10e86900954c6936--stupendous-arithmetic-eecd1c.netlify.app/images/gallery/bee-hive-combs.png",
+    name: "Bee hive combs",
     attributes: [
       {
         trait_type: "BackgroundColor",
@@ -84,10 +84,10 @@ const main = async () => {
   await sleep(delayMS);
 
   const rhino = {
-    description: "What a horn!",
-    external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
-    image: "https://austingriffith.com/images/paintings/rhino.jpg",
-    name: "Rhino",
+    description: "Bee artwork",
+    external_url: "https://62714c3f10e86900954c6936--stupendous-arithmetic-eecd1c.netlify.app/", // <-- this can link to a page for the specific file too
+    image: "https://62714c3f10e86900954c6936--stupendous-arithmetic-eecd1c.netlify.app/images/gallery/bee.png",
+    name: "Bee",
     attributes: [
       {
         trait_type: "BackgroundColor",

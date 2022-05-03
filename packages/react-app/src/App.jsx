@@ -55,7 +55,8 @@ const { ethers } = require("ethers");
 */
 
 /// 📡 What chain are your contracts deployed to?
-const targetNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+// const targetNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+const targetNetwork = NETWORKS.localhost;
 
 // 😬 Sorry for all the console logging
 const DEBUG = true;
@@ -63,10 +64,10 @@ const NETWORKCHECK = true;
 
 // EXAMPLE STARTING JSON:
 const STARTING_JSON = {
-  description: "It's actually a bison?",
-  external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
-  image: "https://austingriffith.com/images/paintings/buffalo.jpg",
-  name: "Buffalo",
+  description: "Abstract painting artwork.",
+  external_url: "https://62714c3f10e86900954c6936--stupendous-arithmetic-eecd1c.netlify.app/", // <-- this can link to a page for the specific file too
+  image: "https://62714c3f10e86900954c6936--stupendous-arithmetic-eecd1c.netlify.app/images/gallery/abstract.png",
+  name: "Abstract",
   attributes: [
     {
       trait_type: "BackgroundColor",
@@ -519,10 +520,10 @@ function App(props) {
   // the json for the nfts
   const json = {
     1: {
-      description: "It's actually a bison?",
-      external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
-      image: "https://austingriffith.com/images/paintings/buffalo.jpg",
-      name: "Buffalo",
+      description: "Abstract painting artwork.",
+      external_url: "https://62714c3f10e86900954c6936--stupendous-arithmetic-eecd1c.netlify.app/", // <-- this can link to a page for the specific file too
+      image: "https://62714c3f10e86900954c6936--stupendous-arithmetic-eecd1c.netlify.app/images/gallery/abstract.png",
+      name: "Abstract",
       attributes: [
         {
           trait_type: "BackgroundColor",
@@ -539,10 +540,10 @@ function App(props) {
       ],
     },
     2: {
-      description: "What is it so worried about?",
-      external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
-      image: "https://austingriffith.com/images/paintings/zebra.jpg",
-      name: "Zebra",
+      description: "Bee hive combs shaped like polygon.",
+      external_url: "https://62714c3f10e86900954c6936--stupendous-arithmetic-eecd1c.netlify.app/", // <-- this can link to a page for the specific file too
+      image: "https://62714c3f10e86900954c6936--stupendous-arithmetic-eecd1c.netlify.app/images/gallery/bee-hive-combs.png",
+      name: "Bee hive combs",
       attributes: [
         {
           trait_type: "BackgroundColor",
@@ -559,10 +560,10 @@ function App(props) {
       ],
     },
     3: {
-      description: "What a horn!",
-      external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
-      image: "https://austingriffith.com/images/paintings/rhino.jpg",
-      name: "Rhino",
+      description: "Bee artwork",
+      external_url: "https://62714c3f10e86900954c6936--stupendous-arithmetic-eecd1c.netlify.app/", // <-- this can link to a page for the specific file too
+      image: "https://62714c3f10e86900954c6936--stupendous-arithmetic-eecd1c.netlify.app/images/gallery/bee.png",
+      name: "Bee",
       attributes: [
         {
           trait_type: "BackgroundColor",
