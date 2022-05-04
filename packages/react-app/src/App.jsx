@@ -639,82 +639,83 @@ function App(props) {
             
             
             {/*Extra UI for buying the tokens back from the user using "approve" and "sellTokens"
-
-            <Divider />
-            <div style={{ padding: 8, marginTop: 32, width: 300, margin: "auto" }}>
-              <Card title="Sell Tokens">
-                <div style={{ padding: 8 }}>{tokensPerEth && tokensPerEth.toNumber()} tokens per ETH</div>
-
-                <div style={{ padding: 8 }}>
-                  <Input
-                    style={{ textAlign: "center" }}
-                    placeholder={"amount of tokens to sell"}
-                    value={tokenSellAmount.value}
-                    onChange={e => {
-                      const newValue = e.target.value.startsWith(".") ? "0." : e.target.value;
-                      const sellAmount = {
-                        value: newValue,
-                        valid: /^\d*\.?\d+$/.test(newValue)
-                      }
-                      setTokenSellAmount(sellAmount);
-                    }}
-                  />
-                  <Balance balance={ethValueToSellTokens} dollarMultiplier={price} />
-                </div>
-                {isSellAmountApproved?
+            <>
+              <Divider />
+              <div style={{ padding: 8, marginTop: 32, width: 300, margin: "auto" }}>
+                <Card title="Sell Tokens">
+                  <div style={{ padding: 8 }}>{tokensPerEth && tokensPerEth.toNumber()} tokens per ETH</div>
 
                   <div style={{ padding: 8 }}>
-                    <Button
-                      disabled={true}
-                      type={"primary"}
-                    >
-                      Approve Tokens
-                    </Button>
-                    <Button
-                      type={"primary"}
-                      loading={buying}
-                      onClick={async () => {
-                        setBuying(true);
-                        await tx(writeContracts.Vendor.sellTokens(tokenSellAmount.valid && ethers.utils.parseEther(tokenSellAmount.value)));
-                        setBuying(false);
-                        setTokenSellAmount("");
+                    <Input
+                      style={{ textAlign: "center" }}
+                      placeholder={"amount of tokens to sell"}
+                      value={tokenSellAmount.value}
+                      onChange={e => {
+                        const newValue = e.target.value.startsWith(".") ? "0." : e.target.value;
+                        const sellAmount = {
+                          value: newValue,
+                          valid: /^\d*\.?\d+$/.test(newValue)
+                        }
+                        setTokenSellAmount(sellAmount);
                       }}
-                      disabled={!tokenSellAmount.valid}
-                    >
-                      Sell Tokens
-                    </Button>
+                    />
+                    <Balance balance={ethValueToSellTokens} dollarMultiplier={price} />
                   </div>
-                  :
-                  <div style={{ padding: 8 }}>
-                    <Button
-                      type={"primary"}
-                      loading={buying}
-                      onClick={async () => {
-                        setBuying(true);
-                        await tx(writeContracts.YourToken.approve(readContracts.Vendor.address, tokenSellAmount.valid && ethers.utils.parseEther(tokenSellAmount.value)));
-                        setBuying(false);
-                        let resetAmount = tokenSellAmount
-                        setTokenSellAmount("");
-                        setTimeout(()=>{
-                          setTokenSellAmount(resetAmount)
-                        },1500)
-                      }}
-                      disabled={!tokenSellAmount.valid}
+                  {isSellAmountApproved?
+
+                    <div style={{ padding: 8 }}>
+                      <Button
+                        disabled={true}
+                        type={"primary"}
                       >
-                      Approve Tokens
-                    </Button>
-                    <Button
-                      disabled={true}
-                      type={"primary"}
-                    >
-                      Sell Tokens
-                    </Button>
-                  </div>
-                    }
+                        Approve Tokens
+                      </Button>
+                      <Button
+                        type={"primary"}
+                        loading={buying}
+                        onClick={async () => {
+                          setBuying(true);
+                          await tx(writeContracts.Vendor.sellTokens(tokenSellAmount.valid && ethers.utils.parseEther(tokenSellAmount.value)));
+                          setBuying(false);
+                          setTokenSellAmount("");
+                        }}
+                        disabled={!tokenSellAmount.valid}
+                      >
+                        Sell Tokens
+                      </Button>
+                    </div>
+                    :
+                    <div style={{ padding: 8 }}>
+                      <Button
+                        type={"primary"}
+                        loading={buying}
+                        onClick={async () => {
+                          setBuying(true);
+                          await tx(writeContracts.YourToken.approve(readContracts.Vendor.address, tokenSellAmount.valid && ethers.utils.parseEther(tokenSellAmount.value)));
+                          setBuying(false);
+                          let resetAmount = tokenSellAmount
+                          setTokenSellAmount("");
+                          setTimeout(()=>{
+                            setTokenSellAmount(resetAmount)
+                          },1500)
+                        }}
+                        disabled={!tokenSellAmount.valid}
+                        >
+                        Approve Tokens
+                      </Button>
+                      <Button
+                        disabled={true}
+                        type={"primary"}
+                      >
+                        Sell Tokens
+                      </Button>
+                    </div>
+                      }
 
 
-              </Card>
-            </div>
+                </Card>
+              </div>
+            </>
             */}
             <div style={{ padding: 8, marginTop: 32 }}>
               <div>Vendor Token Balance:</div>
