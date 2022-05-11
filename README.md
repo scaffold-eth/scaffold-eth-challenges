@@ -93,7 +93,7 @@ Edit `deploy/01_deploy_vendor.js` to deploy the `Vendor` (uncomment Vendor deplo
 
 ⚔️ Side Quest: send tokens from your frontend address to the Vendor contract address and *then* try to buy them.
 
-> ✏️ We can't hard code the vendor address like we did above when deploying to the network because we won't know the vender address at the time we create the token contract. 
+> ✏️ We can't hard code the vendor address like we did above when deploying to the network because we won't know the vendor address at the time we create the token contract. 
 
 > ✏️ So instead, edit `YourToken.sol` to transfer the tokens to the `msg.sender` (deployer) in the **constructor()**.
 
