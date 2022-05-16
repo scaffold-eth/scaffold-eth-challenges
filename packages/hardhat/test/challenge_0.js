@@ -61,7 +61,7 @@ describe("🚩 Challenge 0: 🎟 Simple NFT Example 🤓", function () {
         console.log("\t", " 🏷  mint tx: ", mintResult.hash);
 
         console.log("\t", " ⏳ Waiting for confirmation...");
-        const txResult = await mintResult.wait(2);
+        const txResult = await mintResult.wait(1);
         expect(txResult.status).to.equal(1);
 
         console.log(
