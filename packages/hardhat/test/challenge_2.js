@@ -153,14 +153,9 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
       console.log('\t'," 🍾 Withdrawing as non-owner (should fail)...")
       const startingNonOwnerETHBalance = await ethers.provider.getBalance(nonOwner.address)
       console.log('\t'," ⚖️  Starting non-owner ETH balance: ",ethers.utils.formatEther(startingNonOwnerETHBalance))
-      
-      try {
-        const withdrawFailResult = await vendor.connect(nonOwner).withdraw(vendorETHBalance);
-        console.log('\t'," 🏷  withdraw Result: ",withdrawFailResult.hash)
-      } catch (error) {
-        console.log('\t'," 🏷  Withdraw tx failed with message: ",error.message)
-        expect(error.message).to.equal("Error: VM Exception while processing transaction: reverted with reason string 'Ownable: caller is not the owner'");
-      }
+
+      await expect(vendor.connect(nonOwner).withdraw(vendorETHBalance)).to.be.revertedWith("Ownable: caller is not the owner");
+      console.log('\t'," 🏷  withdraw failed with correct error");
 
       const newNonOwnerETHBalance = await ethers.provider.getBalance(nonOwner.address)
       console.log('\t'," 🔎 New non-owner ETH balance: ", ethers.utils.formatEther(newNonOwnerETHBalance))
