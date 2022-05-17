@@ -61,7 +61,7 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
       console.log(`\t`,"🛰 Connected to YourToken at:",yourToken.address)
     });
   }else{
-    it("Should deploy YourToken", async function () {
+    it("Should deploy Vendor", async function () {
       const Vendor = await ethers.getContractFactory("Vendor");
       vendor = await Vendor.deploy(yourToken.address);
 
