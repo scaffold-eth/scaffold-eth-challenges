@@ -49,7 +49,7 @@ Then, let’s create an init() function in `DEX.sol` that is payable and then we
 
 ```
 function init(uint256 tokens) public payable returns (uint256) {
-  require(totalLiquidity==0,"DEX:init - already has liquidity");
+  require(totalLiquidity == 0, "DEX:init - already has liquidity");
   totalLiquidity = address(this).balance;
   liquidity[msg.sender] = totalLiquidity;
   require(token.transferFrom(msg.sender, address(this), tokens));
