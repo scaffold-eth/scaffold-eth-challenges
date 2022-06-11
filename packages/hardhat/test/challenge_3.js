@@ -107,7 +107,7 @@ describe("🚩 Challenge 3: 🎲 Dice Game", function () {
         expectedRoll.toNumber()
       );
 
-      expect(riggedRoll.riggedRoll()).to.reverted;
+      expect(riggedRoll.riggedRoll()).to.not.emit(diceGame, "Roll");
     });
 
     it("Should withdraw funds", async () => {
