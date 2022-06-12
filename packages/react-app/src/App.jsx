@@ -474,7 +474,6 @@ function App(props) {
     });
   };
 
-  {
     /*
   const riggedRoll = async () => {
 
@@ -513,7 +512,6 @@ function App(props) {
     }
   });
 */
-  }
 
   const filter = readContracts.DiceGame?.filters.Roll(address, null);
 
