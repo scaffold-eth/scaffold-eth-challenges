@@ -474,7 +474,7 @@ function App(props) {
     });
   };
 
-  /*
+    /*
   const riggedRoll = async () => {
     tx(writeContracts.RiggedRoll.riggedRoll({ gasLimit: 500000 }), update => {
       console.log("TX UPDATE", update);
@@ -503,7 +503,7 @@ function App(props) {
       setDiceRolled(false);
     }
   });
-  */
+*/
 
   const filter = readContracts.DiceGame?.filters.Roll(address, null);
 
