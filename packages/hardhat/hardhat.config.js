@@ -22,7 +22,7 @@ const { isAddress, getAddress, formatUnits, parseUnits } = utils;
 // Select the network you want to deploy to here:
 const defaultNetwork = "localhost";
 
-const mainnetGwei = 115;
+const mainnetGwei = 42;
 
 function mnemonic() {
   try {

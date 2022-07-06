@@ -7,10 +7,37 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
 
-  await deploy("YourCollectible", {
+
+  /*let jb = await deploy("JB", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
     // args: [ "Hello", ethers.utils.parseEther("1.5") ],
+    log: true,
+  });
+
+
+  let wethy = await deploy("WETH9", {
+    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
+    from: deployer,
+    // args: [ "Hello", ethers.utils.parseEther("1.5") ],
+    log: true,
+  });
+*/
+
+
+  //console.log("deployed weth mock at address ",wethy.address)
+  // Getting a previousl
+
+  await deploy("YourCollectible", {
+    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
+    from: deployer,
+    args: [
+      "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", //wethy.address, //0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2, //wethy.address,
+      "0x7Ae63FBa045Fec7CaE1a75cF7Aa14183483b8397", //jb.address, //0x7Ae63FBa045Fec7CaE1a75cF7Aa14183483b8397, // jb payment terminal
+      3600,
+      "QmVFxBSW5aFLKRQKtjEnGw8kKGsqy27Czcj22f3ksdSBnu",
+      44
+    ],
     log: true,
   });
 

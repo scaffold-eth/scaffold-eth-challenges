@@ -55,7 +55,7 @@ const { ethers } = require("ethers");
 */
 
 /// 📡 What chain are your contracts deployed to?
-const targetNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+const targetNetwork = NETWORKS.mainnet; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
 const DEBUG = true;
@@ -89,7 +89,7 @@ const getFromIPFS = async hashToGet => {
     for await (const chunk of file.content) {
       content.append(chunk);
     }
-    console.log(content);
+    console.log(content.toString());
     return content;
   }
 };
@@ -274,6 +274,15 @@ function App(props) {
   const balance = useContractReader(readContracts, "YourCollectible", "balanceOf", [address]);
   console.log("🤗 balance:", balance);
 
+  const highestBid = useContractReader(readContracts, "YourCollectible", "highestBid");
+  console.log("🤗 highestBid:", highestBid);
+
+  const highestBidder = useContractReader(readContracts, "YourCollectible", "highestBidder");
+  console.log("🤗 highestBidder:", highestBidder);
+
+  const timeLeft = useContractReader(readContracts, "YourCollectible", "timeLeft");
+  console.log("🤗 timeLeft:", timeLeft);
+
   // 📟 Listen for broadcast events
   const transferEvents = useEventListener(readContracts, "YourCollectible", "Transfer", localProvider, 1);
   console.log("📟 Transfer events:", transferEvents);
@@ -303,7 +312,7 @@ function App(props) {
           try {
             const jsonManifest = JSON.parse(jsonManifestBuffer.toString());
             console.log("jsonManifest", jsonManifest);
-            collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: address, ...jsonManifest });
+            collectibleUpdate.push({ id: tokenId, uri: jsonManifestBuffer.image, owner: address, ...jsonManifest });
           } catch (e) {
             console.log(e);
           }
@@ -667,6 +676,8 @@ function App(props) {
     );
   };
 
+  const [bidAmount, setBidAmount] = useState();
+
   return (
     <div className="App">
       {/* ✏️ Edit the header and change the title to your project name */}
@@ -684,36 +695,6 @@ function App(props) {
               YourCollectibles
             </Link>
           </Menu.Item>
-          <Menu.Item key="/transfers">
-            <Link
-              onClick={() => {
-                setRoute("/transfers");
-              }}
-              to="/transfers"
-            >
-              Transfers
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="/ipfsup">
-            <Link
-              onClick={() => {
-                setRoute("/ipfsup");
-              }}
-              to="/ipfsup"
-            >
-              IPFS Upload
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="/ipfsdown">
-            <Link
-              onClick={() => {
-                setRoute("/ipfsdown");
-              }}
-              to="/ipfsdown"
-            >
-              IPFS Download
-            </Link>
-          </Menu.Item>
           <Menu.Item key="/debugcontracts">
             <Link
               onClick={() => {
@@ -728,15 +709,61 @@ function App(props) {
         <Switch>
           <Route exact path="/">
             <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
+              <div style={{padding:16}}>
+                <div style={{padding:4}}>
+                  Welcome to the Banana Auction Machine - a BuidlGuidl and Juicebox collab
+                </div>
+                <div style={{padding:4}}>
+                  A banana NFT is auctioned off each hour and proceeds go to the <a href="https://juicebox.money/#/v2/p/44" target="_blank">BuidlGuidl Juicebox</a>.
+                </div>
+
+              </div>
+              <div style={{padding:16}}>
+                <div style={{padding:8}}>
+                  Highest Bid: {highestBid && ethers.utils.formatEther(highestBid)}
+                </div>
+                <div style={{padding:8}}>
+                  <div style={{padding:2}}>Highest Bidder:</div>
+                  <Address address={highestBidder} ensProvider={mainnetProvider} />
+                </div>
+                <div style={{padding:8}}>
+                  Time Left: {timeLeft && timeLeft.toNumber()}s
+                </div>
+                <div style={{padding:8, width:256, margin: "auto"}}>
+                  <Input
+                    addonBefore={"Ξ"}
+                    value = {bidAmount}
+                    onChange={e => {
+                      setBidAmount(e.target.value);
+                    }}
+                  />
+                </div>
+
+                <Button
+                  disabled={false}
+                  shape="round"
+                  size="large"
+                  onClick={() => {
+                    tx(
+                      writeContracts.YourCollectible.bid({value: ethers.utils.parseEther(""+bidAmount)})
+                    )
+                    setBidAmount();
+                  }}
+                >
+                  BID
+                </Button>
+              </div>
               <Button
-                disabled={minting}
+                disabled={false}
                 shape="round"
                 size="large"
                 onClick={() => {
-                  mintItem();
+                  tx(
+                    writeContracts.YourCollectible.finalize()
+                  )
                 }}
               >
-                MINT NFT
+                FINALIZE
               </Button>
             </div>
             <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
@@ -888,7 +915,23 @@ function App(props) {
           </Route>
           <Route path="/debugcontracts">
             <Contract
+              name="JB"
+              signer={userSigner}
+              provider={localProvider}
+              address={address}
+              blockExplorer={blockExplorer}
+              contractConfig={contractConfig}
+            />
+            <Contract
               name="YourCollectible"
+              signer={userSigner}
+              provider={localProvider}
+              address={address}
+              blockExplorer={blockExplorer}
+              contractConfig={contractConfig}
+            />
+            <Contract
+              name="WETH9"
               signer={userSigner}
               provider={localProvider}
               address={address}
