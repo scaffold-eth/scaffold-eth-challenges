@@ -287,11 +287,16 @@ function App(props) {
   const transferEvents = useEventListener(readContracts, "YourCollectible", "Transfer", localProvider, 1);
   console.log("📟 Transfer events:", transferEvents);
 
+  const bidEvents = useEventListener(readContracts, "YourCollectible", "Bid", localProvider, 1);
+  console.log("📟 Bid events:", bidEvents);
+
   //
   // 🧠 This effect will update yourCollectibles by polling when your balance changes
   //
   const yourBalance = balance && balance.toNumber && balance.toNumber();
   const [yourCollectibles, setYourCollectibles] = useState();
+
+
 
   useEffect(() => {
     const updateYourCollectibles = async () => {
@@ -677,6 +682,11 @@ function App(props) {
   };
 
   const [bidAmount, setBidAmount] = useState();
+  const [bids, setBids] = useState();
+
+  useEffect(()=>{
+    setBids(bidEvents.reverse().slice(0,4))
+  },[ bidEvents ])
 
   return (
     <div className="App">
@@ -684,43 +694,25 @@ function App(props) {
       <Header />
       {networkDisplay}
       <BrowserRouter>
-        <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
-          <Menu.Item key="/">
-            <Link
-              onClick={() => {
-                setRoute("/");
-              }}
-              to="/"
-            >
-              YourCollectibles
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="/debugcontracts">
-            <Link
-              onClick={() => {
-                setRoute("/debugcontracts");
-              }}
-              to="/debugcontracts"
-            >
-              Debug Contracts
-            </Link>
-          </Menu.Item>
-        </Menu>
+
         <Switch>
           <Route exact path="/">
             <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
               <div style={{padding:16}}>
+                <img style={{maxWidth:256,padding:32}} src={"./banana.png"}/>
                 <div style={{padding:4}}>
                   Welcome to the Banana Auction Machine - a BuidlGuidl and Juicebox collab
                 </div>
                 <div style={{padding:4}}>
                   A banana NFT is auctioned off each hour and proceeds go to the <a href="https://juicebox.money/#/v2/p/44" target="_blank">BuidlGuidl Juicebox</a>.
                 </div>
-
+                <div style={{color:"#FF0000"}}>
+                  This contract is unaudited and yolo'd to mainnet. Please do not make large bids!
+                </div>
               </div>
               <div style={{padding:16}}>
-                <div style={{padding:8}}>
-                  Highest Bid: {highestBid && ethers.utils.formatEther(highestBid)}
+                <div style={{padding:8,fontSize:32}}>
+                  Current Bid: Ξ{highestBid && ethers.utils.formatEther(highestBid)}
                 </div>
                 <div style={{padding:8}}>
                   <div style={{padding:2}}>Highest Bidder:</div>
@@ -766,7 +758,26 @@ function App(props) {
                 FINALIZE
               </Button>
             </div>
+
             <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
+              <span>recent bids:</span>
+              <List
+                bordered
+                dataSource={bids}
+                renderItem={item => {
+                  return (
+                    <List.Item key={item.blockHash + "_" }>
+                      <Address address={item.args[0]} ensProvider={mainnetProvider} fontSize={16} />
+                      Ξ{item.args[1] && ethers.utils.formatEther(item.args[1])}
+                    </List.Item>
+                  );
+                }}
+              />
+            </div>
+
+
+            <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
+              <span>your bananas:</span>
               <List
                 bordered
                 dataSource={yourCollectibles}
@@ -819,101 +830,10 @@ function App(props) {
                 }}
               />
             </div>
+            <a style={{paddingBottom:64}} href="/debug" target="_blank">debug contracts</a>
           </Route>
 
-          <Route path="/transfers">
-            <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
-              <List
-                bordered
-                dataSource={transferEvents}
-                renderItem={item => {
-                  return (
-                    <List.Item key={item[0] + "_" + item[1] + "_" + item.blockNumber + "_" + item.args[2].toNumber()}>
-                      <span style={{ fontSize: 16, marginRight: 8 }}>#{item.args[2].toNumber()}</span>
-                      <Address address={item.args[0]} ensProvider={mainnetProvider} fontSize={16} /> =&gt;
-                      <Address address={item.args[1]} ensProvider={mainnetProvider} fontSize={16} />
-                    </List.Item>
-                  );
-                }}
-              />
-            </div>
-          </Route>
-
-          <Route path="/ipfsup">
-            <div style={{ paddingTop: 32, width: 740, margin: "auto", textAlign: "left" }}>
-              <ReactJson
-                style={{ padding: 8 }}
-                src={yourJSON}
-                theme="pop"
-                enableClipboard={false}
-                onEdit={(edit, a) => {
-                  setYourJSON(edit.updated_src);
-                }}
-                onAdd={(add, a) => {
-                  setYourJSON(add.updated_src);
-                }}
-                onDelete={(del, a) => {
-                  setYourJSON(del.updated_src);
-                }}
-              />
-            </div>
-
-            <Button
-              style={{ margin: 8 }}
-              loading={sending}
-              size="large"
-              shape="round"
-              type="primary"
-              onClick={async () => {
-                console.log("UPLOADING...", yourJSON);
-                setSending(true);
-                setIpfsHash();
-                const result = await ipfs.add(JSON.stringify(yourJSON)); // addToIPFS(JSON.stringify(yourJSON))
-                if (result && result.path) {
-                  setIpfsHash(result.path);
-                }
-                setSending(false);
-                console.log("RESULT:", result);
-              }}
-            >
-              Upload to IPFS
-            </Button>
-
-            <div style={{ padding: 16, paddingBottom: 150 }}>{ipfsHash}</div>
-          </Route>
-          <Route path="/ipfsdown">
-            <div style={{ paddingTop: 32, width: 740, margin: "auto" }}>
-              <Input
-                value={ipfsDownHash}
-                placeHolder="IPFS hash (like QmadqNw8zkdrrwdtPFK1pLi8PPxmkQ4pDJXY8ozHtz6tZq)"
-                onChange={e => {
-                  setIpfsDownHash(e.target.value);
-                }}
-              />
-            </div>
-            <Button
-              style={{ margin: 8 }}
-              loading={sending}
-              size="large"
-              shape="round"
-              type="primary"
-              onClick={async () => {
-                console.log("DOWNLOADING...", ipfsDownHash);
-                setDownloading(true);
-                setIpfsContent();
-                const result = await getFromIPFS(ipfsDownHash); // addToIPFS(JSON.stringify(yourJSON))
-                if (result && result.toString) {
-                  setIpfsContent(result.toString());
-                }
-                setDownloading(false);
-              }}
-            >
-              Download from IPFS
-            </Button>
-
-            <pre style={{ padding: 16, width: 500, margin: "auto", paddingBottom: 150 }}>{ipfsContent}</pre>
-          </Route>
-          <Route path="/debugcontracts">
+          <Route path="/debug">
             <Contract
               name="JB"
               signer={userSigner}
