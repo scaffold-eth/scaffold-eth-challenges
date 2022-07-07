@@ -8,7 +8,7 @@ contract Staker {
 
   ExampleExternalContract public exampleExternalContract;
 
-  constructor(address exampleExternalContractAddress) public {
+  constructor(address exampleExternalContractAddress) {
       exampleExternalContract = ExampleExternalContract(exampleExternalContractAddress);
   }
 
@@ -17,7 +17,7 @@ contract Staker {
 
 
   // After some `deadline` allow anyone to call an `execute()` function
-  // If the deadline has passed and the threshold is met, it should call `exampleExternalContract.complete{value: address(this).balance}()` 
+  // If the deadline has passed and the threshold is met, it should call `exampleExternalContract.complete{value: address(this).balance}()`
 
 
   // If the `threshold` was not met, allow everyone to call a `withdraw()` function
