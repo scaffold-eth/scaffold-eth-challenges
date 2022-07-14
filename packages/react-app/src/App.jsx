@@ -478,10 +478,10 @@ function App(props) {
 
     /*
   const fundContract = async () => {
-    signer.sendTransaction({
+    tx({
       to: writeContracts.RiggedRoll.address,
-      value: ethers.utils.parseEther("0.002")
-  });
+      value: ethers.utils.parseEther(".002"),
+    });
   };
 
   const riggedRoll = async () => {
