@@ -474,9 +474,18 @@ function App(props) {
     });
   };
 
+  
+
     /*
+  const fundContract = async () => {
+    signer.sendTransaction({
+      to: writeContracts.RiggedRoll.address,
+      value: ethers.utils.parseEther("0.002")
+  });
+  };
+
   const riggedRoll = async () => {
-    tx(writeContracts.RiggedRoll.riggedRoll({ gasLimit: 500000 ,  value: ethers.parseEther("0.002")}), update => {
+    tx(writeContracts.RiggedRoll.riggedRoll({ gasLimit: 500000 }), update => {
       console.log("TX UPDATE", update);
       if (update?.status === "sent" || update?.status === 1) {
         setDiceRolled(true);
@@ -588,6 +597,9 @@ function App(props) {
                     />
                     <Button style={{ margin: 16 }} type="primary" disabled={diceRolled} onClick={riggedRoll}>
                       Rigged Roll!
+                    </Button>
+                    <Button style={{ margin: 16 }} type="primary" disabled={diceRolled} onClick={fundContract}>
+                      Contract funding
                     </Button>
                   </div>
                 */}
