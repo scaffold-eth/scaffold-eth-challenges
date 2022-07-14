@@ -23,6 +23,10 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   // paste in your address here to get 10 balloons on deploy:
   // await balloons.transfer("YOUR_ADDRESS",""+(10*10**18));
 
+  // paste in your address here to get 10 ethers on deploy:
+  // const signerDeployer = await ethers.provider.getSigner(deployer);
+  // const Txresult = await signerDeployer.sendTransaction({ to: "YOUR_ADRESS", value: ethers.utils.parseEther("10") });
+
   // uncomment to init DEX on deploy:
   // console.log("Approving DEX ("+dex.address+") to take Balloons from main account...")
   // If you are going to the testnet make sure your deployer account has enough ETH

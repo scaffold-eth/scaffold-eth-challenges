@@ -1,12 +1,14 @@
 import { Card, Col, Divider, Input, Row } from "antd";
-import { useBalance, useContractReader } from "eth-hooks";
+import { useBalance, useContractReader, useBlockNumber } from "eth-hooks";
+import { useEventListener } from "eth-hooks/events/useEventListener";
 import { useTokenBalance } from "eth-hooks/erc/erc-20/useTokenBalance";
 import { ethers } from "ethers";
 import React, { useState } from "react";
 import Address from "./Address";
 import Contract from "./Contract";
-import Curve from "./Curve.jsx";
+import Curve from "./Curve";
 import TokenBalance from "./TokenBalance";
+import Blockies from "react-blockies";
 
 const contractName = "DEX";
 const tokenName = "Balloons";
@@ -27,7 +29,7 @@ export default function Dex(props) {
   const tokenBalance = useTokenBalance(props.readContracts[tokenName], contractAddress, props.localProvider);
   const tokenBalanceFloat = parseFloat(ethers.utils.formatEther(tokenBalance));
   const ethBalanceFloat = parseFloat(ethers.utils.formatEther(contractBalance));
-  const liquidity = useContractReader(props.readContracts, contractName, "liquidity", [props.address]);
+  const liquidity = useContractReader(props.readContracts, contractName, "totalLiquidity");
 
   const rowForm = (title, icon, onClick) => {
     return (
@@ -105,17 +107,16 @@ export default function Dex(props) {
 
         {rowForm("deposit", "📥", async value => {
           let valueInEther = ethers.utils.parseEther("" + value);
-
-          let expectedTokenAmount = valueInEther.mul(tokenBalance).div(contractBalance).add(1);
-          console.log("expectedTokenAmount", expectedTokenAmount);
+          let valuePlusExtra = ethers.utils.parseEther("" + value * 1.03);
+          console.log("valuePlusExtra", valuePlusExtra);
           let allowance = await props.readContracts[tokenName].allowance(
             props.address,
             props.readContracts[contractName].address,
           );
           console.log("allowance", allowance);
-          if (allowance.lt(expectedTokenAmount)) {
+          if (allowance.lt(valuePlusExtra)) {
             await tx(
-              writeContracts[tokenName].approve(props.readContracts[contractName].address, expectedTokenAmount, {
+              writeContracts[tokenName].approve(props.readContracts[contractName].address, valuePlusExtra, {
                 gasLimit: 200000,
               }),
             );
