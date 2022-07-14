@@ -476,7 +476,7 @@ function App(props) {
 
     /*
   const riggedRoll = async () => {
-    tx(writeContracts.RiggedRoll.riggedRoll({ gasLimit: 500000 }), update => {
+    tx(writeContracts.RiggedRoll.riggedRoll({ gasLimit: 500000 ,  value: ethers.parseEther("0.002")}), update => {
       console.log("TX UPDATE", update);
       if (update?.status === "sent" || update?.status === 1) {
         setDiceRolled(true);
