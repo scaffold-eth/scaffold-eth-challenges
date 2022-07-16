@@ -170,8 +170,6 @@ If the balance is less than the `threshold`, you want to set a `openForWithdraw`
 
 > 💻 View your frontend at http://localhost:3000/
 
- 👩‍🎤 Take time to craft your user experience...
-
  📡 When you are ready to ship the frontend app...
 
  📦  Run `yarn build` to package up your frontend.
