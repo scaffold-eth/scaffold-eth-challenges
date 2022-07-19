@@ -4,7 +4,7 @@
 
 ---
 
-## 🚩 Challenge 0: 🎟 Simple NFT Example 🤓
+## 🚩 Challenge 0: 🎟 Simple NFT Example
 
 🎫 Create a simple NFT to learn basics of 🏗 scaffold-eth. You'll use 👷‍♀️ HardHat to compile and deploy smart contracts. Then, you'll use a template React app full of important Ethereum components and hooks. Finally, you'll deploy an NFT to a public network to share with friends! 🚀
 
@@ -20,7 +20,7 @@ https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-1-decentr
 
 ---
 
-## 🚩 Challenge 2: 🏵 Token Vendor 🤖
+## 🚩 Challenge 2: 🏵 Token Vendor
 
 🤖 Smart contracts are kind of like "always on" vending machines that anyone can access. Let's make a decentralized, digital currency. Then, let's build an unstoppable vending machine that will buy and sell the currency. We'll learn about the "approve" pattern for ERC20s and how contract to contract interactions work.
 
@@ -28,7 +28,7 @@ https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-2-token-v
 
 ---
 
-## 🚩 Challenge 3: 🎲 Dice Game 
+## 🚩 Challenge 3: 🎲 Dice Game
 
 🎰 Randomness is tricky on a public deterministic blockchain.  In this challenge you will explore creating random numbers using block hash and how that may be exploitable.  Attack the dice game with your own contract by predicting the randomness ahead of time to always roll a winner!
 
