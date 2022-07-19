@@ -28,6 +28,14 @@ https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-2-token-v
 
 ---
 
+## 🚩 Challenge 3: 🎲 Dice Game 
+
+🎰 Randomness is tricky on a public deterministic blockchain.  In this challenge you will explore creating random numbers using block hash and how that may be exploitable.  Attach the dice game with your own contract by predicting the randomness ahead of time to always roll a winner!
+
+https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-3-dice-game
+
+---
+
 ### 💬 Support Chat
 
 Join the telegram [support chat 💬](https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA) to ask questions and find others building with 🏗 scaffold-eth!
