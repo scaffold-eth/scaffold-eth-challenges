@@ -135,7 +135,53 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
     });
   })
 
+  describe("💵 withdraw()", function () {
+    it("Should let the owner (and nobody else) withdraw the eth from the contract...", async function () {
+      const [ owner, nonOwner ] = await ethers.getSigners();
 
+      console.log('\t'," 💸 Buying some tokens...")
+      const buyTokensResult = await vendor.connect(nonOwner).buyTokens({value: ethers.utils.parseEther("0.1")});
+      console.log('\t'," 🏷  buyTokens Result: ",buyTokensResult.hash)
+
+      console.log('\t'," ⏳ Waiting for confirmation...")
+      const buyTxResult =  await buyTokensResult.wait()
+      expect(buyTxResult.status).to.equal(1);
+
+      const vendorETHBalance = await ethers.provider.getBalance(vendor.address)
+      console.log('\t'," ⚖️  Starting Vendor contract ETH balance: ",ethers.utils.formatEther(vendorETHBalance))
+
+      console.log('\t'," 🍾 Withdrawing as non-owner (should fail)...")
+      const startingNonOwnerETHBalance = await ethers.provider.getBalance(nonOwner.address)
+      console.log('\t'," ⚖️  Starting non-owner ETH balance: ",ethers.utils.formatEther(startingNonOwnerETHBalance))
+
+      await expect(vendor.connect(nonOwner).withdraw(vendorETHBalance)).to.be.revertedWith("Ownable: caller is not the owner");
+      console.log('\t'," 🏷  withdraw failed with correct error");
+
+      const newNonOwnerETHBalance = await ethers.provider.getBalance(nonOwner.address)
+      console.log('\t'," 🔎 New non-owner ETH balance: ", ethers.utils.formatEther(newNonOwnerETHBalance))
+      expect(newNonOwnerETHBalance).to.equal(startingNonOwnerETHBalance);
+      
+      console.log('\t'," 🍾 Withdrawing as owner...")
+      const startingOwnerETHBalance = await ethers.provider.getBalance(owner.address)
+      console.log('\t'," ⚖️  Starting owner ETH balance: ",ethers.utils.formatEther(startingOwnerETHBalance))
+      const withdrawResult = await vendor.withdraw(vendorETHBalance);
+      console.log('\t'," 🏷  withdraw Result: ",withdrawResult.hash);
+
+      console.log('\t'," ⏳ Waiting for confirmation...")
+      const withdrawTxResult =  await withdrawResult.wait()
+      expect(withdrawTxResult.status).to.equal(1);
+
+      const newOwnerETHBalance = await ethers.provider.getBalance(owner.address)
+      console.log('\t'," 🔎 New owner ETH balance: ", ethers.utils.formatEther(newOwnerETHBalance))
+
+      const tx = await ethers.provider.getTransaction(withdrawResult.hash);
+      const receipt = await ethers.provider.getTransactionReceipt(withdrawResult.hash);
+      const gasCost = tx.gasPrice?.mul(receipt.gasUsed);      
+
+      expect(newOwnerETHBalance).to.equal(startingOwnerETHBalance.add(vendorETHBalance).sub(ethers.BigNumber.from(gasCost)));
+
+    });
+  })
 
 
 
