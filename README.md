@@ -142,6 +142,7 @@ $$liquidityToMint = \sqrt{initEth^2} = \left|initEth \right| $$
 function init(uint256 tokens) public payable returns (uint256) {
   require(lpEthToken.totalSupply()==0, "DEX:init - already has liquidity");
   lpEthToken.mint(msg.sender,address(this).balance);
+
   require(token.transferFrom(msg.sender, address(this), tokens));
   return lpEthToken.totalSupply();
 }
@@ -496,4 +497,8 @@ This will be the URL you submit to [SpeedRun](https://speedrunethereum.com/).
 
 💽 Upload your app to surge with `yarn surge` (you could also `yarn s3` or maybe even `yarn ipfs`?)
 
+
+> 💬 Problems, questions, comments on the stack? Post them to the [🏗 scaffold-eth developers chat](https://t.me/joinchat/F7nCRK3kI93PoCOk)
+
 🚔 Traffic to your url might break the [Infura](https://infura.io/) rate limit, edit your key: `constants.js` in `packages/ract-app/src`.
+
