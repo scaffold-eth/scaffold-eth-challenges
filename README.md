@@ -136,6 +136,8 @@ Now when we `yarn deploy --reset` then our contract should be initialized as soo
 
 This section is directly from the [original tutorial](https://medium.com/@austin_48503/%EF%B8%8F-minimum-viable-exchange-d84f30bd0c90) "Price" section. It outlines the general details of the DEX's pricing model.
 
+If you need some more clarity on how the price in a pool is calculated, [this video](https://youtu.be/IL7cRj5vzEU) by Smart Contract Programmer has a more in-depth explination.
+
 Now that our contract holds reserves of both ETH and tokens, we want to use a simple formula to determine the exchange rate between the two.
 Let’s start with the formula `x * y = k` where `x` and `y` are the reserves:
 
