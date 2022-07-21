@@ -22,7 +22,7 @@ Pull down the appropriate challenge repo/branch to get started.
 
 ```bash
 git clone https://github.com/squirtleDevs/scaffold-eth.git challenge-3-single-pool-dex
-cd scaffold-eth
+cd challenge-3-single-pool-dex
 git checkout challenge-3-single-pool-dex
 yarn install
 ```
