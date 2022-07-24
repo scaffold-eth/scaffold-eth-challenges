@@ -8,7 +8,7 @@
 
 >In this tutorial,we will build a decentralized exchange to swap an arbitrary token for ETH using a liquidity pool anyone can participate in. This build will demonstrate how smart contracts can create 🤖 automatic decentralized systems using crypto-economic incentives.
 
-This readme is an upated version of the [original tutorial 📚](https://medium.com/@austin_48503/%EF%B8%8F-minimum-viable-exchange-d84f30bd0c90).
+This readme is an updated version of the [original tutorial 📚](https://medium.com/@austin_48503/%EF%B8%8F-minimum-viable-exchange-d84f30bd0c90).
 
 [support chat 💬](https://t.me/joinchat/q4WzoxX88nwzZmQx) to ask questions and find others dex builders 👷!
 
