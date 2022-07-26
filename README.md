@@ -8,7 +8,7 @@
 
 >In this tutorial,we will build a decentralized exchange to swap an arbitrary token for ETH using a liquidity pool anyone can participate in. This build will demonstrate how smart contracts can create 🤖 automatic decentralized systems using crypto-economic incentives.
 
-This readme is an upated version of the [original tutorial 📚](https://medium.com/@austin_48503/%EF%B8%8F-minimum-viable-exchange-d84f30bd0c90).
+This readme is an updated version of the [original tutorial 📚](https://medium.com/@austin_48503/%EF%B8%8F-minimum-viable-exchange-d84f30bd0c90).
 
 [support chat 💬](https://t.me/joinchat/q4WzoxX88nwzZmQx) to ask questions and find others dex builders 👷!
 
@@ -58,7 +58,7 @@ $$\sqrt{ethRes·tokRes}$$
 
 It's useful to use the square root of the product because we obtain a linear function. Use only the product isn't a good idea because we get a quadratic function and since we are working with us (10^18) magnitude very crazy numbers could come out. Use the sum is not possible because it would be like add apples to oranges.
 
-To track the liquidity we use a token ERC20, hold a certan quantity of this toquen will represent the possession of a share of the total liquidity of the pool.
+To track the liquidity we use a token ERC20, holding a certain quantity of this token will represent the possession of a share of the total liquidity of the pool.
 
 Let’s add code to `DEX.sol`:
 
