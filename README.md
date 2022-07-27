@@ -58,7 +58,7 @@ $$\sqrt{ethRes·tokRes}$$
 
 It's useful to use the square root of the product because we obtain a linear function. Use only the product isn't a good idea because we get a quadratic function and since we are working with us (10^18) magnitude very crazy numbers could come out. Use the sum is not possible because it would be like add apples to oranges.
 
-To track the liquidity we use a token ERC20, hold a certan quantity of this toquen will represent the possession of a share of the total liquidity of the pool.
+To track the liquidity we use a token ERC20, holding a certain quantity of this token will represent the possession of a share of the total liquidity of the pool.
 
 Let’s add code to `DEX.sol`:
 
