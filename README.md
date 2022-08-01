@@ -15,14 +15,14 @@ Prerequisites:
 > clone/fork [🏗 challenge repository](https://github.com/scaffold-eth/scaffold-eth-challenges)
 
 ```bash
-git clone https://github.com/scaffold-eth/scaffold-eth-challenges.git challenge-4-oracle
+git clone https://github.com/scaffold-eth/scaffold-eth-challenges.git challenge-7-oracle
 ```
 
 > install and start your 👷‍ Hardhat chain:
 
 ```bash
-cd challenge-4-oracle
-git checkout challenge-4-oracle
+cd challenge-7-oracle
+git checkout challenge-7-oracle
 yarn install
 yarn chain
 ```
@@ -30,14 +30,14 @@ yarn chain
 > in a second terminal window, start your 📱 frontend:
 
 ```bash
-cd challenge-4-oracle
+cd challenge-7-oracle
 yarn start
 ```
 
 > in a third terminal window, 🛰 deploy your contract:
 
 ```bash
-cd challenge-4-oracle
+cd challenge-7-oracle
 yarn deploy
 ```
 
