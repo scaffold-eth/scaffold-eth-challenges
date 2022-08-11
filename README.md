@@ -21,9 +21,9 @@ Pull down the appropriate challenge repo/branch to get started.
 > ❗️ NOTE: The current front-end may need to be refreshed as you carry out transactions to update your balance of balloons in the UI, etc.
 
 ```bash
-git clone https://github.com/squirtleDevs/scaffold-eth.git challenge-3-single-pool-dex
-cd challenge-3-single-pool-dex
-git checkout challenge-3-single-pool-dex
+git clone https://github.com/squirtleDevs/scaffold-eth.git challenge-4-dex
+cd challenge-4-dex
+git checkout challenge-4-dex
 yarn install
 ```
 
