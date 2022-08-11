@@ -8,11 +8,11 @@ This challenge will help you build/understand a simple decentralized exchange, w
 
 > ❗️ NOTE: functions outlined within the `DEXTemplate.sol` are what works with the front end of this branch/repo. Also return variable names may need to be specified exactly as outlined within the `Solutions/DEX.sol` file. If you are confused, see solutions folder in this repo and/or cross reference with front-end code.
 
-There is also a [Youtube video](https://www.youtube.com/watch?v=eP5w6Ger1EQ&t=364s&ab_channel=SimplyExplained) that may help you understand the concepts covered within this challenge too:
+There is also a 🎥 [Youtube video](https://www.youtube.com/watch?v=eP5w6Ger1EQ&t=364s&ab_channel=SimplyExplained) that may help you understand the concepts covered within this challenge too:
 
 This branch was heavily based off of this [archived feature branch](https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-5-dex).
 
-> 💬 Meet other builders in the [Challenge 3 Telegram!](https://t.me/+_NeUIJ664Tc1MzIx)
+> 💬 Meet other builders in the [Challenge 4 Telegram!](https://t.me/+_NeUIJ664Tc1MzIx)
 
 ---
 
@@ -62,7 +62,7 @@ Navigate to the Debug Contracts tab and you should see two smart contracts displ
 
 ---
 
-### ⛳️ **Checkpoint 2: Reserves** 🪙 ⚖️
+### ⛳️ **Checkpoint 2: Reserves** ⚖️
 
 We want to create an automatic market where our contract will hold reserves of both ETH and 🎈 Balloons. These reserves will provide liquidity that allows anyone to swap between the assets.
 
@@ -336,7 +336,9 @@ Now, a user can just enter the amount of ETH or tokens they want to swap and the
 
 - [ ] `approve()` event emission: can you implement this into the event tabs so that it is clear when `approve()` from the `Balloons.sol` contract has been executed?
 
-### **Checkpoint 7: 💾 Deploy it!** 🛰
+---
+
+### ⛳️ **Checkpoint 7: 💾 Deploy it!** 🛰
 
 📡 Edit the `defaultNetwork` in `packages/hardhat/hardhat.config.js`, as well as `targetNetwork` in `packages/react-app/src/App.jsx`, to [your choice of public EVM networks](https://ethereum.org/en/developers/docs/networks/)
 
@@ -360,7 +362,7 @@ Now, a user can just enter the amount of ETH or tokens they want to swap and the
 
 ---
 
-### **Checkpoint 8: 📜 Contract Verification**
+### ⛳️ **Checkpoint 8: 📜 Contract Verification**
 
 Update the api-key in packages/hardhat/package.json file. You can get your key [here](https://etherscan.io/myapikey).
 
@@ -368,20 +370,14 @@ Update the api-key in packages/hardhat/package.json file. You can get your key [
 
 > Now you are ready to run the `yarn verify --network your_network` command to verify your contracts on etherscan 🛰
 
-This will be the URL you submit to [SpeedRun](https://speedrunethereum.com).
-
 ---
 
-### **Checkpoint 9: 🚢 Ship it! 🚁**
+### ⛳️ **Checkpoint 9: 🚢 Ship it! 🚁**
 
 📦 Run `yarn build` to package up your frontend.
 
 💽 Upload your app to surge with `yarn surge` (you could also `yarn s3` or maybe even `yarn ipfs`?)
 
-🚔 Traffic to your url might break the [Infura](https://infura.io/) rate limit, edit your key: `constants.js` in `packages/ract-app/src`.
-
----
+Post your solution on your [BuidlGuidl.com](https://buidlguidl.com) profile and also in the [Challenge 4 Telegram!](https://t.me/+_NeUIJ664Tc1MzIx)
 
 > 💬 Problems, questions, comments on the stack? Post them to the [🏗 scaffold-eth developers chat](https://t.me/joinchat/F7nCRK3kI93PoCOk)
-
----
