@@ -114,7 +114,7 @@ yarn deploy
 
 ![networkSelect](https://user-images.githubusercontent.com/12072395/146871168-29b3d87a-7d25-4972-9b3c-0ec8c979171b.PNG)
 
-🔐 Generate a **deployer address** with `yarn run generate`
+🔐 Generate a **deployer address** with `yarn generate`
 
 ![nft7](https://user-images.githubusercontent.com/526558/124387064-7d0a0f00-dcb3-11eb-9d0c-195f93547fb9.png)
 
