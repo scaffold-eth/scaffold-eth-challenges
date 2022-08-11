@@ -12,6 +12,8 @@ There is also a [Youtube video](https://www.youtube.com/watch?v=eP5w6Ger1EQ&t=36
 
 This branch was heavily based off of this [archived feature branch](https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-5-dex).
 
+Meet other builders in the [Challenge 3 Telegram!](https://t.me/+_NeUIJ664Tc1MzIx)
+
 ---
 
 ### **⛳️ Checkpoint 0: 📦 install 📚**
