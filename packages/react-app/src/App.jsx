@@ -29,9 +29,18 @@ import { Transactor } from "./helpers";
 import { useContractConfig } from "./hooks";
 // import Hints from "./Hints";
 
+const projectId = "2DDHiA47zFkJXtnxzl2jFkyuaoq";
+const projectSecret = "96a91eeafc0a390ab66e6a87f61152aa";
+const projectIdAndSecret = `${projectId}:${projectSecret}`;
+
 const { BufferList } = require("bl");
 const ipfsAPI = require("ipfs-http-client");
-const ipfs = ipfsAPI({ host: "ipfs.infura.io", port: "5001", protocol: "https" });
+const ipfs = ipfsAPI({
+  host: "ipfs.infura.io",
+  port: "5001",
+  protocol: "https",
+  headers: { authorization: `Basic ${Buffer.from(projectIdAndSecret).toString("base64")}` },
+});
 
 const { ethers } = require("ethers");
 
