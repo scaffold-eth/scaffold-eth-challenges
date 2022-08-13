@@ -58,17 +58,17 @@ describe("🚩 Challenge 3: 🎲 Dice Game", function () {
   describe("⚙️ Setup contracts", function () {
     it("Should deploy contracts", async function () {
       await deployContracts();
-      expect(await riggedRoll.diceGame()).to.equal(diceGame.address);
+      await expect(await riggedRoll.diceGame()).to.equal(diceGame.address);
     });
 
     it("Should revert if balance less than .002 ethers", async function () {
-      expect(riggedRoll.riggedRoll()).to.reverted;
+      await expect(riggedRoll.riggedRoll()).to.reverted;
     });
 
     it("Should transfer sufficient eth to RiggedRoll", async function () {
       await fundRiggedContract();
       let balance = await provider.getBalance(riggedRoll.address);
-      expect(balance).to.above(ethers.utils.parseEther(".002"));
+      await expect(balance).to.above(ethers.utils.parseEther(".002"));
     });
   });
 
@@ -87,13 +87,13 @@ describe("🚩 Challenge 3: 🎲 Dice Game", function () {
       let tx = riggedRoll.riggedRoll();
 
       it("Should emit Roll event!", async () => {
-        expect(tx)
+       await expect(tx)
           .to.emit(diceGame, "Roll")
           .withArgs(riggedRoll.address, expectedRoll);
       });
 
       it("Should emit Winner event!", async () => {
-        expect(tx).to.emit(diceGame, "Winner");
+        await expect(tx).to.emit(diceGame, "Winner");
       });
     });
 
@@ -107,7 +107,7 @@ describe("🚩 Challenge 3: 🎲 Dice Game", function () {
         expectedRoll.toNumber()
       );
 
-      expect(riggedRoll.riggedRoll()).to.reverted;
+      await expect(riggedRoll.riggedRoll()).to.reverted;
     });
 
     it("Should withdraw funds", async () => {
