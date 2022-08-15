@@ -148,7 +148,7 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
 
       const newNonOwnerETHBalance = await ethers.provider.getBalance(nonOwner.address)
       console.log('\t'," 🔎 New non-owner ETH balance: ", ethers.utils.formatEther(newNonOwnerETHBalance))
-      expect(newNonOwnerETHBalance).to.equal(startingNonOwnerETHBalance);
+      expect(newNonOwnerETHBalance).to.be.lte(startingNonOwnerETHBalance);
 
       console.log('\t'," 🍾 Withdrawing as owner...")
       const startingOwnerETHBalance = await ethers.provider.getBalance(owner.address)
