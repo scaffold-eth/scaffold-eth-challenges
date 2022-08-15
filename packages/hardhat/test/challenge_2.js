@@ -21,57 +21,46 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
 
   let yourToken;
 
-
-
-  if(process.env.CONTRACT_ADDRESS){
-    // live contracts, token already deployed
-  }else{
-    it("Should deploy YourToken", async function () {
-      const YourToken = await ethers.getContractFactory("YourToken");
-      yourToken = await YourToken.deploy();
-    });
-    describe("totalSupply()", function () {
-
-      it("Should have a total supply of at least 1000", async function () {
-
-        const totalSupply = await yourToken.totalSupply();
-        const totalSupplyInt = parseInt(ethers.utils.formatEther(totalSupply))
-        console.log('\t'," 🧾 Total Supply:",totalSupplyInt)
-        expect(totalSupplyInt).to.greaterThan(999);
-
-      });
-    })
-
+  let tokenContractArtifact;
+  if (process.env.CONTRACT_ADDRESS) {
+    tokenContractArtifact = `contracts/YourTokenAutograder.sol:YourToken`
+  } else {
+    tokenContractArtifact = "contracts/YourToken.sol:YourToken";
   }
 
+  it("Should deploy YourToken", async function () {
+    const YourToken = await ethers.getContractFactory(tokenContractArtifact);
+    yourToken = await YourToken.deploy();
+  });
+
+  describe("totalSupply()", function () {
+    it("Should have a total supply of at least 1000", async function () {
+      const totalSupply = await yourToken.totalSupply();
+      const totalSupplyInt = parseInt(ethers.utils.formatEther(totalSupply))
+      console.log('\t'," 🧾 Total Supply:",totalSupplyInt)
+      expect(totalSupplyInt).to.greaterThan(999);
+
+    });
+  })
+
+  let contractArtifact;
+  if (process.env.CONTRACT_ADDRESS) {
+    contractArtifact = `contracts/${process.env.CONTRACT_ADDRESS}.sol:Vendor`
+  } else {
+    contractArtifact = "contracts/Vendor.sol:Vendor";
+  }
 
   let vendor;
+  it("Should deploy Vendor", async function () {
+    const Vendor = await ethers.getContractFactory(contractArtifact);
+    vendor = await Vendor.deploy(yourToken.address);
 
-  if(process.env.CONTRACT_ADDRESS){
-    it("Should connect to external contract", async function () {
-      vendor = await ethers.getContractAt("Vendor",process.env.CONTRACT_ADDRESS);
-      console.log(`\t`,"🛰 Connected to:",vendor.address)
-
-      console.log(`\t`,"📡 Loading the yourToken address from the Vendor...")
-      console.log(`\t`,"⚠️ Make sure *yourToken* is public in the Vendor.sol!")
-      let tokenAddress = await vendor.yourToken();
-      console.log('\t',"🏷 Token Address:",tokenAddress)
-
-      yourToken = await ethers.getContractAt("YourToken",tokenAddress);
-      console.log(`\t`,"🛰 Connected to YourToken at:",yourToken.address)
-    });
-  }else{
-    it("Should deploy Vendor", async function () {
-      const Vendor = await ethers.getContractFactory("Vendor");
-      vendor = await Vendor.deploy(yourToken.address);
-
-      console.log("Transferring 1000 tokens to the vendor...")
-      await yourToken.transfer(
-        vendor.address,
-        ethers.utils.parseEther("1000")
-      );
-    });
-  }
+    console.log("Transferring 1000 tokens to the vendor...")
+    await yourToken.transfer(
+      vendor.address,
+      ethers.utils.parseEther("1000")
+    );
+  });
 
   describe("💵 buyTokens()", function () {
     it("Should let us buy tokens and our balance should go up...", async function () {
@@ -160,7 +149,7 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
       const newNonOwnerETHBalance = await ethers.provider.getBalance(nonOwner.address)
       console.log('\t'," 🔎 New non-owner ETH balance: ", ethers.utils.formatEther(newNonOwnerETHBalance))
       expect(newNonOwnerETHBalance).to.equal(startingNonOwnerETHBalance);
-      
+
       console.log('\t'," 🍾 Withdrawing as owner...")
       const startingOwnerETHBalance = await ethers.provider.getBalance(owner.address)
       console.log('\t'," ⚖️  Starting owner ETH balance: ",ethers.utils.formatEther(startingOwnerETHBalance))
@@ -176,7 +165,7 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
 
       const tx = await ethers.provider.getTransaction(withdrawResult.hash);
       const receipt = await ethers.provider.getTransactionReceipt(withdrawResult.hash);
-      const gasCost = tx.gasPrice?.mul(receipt.gasUsed);      
+      const gasCost = tx.gasPrice?.mul(receipt.gasUsed);
 
       expect(newOwnerETHBalance).to.equal(startingOwnerETHBalance.add(vendorETHBalance).sub(ethers.BigNumber.from(gasCost)));
 
