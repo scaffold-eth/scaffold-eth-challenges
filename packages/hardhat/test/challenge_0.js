@@ -24,25 +24,19 @@ describe("🚩 Challenge 0: 🎟 Simple NFT Example 🤓", function () {
   // console.log("hre:",Object.keys(hre)) // <-- you can access the hardhat runtime env here
 
   describe("YourCollectible", function () {
+
+    let contractArtifact;
     if (process.env.CONTRACT_ADDRESS) {
-      it("Should connect to external contract", async function () {
-        myContract = await ethers.getContractAt(
-          "YourCollectible",
-          process.env.CONTRACT_ADDRESS
-        );
-        console.log(
-          "     🛰 Connected to external contract",
-          myContract.address
-        );
-      });
+      contractArtifact = `contracts/${process.env.CONTRACT_ADDRESS}.sol:YourCollectible`
     } else {
-      it("Should deploy YourCollectible", async function () {
-        const YourCollectible = await ethers.getContractFactory(
-          "YourCollectible"
-        );
-        myContract = await YourCollectible.deploy();
-      });
+      contractArtifact = "contracts/YourCollectible.sol:YourCollectible";
     }
+
+    it("Should deploy the contract", async function () {
+      const YourCollectible = await ethers.getContractFactory(contractArtifact);
+      myContract = await YourCollectible.deploy();
+      console.log("     🛰  Contract deployed on", myContract.address)
+    });
 
     describe("mintItem()", function () {
       it("Should be able to mint an NFT", async function () {
