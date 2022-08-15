@@ -26,21 +26,23 @@ describe("🚩 Challenge 1: 🥩 Decentralized Staking App", function () {
 
   describe("Staker", function () {
 
-    if(process.env.CONTRACT_ADDRESS){
-      it("Should connect to external contract", async function () {
-        stakerContract = await ethers.getContractAt("Staker",process.env.CONTRACT_ADDRESS);
-        console.log("     🛰 Connected to external contract",stakerContract.address)
-      });
-    }else{
-      it("Should deploy ExampleExternalContract", async function () {
-        const ExampleExternalContract = await ethers.getContractFactory("ExampleExternalContract");
-        exampleExternalContract = await ExampleExternalContract.deploy();
-      });
-      it("Should deploy Staker", async function () {
-        const Staker = await ethers.getContractFactory("Staker");
-        stakerContract = await Staker.deploy(exampleExternalContract.address);
-      });
+    let contractArtifact;
+    if (process.env.CONTRACT_ADDRESS) {
+      contractArtifact = `contracts/${process.env.CONTRACT_ADDRESS}.sol:Staker`
+    } else {
+      contractArtifact = "contracts/Staker.sol:Staker";
     }
+
+    it("Should deploy ExampleExternalContract", async function () {
+      const ExampleExternalContract = await ethers.getContractFactory("ExampleExternalContract");
+      exampleExternalContract = await ExampleExternalContract.deploy();
+      console.log("     🛰  exampleExternalContract contract deployed on", exampleExternalContract.address)
+    });
+    it("Should deploy Staker", async function () {
+      const Staker = await ethers.getContractFactory(contractArtifact);
+      stakerContract = await Staker.deploy(exampleExternalContract.address);
+      console.log("     🛰  Staker contract deployed on", stakerContract.address)
+    });
 
     describe("🥩 Stake!", function () {
       it("Balance should go up when you stake()", async function () {
@@ -134,16 +136,16 @@ describe("🚩 Challenge 1: 🥩 Decentralized Staking App", function () {
           console.log('\t'," 💵 calling withdraw")
           const withdrawResult = await stakerContract.connect(secondAccount).withdraw();
           console.log('\t'," 🏷  withdrawResult: ",withdrawResult.hash)
-          
+
           // need to account for the gas cost from calling withdraw
           const tx = await ethers.provider.getTransaction(withdrawResult.hash);
           const receipt = await ethers.provider.getTransactionReceipt(withdrawResult.hash);
           const gasCost = tx.gasPrice.mul(receipt.gasUsed);
-          
+
           const endingBalance = await ethers.provider.getBalance(secondAccount.address);
 
           expect(endingBalance).to.equal(startingBalance.add(ethers.utils.parseEther("0.001")).sub(gasCost));
-          
+
         });
       }
       //
