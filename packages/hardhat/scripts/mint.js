@@ -6,6 +6,15 @@ const { utils } = require("ethers");
 const R = require("ramda");
 const ipfsAPI = require("ipfs-http-client");
 
+
+/*
+const ipfs = ipfsAPI({
+  host: "ipfs.nifty.ink",
+  port: "3001",
+  protocol: "https",
+});
+*/
+
 const ipfs = ipfsAPI({
   host: "ipfs.infura.io",
   port: "5001",
