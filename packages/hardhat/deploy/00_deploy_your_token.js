@@ -51,7 +51,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   //     await run("verify:verify", {
   //       address: yourToken.address,
   //       contract: "contracts/YourToken.sol:YourToken",
-  //       contractArguments: [],
+  //       constructorArguments: [],
   //     });
   //   } catch (e) {
   //     console.log(" ⚠️ Failed to verify contract on Etherscan ");
