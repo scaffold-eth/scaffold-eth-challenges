@@ -381,3 +381,29 @@ Update the api-key in packages/hardhat/package.json file. You can get your key [
 Post your solution on your [BuidlGuidl.com](https://buidlguidl.com) profile and also in the [Challenge 4 Telegram!](https://t.me/+_NeUIJ664Tc1MzIx)
 
 > 💬 Problems, questions, comments on the stack? Post them to the [🏗 scaffold-eth developers chat](https://t.me/joinchat/F7nCRK3kI93PoCOk)
+
+---
+
+### Foundry Testing 😎 (BUIDL GUIDL Admin Notes - Challengers can ignore this unless you want to play with Foundry)
+
+To start the project, clone the repo to your local machine using the following CLI command:
+
+1. Clone the repo onto your local machine and install the submodules: `git clone --recursive <repo link>`
+
+   > NOTE: If you have not installed the submodules, probably because you ran `git clone <repo link>` instead of the CLI command in step 1, you may run into errors when running `forge build` since it is looking for the dependencies for the project. `git submodule update --init --recursive` can be used if you clone the repo without installing the submodules.
+
+2. Navigate to `./packages/hardhat` from the root of your local copy of the `challenge-4-dex` branch. Install forge on your machine if you do not have it already: `forge install`
+
+> NOTE: If you need to download the latest version of foundry, just run `foundryup`
+
+3. Build the project: `forge build`
+
+**Unit Tests to Autograde 🧪**
+
+To run unit tests against a non-persistent local mainnet fork, first make sure you have a .env file set up at the root (follow .env.example format) and populate the INFURA_KEY variable like so:
+
+INFURA_KEY="<INSERT_INFURA_API_KEY_HERE>"
+
+Next, run the following CLI command: `source .env`
+
+CLI command: forge test --fork-url https://mainnet.infura.io/v3/$INFURA_KEY

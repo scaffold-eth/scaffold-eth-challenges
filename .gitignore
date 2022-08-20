@@ -67,3 +67,7 @@ yarn-error.log*
 
 # doc directory
 /doc
+
+# Forge
+out/
+solidity-files-cache.json
