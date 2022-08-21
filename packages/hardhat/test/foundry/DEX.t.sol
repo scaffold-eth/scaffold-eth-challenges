@@ -65,6 +65,7 @@ contract DEXTest is Setup {
         // test we get the right price back
         // test with basic xInput, xReserves, yReserves at init?
         // This could be a fuzz test I guess
+
     }
 
     function testGetLiquidity() public {
@@ -73,6 +74,25 @@ contract DEXTest is Setup {
     }
 
     function testEthToToken() public {
+        _init(); // 5 balloons, and 5 ETH in pool.
+        
+        // basic manual calc of expected tokenOut
+        uint256 calcTokenOut; // TODO: get some help on this, cause you code late at night lol and are too tired to think on this.
+        uint256 oldETHBal = owner.balance;
+        uint256 oldBallonBal = balloons.balanceOf(owner);
+        uint256 oldDexBalloon = balloons.balanceOf(address(dex));
+        uint256 dexEthBal = dex.getBalance();
+
+        vm.startPrank(owner);
+        vm.expectEmit(false, false, false, false); // TODO: update with (true, true, true, true), once you know what calcTokenOut is.
+        emit EthToTokenSwap(owner, "Eth to Balloons", ethInput, calcTokenOut);
+        dex.ethToToken{value: ethInput}();
+
+        uint256 balloonDiff = oldDexBalloon - balloons.balanceOf(address(dex));
+        assertEq(owner.balance, oldETHBal - ethInput);
+        uint256 newUserBalloons = oldBallonBal + (oldDexBalloon - balloonDiff);
+        assertApproxEqAbs(balloons.balanceOf(owner), newUserBalloons, 3437 * 10 ** 15); // check token transfer - TODO: I think this is due to slippage, but can't recall. Very low liquidity, so yeah.
+        vm.stopPrank();
     }
     
     // helpers

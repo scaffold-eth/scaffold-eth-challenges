@@ -1,8 +1,7 @@
-pragma solidity >=0.8.0 <0.9.0;
+pragma solidity ^0.8.13;
 // SPDX-License-Identifier: MIT
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 /**
  * @title DEX
@@ -14,7 +13,6 @@ contract DEX {
 
     uint256 public totalLiquidity; //total amount of liquidity provider tokens (LPTs) minted (NOTE: that LPT "price" is tied to the ratio, and thus price of the assets within this AMM)
     mapping(address => uint256) public liquidity; //liquidity of each depositor
-    using SafeMath for uint256; //outlines use of SafeMath for uint256 variables
     IERC20 token; //instantiates the imported contract
     address public tokenAddress;
 
@@ -76,9 +74,9 @@ contract DEX {
         uint256 xReserves,
         uint256 yReserves
     ) public view returns (uint256 yOutput) {
-        uint256 xInputWithFee = xInput.mul(997);
-        uint256 numerator = xInputWithFee.mul(yReserves);
-        uint256 denominator = (xReserves.mul(1000)).add(xInputWithFee);
+        uint256 xInputWithFee = xInput * 997;
+        uint256 numerator = xInputWithFee * yReserves;
+        uint256 denominator = (xReserves * 1000) + xInputWithFee;
         return (numerator / denominator);
     }
 
@@ -94,7 +92,7 @@ contract DEX {
      */
     function ethToToken() public payable returns (uint256 tokenOutput) {
         require(msg.value > 0, "cannot swap 0 ETH");
-        uint256 ethReserve = address(this).balance.sub(msg.value);
+        uint256 ethReserve = address(this).balance - msg.value;
         uint256 token_reserve = token.balanceOf(address(this));
         uint256 tokenOutput = price(msg.value, ethReserve, token_reserve);
 
@@ -124,14 +122,14 @@ contract DEX {
      * NOTE: Equal parts of both assets will be removed from the user's wallet with respect to the price outlined by the AMM.
      */
     function deposit() public payable returns (uint256 tokensDeposited) {
-        uint256 ethReserve = address(this).balance.sub(msg.value);
+        uint256 ethReserve = address(this).balance - msg.value;
         uint256 tokenReserve = token.balanceOf(address(this));
         uint256 tokenDeposit;
 
-        tokenDeposit = (msg.value.mul(tokenReserve) / ethReserve).add(1);
-        uint256 liquidityMinted = msg.value.mul(totalLiquidity) / ethReserve;
-        liquidity[msg.sender] = liquidity[msg.sender].add(liquidityMinted);
-        totalLiquidity = totalLiquidity.add(liquidityMinted);
+        tokenDeposit = ((msg.value * tokenReserve) / ethReserve) + 1;
+        uint256 liquidityMinted = msg.value * totalLiquidity / ethReserve;
+        liquidity[msg.sender] = liquidity[msg.sender] + liquidityMinted;
+        totalLiquidity = totalLiquidity + liquidityMinted;
 
         require(token.transferFrom(msg.sender, address(this), tokenDeposit));
         emit LiquidityProvided(msg.sender, liquidityMinted, msg.value, tokenDeposit);
@@ -148,11 +146,11 @@ contract DEX {
         uint256 tokenReserve = token.balanceOf(address(this));
         uint256 ethWithdrawn;
 
-        ethWithdrawn = amount.mul(ethReserve) / totalLiquidity;
+        ethWithdrawn = amount * ethReserve / totalLiquidity;
 
-        uint256 tokenAmount = amount.mul(tokenReserve) / totalLiquidity;
-        liquidity[msg.sender] = liquidity[msg.sender].sub(amount);
-        totalLiquidity = totalLiquidity.sub(amount);
+        uint256 tokenAmount = amount * tokenReserve / totalLiquidity;
+        liquidity[msg.sender] = liquidity[msg.sender] - amount;
+        totalLiquidity = totalLiquidity - amount;
         (bool sent, ) = payable(msg.sender).call{ value: ethWithdrawn }("");
         require(sent, "withdraw(): revert in transferring eth to you!");
         require(token.transfer(msg.sender, tokenAmount));
