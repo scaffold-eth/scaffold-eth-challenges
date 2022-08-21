@@ -406,4 +406,6 @@ INFURA_KEY="<INSERT_INFURA_API_KEY_HERE>"
 
 Next, run the following CLI command: `source .env`
 
+Before testing, make sure you have completed `DEX.sol` and `Balloons.sol` files within the subdirectory under the path: `./packages/hardhat/contracts/`. Temporarily, we can check challenger's submissions by taking their etherscan submissions and hard copying the code into this subdirectory, then running forge tests against them to assess completion.
+
 CLI command: forge test --fork-url https://mainnet.infura.io/v3/$INFURA_KEY
