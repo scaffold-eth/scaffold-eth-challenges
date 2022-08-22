@@ -79,7 +79,7 @@ contract DEXTest is Setup {
         // basic manual calc of expected tokenOut
         uint256 calcTokenOut; // TODO: get some help on this, cause you code late at night lol and are too tired to think on this.
         uint256 oldETHBal = owner.balance;
-        uint256 oldBallonBal = balloons.balanceOf(owner);
+        uint256 oldBalloonBal = balloons.balanceOf(owner);
         uint256 oldDexBalloon = balloons.balanceOf(address(dex));
         uint256 dexEthBal = dex.getBalance();
 
@@ -90,9 +90,38 @@ contract DEXTest is Setup {
 
         uint256 balloonDiff = oldDexBalloon - balloons.balanceOf(address(dex));
         assertEq(owner.balance, oldETHBal - ethInput);
-        uint256 newUserBalloons = oldBallonBal + (oldDexBalloon - balloonDiff);
+        uint256 newUserBalloons = oldBalloonBal + (oldDexBalloon - balloonDiff);
         assertApproxEqAbs(balloons.balanceOf(owner), newUserBalloons, 3437 * 10 ** 15); // check token transfer - TODO: I think this is due to slippage, but can't recall. Very low liquidity, so yeah.
         vm.stopPrank();
+    }
+
+    function tokenToEth() public {
+        _init(); // 5 balloons, and 5 ETH in pool.
+        
+        // basic manual calc of expected tokenOut
+        uint256 calcEthOut; // TODO: get some help on this, cause you code late at night lol and are too tired to think on this.
+        uint256 oldETHBal = owner.balance;
+        uint256 oldBalloonBal = balloons.balanceOf(owner);
+        uint256 oldDexBalloon = balloons.balanceOf(address(dex));
+        uint256 dexEthBal = dex.getBalance();
+
+        vm.startPrank(owner);
+        vm.expectEmit(false, false, false, false); // TODO: update with (true, true, true, true), once you know what calcTokenOut is.
+        emit TokenToEthSwap(owner, "Balloons to ETH", balloonsInput, calcEthOut);
+        dex.tokenToEth(balloonsInput);
+
+        uint256 ethDiff = dexEthBal - dex.getBalance();
+        assertEq(balloons.balanceOf(owner), oldBalloonBal - balloonsInput);
+        uint256 newUserEth = oldETHBal + ethDiff;
+        assertApproxEqAbs(owner.balance, newUserEth, 3437 * 10 ** 15); // check token transfer - TODO: I think this is due to slippage, but can't recall. Very low liquidity, so yeah.
+        vm.stopPrank();
+    }
+
+    function testCannotSwapZeroTokens() public {
+        _init();
+        vm.prank(owner);
+        vm.expectRevert("cannot swap 0 tokens");
+        dex.tokenToEth(0);
     }
     
     // helpers
