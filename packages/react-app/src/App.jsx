@@ -16,6 +16,7 @@ import {
   useContractReader,
   useGasPrice,
   useOnBlock,
+  useUserAddress,
   useUserProviderAndSigner,
 } from "eth-hooks";
 import { useEventListener } from "eth-hooks/events/useEventListener";
@@ -230,106 +231,57 @@ function App(props) {
   // If you want to make 🔐 write transactions to your contracts, use the userSigner:
   const writeContracts = useContractLoader(userSigner, contractConfig, localChainId);
 
-  // EXTERNAL CONTRACT EXAMPLE:
-  //
-  // If you want to bring in the mainnet DAI contract it would look like:
-  const mainnetContracts = useContractLoader(mainnetProvider, contractConfig);
+  // ** 📟 Listen for channel events
+  const openEvents = useEventListener(readContracts, "Streamer", "Opened", localProvider, 1);
+  console.log("open events:", openEvents);
+  const closeEvents = useEventListener(readContracts, "Streamer", "Closing", localProvider, 1);
+  console.log("close events:", closeEvents);
 
-  // If you want to call a function on a new block
-  useOnBlock(mainnetProvider, () => {
-    console.log(`⛓ A new mainnet block is here: ${mainnetProvider._lastBlockNumber}`);
-  });
-
-  // Then read your DAI balance like:
-  const myMainnetDAIBalance = useContractReader(mainnetContracts, "DAI", "balanceOf", [
-    "0x34aA3F359A9D614239015126635CE7732c18fDF3",
-  ]);
-
-  //keep track of contract balance to know how much has been staked total:
-  const stakerContractBalance = useBalance(
-    localProvider,
-    readContracts && readContracts.Staker ? readContracts.Staker.address : null,
-  );
-  if (DEBUG) console.log("💵 stakerContractBalance", stakerContractBalance);
-
-  // ** keep track of total 'threshold' needed of ETH
-  const threshold = useContractReader(readContracts, "Staker", "threshold");
-  console.log("💵 threshold:", threshold);
-
-  // ** keep track of a variable from the contract in the local React state:
-  const balanceStaked = useContractReader(readContracts, "Staker", "balances", [address]);
-  console.log("💸 balanceStaked:", balanceStaked);
-
-  // ** 📟 Listen for broadcast events
-  const stakeEvents = useEventListener(readContracts, "Staker", "Stake", localProvider, 1);
-  console.log("📟 stake events:", stakeEvents);
-
-  // ** keep track of a variable from the contract in the local React state:
-  const timeLeft = useContractReader(readContracts, "Staker", "timeLeft");
-  console.log("⏳ timeLeft:", timeLeft);
-
-  // ** Listen for when the contract has been 'completed'
-  const complete = useContractReader(readContracts, "ExampleExternalContract", "completed");
-  console.log("✅ complete:", complete);
-
-  const exampleExternalContractBalance = useBalance(
-    localProvider,
-    readContracts && readContracts.ExampleExternalContract ? readContracts.ExampleExternalContract.address : null,
-  );
-  if (DEBUG) console.log("💵 exampleExternalContractBalance", exampleExternalContractBalance);
-
-  let completeDisplay = "";
-  if (complete) {
-    completeDisplay = (
-      <div style={{ padding: 64, backgroundColor: "#eeffef", fontWeight: "bolder", color: "rgba(0, 0, 0, 0.85)" }}>
-        🚀 🎖 👩‍🚀 -- Staking App triggered `ExampleExternalContract` -- 🎉 🍾 🎊
-        <Balance balance={exampleExternalContractBalance} fontSize={64} /> ETH staked!
-      </div>
-    );
+  function openChannels() {
+    console.log("Open: " + JSON.stringify(openEvents));
+    console.log("Closed: " + JSON.stringify(closeEvents));
   }
 
+  openChannels();
+
+  const timeLeft = useContractReader(readContracts, "Streamer", "timeLeft", [address]);
+  console.log("timeleft: " + timeLeft);
+
+  const userAddress = useUserAddress(userSigner);
+  const ownerAddress = useContractReader(readContracts, "Streamer", "owner");
+  console.log("User:  %s\nOwner: %s", userAddress, ownerAddress);
+
+  const userIsOwner = ownerAddress == userAddress;
+
   /*
-  const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
-  console.log("🏷 Resolved austingriffith.eth as:", addressFromENS)
+    p2p communication infrastructure:
+
+    this is where our off-chain application commuinication is enabled. Based on
+    works from https://webrtc.github.io/samples/
   */
+
+  const broadcast = new BroadcastChannel("comms-" + userAddress);
+
+  broadcast.onmessage = e => {
+    console.log("Received: %s", e.data);
+  };
+
+  function send() {}
 
   //
   // 🧫 DEBUG 👨🏻‍🔬
   //
   useEffect(() => {
-    if (
-      DEBUG &&
-      mainnetProvider &&
-      address &&
-      selectedChainId &&
-      yourLocalBalance &&
-      yourMainnetBalance &&
-      readContracts &&
-      writeContracts &&
-      mainnetContracts
-    ) {
+    if (DEBUG && address && selectedChainId && yourLocalBalance && readContracts && writeContracts) {
       console.log("_____________________________________ 🏗 scaffold-eth _____________________________________");
-      console.log("🌎 mainnetProvider", mainnetProvider);
       console.log("🏠 localChainId", localChainId);
       console.log("👩‍💼 selected address:", address);
       console.log("🕵🏻‍♂️ selectedChainId:", selectedChainId);
       console.log("💵 yourLocalBalance", yourLocalBalance ? ethers.utils.formatEther(yourLocalBalance) : "...");
-      console.log("💵 yourMainnetBalance", yourMainnetBalance ? ethers.utils.formatEther(yourMainnetBalance) : "...");
       console.log("📝 readContracts", readContracts);
-      console.log("🌍 DAI contract on mainnet:", mainnetContracts);
-      console.log("💵 yourMainnetDAIBalance", myMainnetDAIBalance);
       console.log("🔐 writeContracts", writeContracts);
     }
-  }, [
-    mainnetProvider,
-    address,
-    selectedChainId,
-    yourLocalBalance,
-    yourMainnetBalance,
-    readContracts,
-    writeContracts,
-    mainnetContracts,
-  ]);
+  }, [address, selectedChainId, yourLocalBalance, readContracts, writeContracts]);
 
   let networkDisplay = "";
   if (NETWORKCHECK && localChainId && selectedChainId && localChainId !== selectedChainId) {
@@ -509,12 +461,7 @@ function App(props) {
 
         <Switch>
           <Route exact path="/">
-            {completeDisplay}
-
-            <div style={{ padding: 8, marginTop: 32 }}>
-              <div>Staker Contract:</div>
-              <Address value={readContracts && readContracts.Staker && readContracts.Staker.address} />
-            </div>
+            {userIsOwner ? <h1>Hello Owner!</h1> : <h1>Hello Consumer!</h1>}
 
             <div style={{ padding: 8, marginTop: 32 }}>
               <div>Timeleft:</div>
@@ -522,91 +469,80 @@ function App(props) {
             </div>
 
             <div style={{ padding: 8 }}>
-              <div>Total staked:</div>
-              <Balance balance={stakerContractBalance} fontSize={64} />/<Balance balance={threshold} fontSize={64} />
-            </div>
-
-            <div style={{ padding: 8 }}>
-              <div>You staked:</div>
-              <Balance balance={balanceStaked} fontSize={64} />
+              <div>Total ETH locked:</div>
+              {/* add contract balance */}
             </div>
 
             <div style={{ padding: 8 }}>
               <Button
-                type={"default"}
+                type="primary"
                 onClick={() => {
-                  tx(writeContracts.Staker.execute());
+                  tx(writeContracts.Streamer.fundChannel({ value: ethers.utils.parseEther("0.05") }));
                 }}
               >
-                📡 Execute!
+                Open a 0.05 ETH channel!
               </Button>
             </div>
-
             <div style={{ padding: 8 }}>
               <Button
-                type={"default"}
+                type="primary"
                 onClick={() => {
-                  tx(writeContracts.Staker.withdraw());
+                  tx(writeContracts.Streamer.closeChannel());
                 }}
               >
-                🏧 Withdraw
+                Close your channel!
               </Button>
             </div>
-
             <div style={{ padding: 8 }}>
               <Button
-                type={balanceStaked ? "success" : "primary"}
+                type="primary"
                 onClick={() => {
-                  tx(writeContracts.Staker.stake({ value: ethers.utils.parseEther("0.5") }));
+                  tx(writeContracts.Streamer.liquidateChannel());
                 }}
               >
-                🥩 Stake 0.5 ether!
+                Liquidate your channel! (Recover remaining funds)
               </Button>
             </div>
-
-            {/*
-                🎛 this scaffolding is full of commonly used components
-                this <Contract/> component will automatically parse your ABI
-                and give you a form to interact with it locally
-            */}
+            <div style={{ padding: 8 }}>
+              <button onClick={sayHi}>Say Hi!</button>
+            </div>
 
             <div style={{ width: 500, margin: "auto", marginTop: 64 }}>
-              <div>Stake Events:</div>
+              <div>Channel Closures:</div>
               <List
-                dataSource={stakeEvents}
+                dataSource={closeEvents}
+                renderItem={item => (
+                  <List.Item key={item.blockNumber}>
+                    <Address value={item.args[0]} ensProvider={mainnetProvider} fontSize={16} /> began channel closure.
+                  </List.Item>
+                )}
+              />
+            </div>
+            <div style={{ width: 500, margin: "auto", marginTop: 64 }}>
+              <div>Channel Openings:</div>
+              <List
+                dataSource={openEvents}
                 renderItem={item => {
                   return (
                     <List.Item key={item.blockNumber}>
-                      <Address value={item.args[0]} ensProvider={mainnetProvider} fontSize={16} /> =>
+                      <Address value={item.args[0]} ensProvider={mainnetProvider} fontSize={16} /> opened with:
                       <Balance balance={item.args[1]} />
                     </List.Item>
                   );
                 }}
               />
             </div>
-
-            {/* uncomment for a second contract:
-            <Contract
-              name="SecondContract"
-              signer={userProvider.getSigner()}
-              provider={localProvider}
-              address={address}
-              blockExplorer={blockExplorer}
-              contractConfig={contractConfig}
-            />
-            */}
           </Route>
+
+          {/*
+            this scaffolding is full of commonly used components.
+            
+            this <Contract/> component will automatically parse your ABI
+            and give you a form to interact with it locally
+          */}
           <Route path="/contracts">
             <Contract
-              name="Staker"
-              signer={userSigner}
-              provider={localProvider}
-              address={address}
-              blockExplorer={blockExplorer}
-              contractConfig={contractConfig}
-            />
-            <Contract
-              name="ExampleExternalContract"
+              name="Streamer"
               signer={userSigner}
               provider={localProvider}
               address={address}
@@ -636,11 +572,12 @@ function App(props) {
       </div>
 
       <div style={{ marginTop: 32, opacity: 0.5 }}>
-        {/* Add your address here */}
+        {/* todo: Add your address here */}
         Created by <Address value={"Your...address"} ensProvider={mainnetProvider} fontSize={16} />
       </div>
 
       <div style={{ marginTop: 32, opacity: 0.5 }}>
+        {/* todo: change fork location */}
         <a target="_blank" style={{ padding: 32, color: "#000" }} href="https://github.com/scaffold-eth/scaffold-eth">
           🍴 Fork me!
         </a>
@@ -648,30 +585,6 @@ function App(props) {
 
       {/* 🗺 Extra UI like gas price, eth price, faucet, and support: */}
       <div style={{ position: "fixed", textAlign: "left", left: 0, bottom: 20, padding: 10 }}>
-        <Row align="middle" gutter={[4, 4]}>
-          <Col span={8}>
-            <Ramp price={price} address={address} networks={NETWORKS} />
-          </Col>
-
-          <Col span={8} style={{ textAlign: "center", opacity: 0.8 }}>
-            <GasGauge gasPrice={gasPrice} />
-          </Col>
-          <Col span={8} style={{ textAlign: "center", opacity: 1 }}>
-            <Button
-              onClick={() => {
-                window.open("https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA");
-              }}
-              size="large"
-              shape="round"
-            >
-              <span style={{ marginRight: 8 }} role="img" aria-label="support">
-                💬
-              </span>
-              Support
-            </Button>
-          </Col>
-        </Row>
-
         <Row align="middle" gutter={[4, 4]}>
           <Col span={24}>
             {
