@@ -96,7 +96,7 @@ contract DEX {
         uint256 token_reserve = token.balanceOf(address(this));
         uint256 tokenOutput = price(msg.value, ethReserve, token_reserve);
 
-        require(token.transfer(msg.sender, tokenOutput), "ethToToken(): reverted swap.");
+        require(token.transfer(msg.sender, tokenOutput), "ethToToken(): reverted swap."); // this reversion message will never happen. The reversion that would come up is either if there wasn't approval from this contract to transfer tokens, or it transferred the wrong amount. So this test is really a check that the challenger understands how to calculate the right amount to be transferred from the DEX.
         emit EthToTokenSwap(msg.sender, "Eth to Balloons", msg.value, tokenOutput);
         return tokenOutput;
     }
@@ -108,7 +108,7 @@ contract DEX {
         require(tokenInput > 0, "cannot swap 0 tokens");
         uint256 token_reserve = token.balanceOf(address(this));
         uint256 ethOutput = price(tokenInput, token_reserve, address(this).balance);
-        require(token.transferFrom(msg.sender, address(this), tokenInput), "tokenToEth(): reverted swap.");
+        require(token.transferFrom(msg.sender, address(this), tokenInput), "tokenToEth(): reverted swap."); // TODO: I believe the reversion statement isn't even needed.
         (bool sent, ) = msg.sender.call{ value: ethOutput }("");
         require(sent, "tokenToEth: revert in transferring eth to you!");
         emit TokenToEthSwap(msg.sender, "Balloons to ETH", ethOutput, tokenInput);
