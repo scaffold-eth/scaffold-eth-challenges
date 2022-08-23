@@ -7,7 +7,8 @@ require("@nomiclabs/hardhat-waffle");
 require("@tenderly/hardhat-tenderly");
 
 require("hardhat-deploy");
-require("hardhat-gas-reporter");
+// Show gas report on tests.
+// require("hardhat-gas-reporter");
 
 require("@eth-optimism/hardhat-ovm");
 require("@nomiclabs/hardhat-ethers");
@@ -67,10 +68,10 @@ module.exports = {
   networks: {
     localhost: {
       url: "http://localhost:8545",
-      /*      
+      /*
         notice no mnemonic here? it will just use account 0 of the hardhat node to deploy
         (you can put in a mnemonic here to set the deployer locally)
-      
+
       */
     },
 
