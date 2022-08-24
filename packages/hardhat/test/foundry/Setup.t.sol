@@ -26,6 +26,8 @@ abstract contract Setup is Test {
     uint256 public constant initETHBalance = 5 * 10 ** 18; // as per deployment script challengers should be using. 
     uint256 public constant ethInput = 10 ** 18;
     uint256 public constant balloonsInput = 10 ** 18;
+    uint256 public constant withdrawAmount = balloonsInput / 2;
+
 
 
     uint256 public constant PRICE_PRECISION = 10 ** 18;

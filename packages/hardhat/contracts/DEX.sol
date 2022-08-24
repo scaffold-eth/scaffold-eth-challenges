@@ -68,6 +68,9 @@ contract DEX {
 
     /**
      * @notice returns yOutput, or yDelta for xInput (or xDelta)
+     * @param xInput amount of ETH inputted
+     * @param xReserves amount of ETH reserves before price check
+     * @param yReserves amount of BAL reserves before price check
      */
     function price(
         uint256 xInput,
@@ -122,6 +125,7 @@ contract DEX {
      * NOTE: Equal parts of both assets will be removed from the user's wallet with respect to the price outlined by the AMM.
      */
     function deposit() public payable returns (uint256 tokensDeposited) {
+        require(msg.value > 0, "deposit(): cannot deposit 0 ETHER");
         uint256 ethReserve = address(this).balance - msg.value;
         uint256 tokenReserve = token.balanceOf(address(this));
         uint256 tokenDeposit;
@@ -152,7 +156,6 @@ contract DEX {
         liquidity[msg.sender] = liquidity[msg.sender] - amount;
         totalLiquidity = totalLiquidity - amount;
         (bool sent, ) = payable(msg.sender).call{ value: ethWithdrawn }("");
-        require(sent, "withdraw(): revert in transferring eth to you!");
         require(token.transfer(msg.sender, tokenAmount));
         emit LiquidityRemoved(msg.sender, amount, ethWithdrawn, tokenAmount);
         return (ethWithdrawn, tokenAmount);
