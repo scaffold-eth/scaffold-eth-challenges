@@ -10,8 +10,6 @@ This challenge will help you build/understand a simple decentralized exchange, w
 
 There is also a 🎥 [Youtube video](https://www.youtube.com/watch?v=eP5w6Ger1EQ&t=364s&ab_channel=SimplyExplained) that may help you understand the concepts covered within this challenge too:
 
-This branch was heavily based off of this [archived feature branch](https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-5-dex).
-
 > 💬 Meet other builders in the [Challenge 4 Telegram!](https://t.me/+_NeUIJ664Tc1MzIx)
 
 ---
