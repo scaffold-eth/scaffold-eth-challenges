@@ -457,8 +457,9 @@ function App(props) {
       return ethers.utils.parseEther("0");
     }
 
-    let init = ethers.utils.parseEther("0.5");
-    return init.sub(vouchers()[address]);
+    const init = ethers.utils.parseEther("0.5");
+    const final = vouchers()[address].finalBalance;
+    return init.sub(final);
   }
 
   /**
