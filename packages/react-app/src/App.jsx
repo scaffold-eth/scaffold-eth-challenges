@@ -335,6 +335,11 @@ function App(props) {
    * @param {MessageEvent<string>} e
    */
   channel.onmessage = e => {
+    if (typeof e.data != "string") {
+      console.warn(`recieved unexpected channel data: ${JSON.stringify(e.data)}`);
+      return;
+    }
+
     console.log("Received: %s", e.data);
     recievedWisdom = e.data;
     document.getElementById("recievedWisdom-" + userAddress).innerText = recievedWisdom;
