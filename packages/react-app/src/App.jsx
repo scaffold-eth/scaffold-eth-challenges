@@ -370,7 +370,11 @@ function App(props) {
     const costPerCharacter = ethers.utils.parseEther("0.001");
     const duePayment = costPerCharacter.mul(ethers.BigNumber.from(wisdom.length));
 
-    const newFinal = initialBalance.sub(duePayment);
+    let newFinal = initialBalance.sub(duePayment);
+
+    if (newFinal.lt(ethers.BigNumber.from(0))) {
+      newFinal = ethers.BigNumber.from(0);
+    }
 
     const sig = await userSigner.signMessage(newFinal.toHexString());
 
