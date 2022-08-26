@@ -7,8 +7,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Streamer is Ownable {
   event Opened(address, uint256);
-  event Closing(address);
-  event Liquidating(address);
+  event Challenged(address);
+  event Closed(address);
 
   mapping(address => uint256) balances;
   mapping(address => uint256) closeAt;
@@ -21,10 +21,10 @@ contract Streamer is Ownable {
   }
 
   function closeChannel() public {
-      require(balances[msg.sender] > 0, "no channel exists");
+      require(balances[msg.sender] > 0, "no user channel exists");
   
       closeAt[msg.sender] = block.timestamp + 2 minutes;
-      emit Closing(msg.sender);
+      emit Challenged(msg.sender);
   }
 
   function timeLeft(address channel) public view returns (uint256) {
@@ -43,7 +43,7 @@ contract Streamer is Ownable {
     (sent, mem) = msg.sender.call{value: balances[msg.sender]}("");
     require(sent, "liquidation failed");
     balances[msg.sender] = 0;
-    emit Liquidating(msg.sender);
+    emit Closed(msg.sender);
   }
 
   function withdrawEarnings(Voucher calldata v) public onlyOwner {
@@ -63,5 +63,4 @@ contract Streamer is Ownable {
     bytes32 s;
     uint8 v;
   }
-
 }

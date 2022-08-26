@@ -1,7 +1,7 @@
 import WalletConnectProvider from "@walletconnect/web3-provider";
 //import Torus from "@toruslabs/torus-embed"
 import WalletLink from "walletlink";
-import { Alert, Button, Col, Menu, Row, List } from "antd";
+import { Alert, Button, Card, Checkbox, Col, Menu, Row, List, Space } from "antd";
 import "antd/dist/antd.css";
 import React, { useCallback, useEffect, useState } from "react";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
@@ -29,6 +29,7 @@ import Portis from "@portis/web3";
 import Fortmatic from "fortmatic";
 import Authereum from "authereum";
 import humanizeDuration from "humanize-duration";
+import TextArea from "antd/lib/input/TextArea";
 
 const { ethers } = require("ethers");
 /*
@@ -231,18 +232,45 @@ function App(props) {
   // If you want to make 🔐 write transactions to your contracts, use the userSigner:
   const writeContracts = useContractLoader(userSigner, contractConfig, localChainId);
 
-  // ** 📟 Listen for channel events
+  //
+  // statechannel specific listeners, application, etc.
+  //
+
+  // ** 📟 Listen for on-chain channel events
   const openEvents = useEventListener(readContracts, "Streamer", "Opened", localProvider, 1);
   console.log("open events:", openEvents);
-  const closeEvents = useEventListener(readContracts, "Streamer", "Closing", localProvider, 1);
-  console.log("close events:", closeEvents);
+  const challengeEvents = useEventListener(readContracts, "Streamer", "Challenged", localProvider, 1);
+  console.log("close events:", challengeEvents);
+  const closeEvents = useEventListener(readContracts, "Streamer", "Closed", localProvider, 1);
 
-  function openChannels() {
-    console.log("Open: " + JSON.stringify(openEvents));
-    console.log("Closed: " + JSON.stringify(closeEvents));
+  function onchainChannels() {
+    let opened = [];
+    openEvents.forEach(chan => {
+      opened.push(chan.args[0]); // see the Opened event in Streamer.sol
+    });
+
+    const challenged = [];
+    challengeEvents.forEach(chan => {
+      challenged.push(chan.args[0]); // see Challenged event in Streamer.sol
+    });
+
+    const closed = [];
+    closeEvents.forEach(chan => {
+      closed.push(chan.args[0]); // see Closed event in Streamer.sol
+
+      // remove finalized channels from the list of running channels
+      opened = opened.filter(addr => addr != chan.args[0]);
+    });
+
+    return {
+      opened,
+      challenged,
+      closed,
+    };
   }
 
-  openChannels();
+  const chainChannels = onchainChannels();
+  console.log(`chanStat:\n${JSON.stringify(chainChannels)}`);
 
   const timeLeft = useContractReader(readContracts, "Streamer", "timeLeft", [address]);
   console.log("timeleft: " + timeLeft);
@@ -254,19 +282,248 @@ function App(props) {
   const userIsOwner = ownerAddress == userAddress;
 
   /*
-    p2p communication infrastructure:
-
-    this is where our off-chain application commuinication is enabled. Based on
-    works from https://webrtc.github.io/samples/
+    The off-chain app:
+    ==================
+    - the provider sends wisdom through the channel, the client
+      returns signed vouchers which the provider can redeem at their convenience
+    - Client pays per character. This type of transaction throughput is 
+    infeasible on L1 because of:
+      - gas costs per transaction dwarfing the cost of each transaction
+      - block-time constraints preventing real-time p2p payments
   */
 
-  const broadcast = new BroadcastChannel("comms-" + userAddress);
+  /*
+    Client perspective:
+    - clients participate in a single channel - the client-streamer channel.    
+  */
 
-  broadcast.onmessage = e => {
+  /**
+   * the channel used to communicate application state
+   * and payment updates off chain.
+   */
+  const channel = getUserChannel();
+
+  /**
+   * to prevent repeated instantiations on react rerenders
+   * @returns {BroadcastChannel}
+   */
+  function getUserChannel() {
+    if (window.userChannel === undefined || window.userChannel.name === "") {
+      window.userChannel = new BroadcastChannel(userAddress);
+    }
+
+    return window.userChannel;
+  }
+
+  /**
+   * this is what you're paying for. It'd better be good.
+   */
+  let recievedWisdom = "";
+
+  /**
+   * let the application pay for your received wisdom automatically.
+   * if false, the client will have to manually trigger each payment.
+   */
+  let autoPay = true;
+
+  /**
+   * Handle incoming service data from the service provider.
+   *
+   * If autoPay is turned on, instantly recalculate due payment
+   * and return to the service provider.
+   *
+   * @param {MessageEvent<string>} e
+   */
+  channel.onmessage = e => {
     console.log("Received: %s", e.data);
+    recievedWisdom = e.data;
+    document.getElementById("recievedWisdom-" + userAddress).innerText = recievedWisdom;
+
+    if (autoPay) {
+      reimburseService(recievedWisdom);
+    }
   };
 
-  function send() {}
+  function hasOpenChannel() {
+    return onchainChannels().opened.includes(userAddress);
+  }
+
+  function hasClosingChannel() {
+    return onchainChannels().challenged.includes(userAddress);
+  }
+
+  function hasClosedChannel() {
+    return onchainChannels().closed.includes(userAddress);
+  }
+
+  /**
+   *
+   * @param {string} wisdom
+   */
+  async function reimburseService(wisdom) {
+    const initialBalance = ethers.utils.parseEther("0.5");
+    const costPerCharacter = ethers.utils.parseEther("0.001");
+    const duePayment = costPerCharacter.mul(ethers.BigNumber.from(wisdom.length));
+
+    const newFinal = initialBalance.sub(duePayment);
+
+    const sig = await userSigner.signMessage(newFinal._hex);
+
+    channel.postMessage({
+      finalBalance: newFinal,
+      signature: sig,
+    });
+  }
+
+  const coder = ethers.utils.defaultAbiCoder;
+
+  /*
+    Streamer perspective:
+    - streamer has a channel per client
+    - streamer types advice into each client's text-box, and can monitor
+    */
+
+  /**
+   * an {address: BroadcastChannel} map. One channel for each subscribed channel.
+   */
+  const channels = {};
+
+  /**
+   * an {address: Voucher} that stores the highest paying voucher for each
+   * client.
+   */
+
+  /**
+   * @returns { {[x: string]: {finalBalance: ethers.BigNumber, signature: string}} }
+   */
+  function vouchers() {
+    if (window.vouchers === undefined) {
+      window.vouchers = {};
+    }
+    return window.vouchers;
+  }
+
+  chainChannels.opened.forEach(address => {
+    setClientChannel(channels, address);
+    channels[address] = window.clientChannels[address];
+  });
+
+  if (userIsOwner) {
+    Object.keys(channels).forEach(address => {
+      /**
+       * Handle incoming payments from the
+       *
+       * If autoPay is turned on, instantly recalculate due payment
+       * and submit.
+       *
+       * @param {MessageEvent<{finalBalance: ethers.BigNumber, signature: string}>} e
+       */
+      channels[address].onmessage = e => {
+        // check that the voucher is signed by the correct user
+        const signer = ethers.utils.verifyMessage(e.data.finalBalance._hex, e.data.signature);
+
+        if (signer != address) {
+          console.warn("received malformed or forged signature!");
+          console.warn(`expected signature from ${address}, but found signature from ${signer}`);
+          return;
+        }
+
+        // update the stored voucher if it is more valuable
+        const existingVoucher = vouchers[address];
+        const bn = ethers.BigNumber.from(e.data.finalBalance._hex);
+
+        if (existingVoucher === undefined || bn.lt(existingVoucher.finalBalance)) {
+          vouchers()[address] = e.data;
+          vouchers()[address].finalBalance = bn;
+          console.log(`updated voucher`);
+          logVouchers();
+        }
+      };
+    });
+  }
+
+  /**
+   *
+   * @param {string} address
+   * @returns {ethers.BigNumber}
+   */
+  function claimable(address) {
+    if (vouchers()[address] === undefined) {
+      return ethers.utils.parseEther("0");
+    }
+
+    let init = ethers.utils.parseEther("0.5");
+    return init.sub(vouchers()[address]);
+  }
+
+  /**
+   * to prevent repeated instantiations on react refresh.
+   */
+  function setClientChannel(channels, address) {
+    if (channels[address] !== undefined) {
+      return;
+    }
+
+    if (window.clientChannels === undefined) {
+      window.clientChannels = {};
+    }
+
+    if (window.clientChannels[address] === undefined) {
+      window.clientChannels[address] = new BroadcastChannel(address);
+    }
+
+    channels[address] = window.clientChannels[address];
+  }
+
+  /**
+   * sends the provided wisdom across the application channel
+   * with user at `address`.
+   * @param {string} address
+   */
+  function provideService(address) {
+    console.log("calling provideService");
+    const channelInput = document.getElementById("input-" + address);
+    if (channelInput) {
+      console.log("sending: %s", channelInput.value);
+      channels[address].postMessage(channelInput.value);
+    } else {
+      console.log(`ChannelInput: ${channelInput}`);
+    }
+  }
+
+  function logVouchers() {
+    console.log(`Vouchers: ${JSON.stringify(vouchers())}`);
+  }
+
+  /**
+   * This takes the best payment voucher recieved from user at
+   * `address` and applies it to the streamer contract on-chain.
+   * @param {string} address
+   */
+  async function claimPaymentOnChain(address) {
+    console.log("Claiming voucher on chain...");
+    logVouchers();
+
+    if (vouchers()[address] == undefined) {
+      console.warn(`no voucher found for ${address}`);
+      return;
+    }
+
+    const coder = ethers.utils.defaultAbiCoder;
+    const rsv = ethers.utils.splitSignature(vouchers()[address].signature);
+
+    // let signatureEnc = coder.encode(["bytes32 r", "bytes32 s", "uint8 v"], [rsv.r, rsv.s, rsv.v]);
+    const voucherEnc = coder.encode(
+      ["uint256 finalBalance", "tuple (bytes32 r, bytes32 s, uint8 v) sig"],
+      [vouchers()[address].finalBalance, [rsv.r, rsv.s, rsv.v]],
+    );
+    console.log(`Encoded voucher: ${voucherEnc}`);
+
+    const withdrawTx = writeContracts.Streamer.withdrawEarnings(voucherEnc);
+    console.log(`Transaction: ${JSON.stringify(withdrawTx)}`);
+
+    tx(withdrawTx);
+  }
 
   //
   // 🧫 DEBUG 👨🏻‍🔬
@@ -444,7 +701,7 @@ function App(props) {
               }}
               to="/"
             >
-              Staker UI
+              Streamer UI
             </Link>
           </Menu.Item>
           <Menu.Item key="/contracts">
@@ -461,77 +718,141 @@ function App(props) {
 
         <Switch>
           <Route exact path="/">
-            {userIsOwner ? <h1>Hello Owner!</h1> : <h1>Hello Consumer!</h1>}
+            {userIsOwner ? (
+              //
+              // UI for the service provider
+              //
+              <div>
+                <h1>Hello Guru!</h1>
+                <h2>
+                  You have {chainChannels.opened.length} channel{chainChannels.opened.length == 1 ? "" : "s"} open.
+                </h2>
+                Channels with{" "}
+                <Button size="small" danger type="primary">
+                  RED
+                </Button>{" "}
+                withdrawal buttons are under challenge on-chain, and should be redeemed ASAP.
+                <List
+                  const
+                  dataSource={chainChannels.opened}
+                  renderItem={address => (
+                    <List.Item key={address}>
+                      <Address value={address} ensProvider={mainnetProvider} fontSize={12} />
+                      <TextArea
+                        style={{ margin: 5 }}
+                        rows={3}
+                        placeholder="Provide your wisdom here..."
+                        id={"input-" + address}
+                        onChange={e => {
+                          e.stopPropagation();
+                          provideService(address);
+                        }}
+                      ></TextArea>
 
-            <div style={{ padding: 8, marginTop: 32 }}>
-              <div>Timeleft:</div>
-              {timeLeft && humanizeDuration(timeLeft.toNumber() * 1000)}
-            </div>
+                      <Card style={{ margin: 5 }}>
+                        Claimable Balance: <Balance balance={claimable(address)} fontSize={16} />
+                      </Card>
 
-            <div style={{ padding: 8 }}>
-              <div>Total ETH locked:</div>
-              {/* add contract balance */}
-            </div>
-
-            <div style={{ padding: 8 }}>
-              <Button
-                type="primary"
-                onClick={() => {
-                  tx(writeContracts.Streamer.fundChannel({ value: ethers.utils.parseEther("0.05") }));
-                }}
-              >
-                Open a 0.05 ETH channel!
-              </Button>
-            </div>
-            <div style={{ padding: 8 }}>
-              <Button
-                type="primary"
-                onClick={() => {
-                  tx(writeContracts.Streamer.closeChannel());
-                }}
-              >
-                Close your channel!
-              </Button>
-            </div>
-            <div style={{ padding: 8 }}>
-              <Button
-                type="primary"
-                onClick={() => {
-                  tx(writeContracts.Streamer.liquidateChannel());
-                }}
-              >
-                Liquidate your channel! (Recover remaining funds)
-              </Button>
-            </div>
-            <div style={{ padding: 8 }}>
-              <button onClick={sayHi}>Say Hi!</button>
-            </div>
-
-            <div style={{ width: 500, margin: "auto", marginTop: 64 }}>
-              <div>Channel Closures:</div>
-              <List
-                dataSource={closeEvents}
-                renderItem={item => (
-                  <List.Item key={item.blockNumber}>
-                    <Address value={item.args[0]} ensProvider={mainnetProvider} fontSize={16} /> began channel closure.
-                  </List.Item>
-                )}
-              />
-            </div>
-            <div style={{ width: 500, margin: "auto", marginTop: 64 }}>
-              <div>Channel Openings:</div>
-              <List
-                dataSource={openEvents}
-                renderItem={item => {
-                  return (
-                    <List.Item key={item.blockNumber}>
-                      <Address value={item.args[0]} ensProvider={mainnetProvider} fontSize={16} /> opened with:
-                      <Balance balance={item.args[1]} />
+                      <Button
+                        style={{ margin: 5 }}
+                        type="primary"
+                        danger={chainChannels.challenged.includes(address)}
+                        disabled={chainChannels.closed.includes(address)}
+                        onClick={() => {
+                          claimPaymentOnChain(address);
+                        }}
+                      >
+                        Cash out latest voucher
+                      </Button>
                     </List.Item>
-                  );
-                }}
-              />
-            </div>
+                  )}
+                ></List>
+                <div style={{ padding: 8 }}>
+                  <div>Total ETH locked:</div>
+                  {/* add contract balance */}
+                </div>
+              </div>
+            ) : (
+              //
+              // UI for the service consumer
+              //
+              <div>
+                <h1>Hello Rube!</h1>
+
+                {/*  */}
+
+                {hasOpenChannel() ? (
+                  <div style={{ padding: 8 }}>
+                    <Row align="middle">
+                      <Col span={3}>
+                        <Checkbox
+                          defaultChecked={autoPay}
+                          onChange={e => {
+                            autoPay = e.target.checked;
+                            console.log("AutoPay: " + autoPay);
+                          }}
+                        >
+                          AutoPay
+                        </Checkbox>
+                      </Col>
+                      <Col span={16}>
+                        <Card title="Received Wisdom">
+                          <span id={"recievedWisdom-" + userAddress}></span>
+                        </Card>
+                      </Col>
+                      <Col span={5}>
+                        <Button
+                          disabled={hasClosingChannel()}
+                          type="primary"
+                          onClick={() => {
+                            // disable the production of further voucher signatures
+                            autoPay = false;
+                            tx(writeContracts.Streamer.closeChannel());
+                          }}
+                        >
+                          Close this channel!
+                        </Button>
+
+                        <div style={{ padding: 8, marginTop: 32 }}>
+                          <div>Timeleft:</div>
+                          {timeLeft && humanizeDuration(timeLeft.toNumber() * 1000)}
+                        </div>
+                        <Button
+                          style={{ padding: 5, margin: 5 }}
+                          disabled={timeLeft}
+                          type="primary"
+                          onClick={() => {
+                            tx(writeContracts.Streamer.liquidateChannel());
+                          }}
+                        >
+                          Withdraw remaining funds
+                        </Button>
+                        <div />
+                      </Col>
+                    </Row>
+                  </div>
+                ) : hasClosedChannel() ? (
+                  <div>
+                    <p>Thanks for stopping by - we hope you have enjoyed the guru's advice.</p>
+                    <p>
+                      {" "}
+                      This UI obstructs you from opening a second channel. Why? Is it safe to open another channel?
+                    </p>
+                  </div>
+                ) : (
+                  <div style={{ padding: 8 }}>
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        tx(writeContracts.Streamer.fundChannel({ value: ethers.utils.parseEther("0.5") }));
+                      }}
+                    >
+                      Open a 0.5 ETH channel for advice from the Guru.
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
           </Route>
 
           {/*
