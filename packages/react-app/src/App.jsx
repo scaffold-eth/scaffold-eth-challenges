@@ -372,10 +372,10 @@ function App(props) {
 
     const newFinal = initialBalance.sub(duePayment);
 
-    const sig = await userSigner.signMessage(newFinal._hex);
+    const sig = await userSigner.signMessage(newFinal.toHexString());
 
     channel.postMessage({
-      finalBalance: newFinal,
+      finalBalance: newFinal.toHexString(),
       signature: sig,
     });
   }
@@ -421,11 +421,11 @@ function App(props) {
        * If autoPay is turned on, instantly recalculate due payment
        * and submit.
        *
-       * @param {MessageEvent<{finalBalance: ethers.BigNumber, signature: string}>} e
+       * @param {MessageEvent<{finalBalance: string, signature: string}>} e
        */
       channels[address].onmessage = e => {
         // check that the voucher is signed by the correct user
-        const signer = ethers.utils.verifyMessage(e.data.finalBalance._hex, e.data.signature);
+        const signer = ethers.utils.verifyMessage(e.data.finalBalance, e.data.signature);
 
         if (signer != address) {
           console.warn("received malformed or forged signature!");
@@ -434,8 +434,8 @@ function App(props) {
         }
 
         // update the stored voucher if it is more valuable
-        const existingVoucher = vouchers[address];
-        const bn = ethers.BigNumber.from(e.data.finalBalance._hex);
+        const existingVoucher = vouchers()[address];
+        const bn = ethers.BigNumber.from(e.data.finalBalance);
 
         if (existingVoucher === undefined || bn.lt(existingVoucher.finalBalance)) {
           vouchers()[address] = e.data;
