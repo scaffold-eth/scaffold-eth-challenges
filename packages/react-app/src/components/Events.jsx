@@ -40,6 +40,13 @@ export default function Events({ contracts, contractName, eventName, localProvid
         bordered
         dataSource={events}
         renderItem={item => {
+          if (!item || !item.args || item.args.length === 0) {
+            return (
+              <List.Item key={item.blockNumber + "_"}>
+                Event without arguments
+              </List.Item>
+            );
+          }
           return (
             <List.Item key={item.blockNumber + "_" + item.args[0].toString()}>
               <Address address={item.args[0]} ensProvider={mainnetProvider} fontSize={16} />
