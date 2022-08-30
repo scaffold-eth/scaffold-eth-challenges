@@ -475,16 +475,15 @@ function App(props) {
     }
 
     const init = ethers.utils.parseEther("0.5");
-    const updated = vouchers()[address].updatedBalance;
+    const final = vouchers()[address].updatedBalance;
 
-    const updated = init.sub(updated);
+    const updated = init.sub(final);
     let patch = {};
     patch[address] = updated;
     // window.claimable[address] = updated;
     window.claimable = Object.assign(window.claimable, patch);
     // window.claimable = { ...window.claimable }; // trigger react rerender
 
-    forceUpdate();
     return updated;
   }
 
