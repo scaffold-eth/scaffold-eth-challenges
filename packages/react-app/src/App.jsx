@@ -475,16 +475,12 @@ function App(props) {
     }
 
     const init = ethers.utils.parseEther("0.5");
-    const final = vouchers()[address].updatedBalance;
+    const updated = vouchers()[address].updatedBalance;
 
-    const updated = init.sub(final);
-    let patch = {};
-    patch[address] = updated;
-    // window.claimable[address] = updated;
-    window.claimable = Object.assign(window.claimable, patch);
-    // window.claimable = { ...window.claimable }; // trigger react rerender
+    const claimable = init.sub(updated);
+    window.claimable[address] = claimable; // todo: doesn't update react Balances component
 
-    return updated;
+    return claimable;
   }
 
   /**
