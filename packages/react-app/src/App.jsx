@@ -1,7 +1,7 @@
 import WalletConnectProvider from "@walletconnect/web3-provider";
 //import Torus from "@toruslabs/torus-embed"
 import WalletLink from "walletlink";
-import { Alert, Button, Card, Checkbox, Col, Menu, Row, List, Space } from "antd";
+import { Alert, Button, Card, Checkbox, Col, Menu, Row, List, Space, Spin } from "antd";
 import "antd/dist/antd.css";
 import React, { useCallback, useEffect, useState } from "react";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
@@ -282,7 +282,6 @@ function App(props) {
   console.log("User:  %s\nOwner: %s", userAddress, ownerAddress);
 
   const userIsOwner = ownerAddress == userAddress;
-  const UIReady = true;
 
   /*
     The off-chain app:
@@ -795,6 +794,8 @@ function App(props) {
                       </Button>
                     </List.Item>
                   )}
+                ></List>
+                <div style={{ padding: 8 }}>
                   <div>Total ETH locked:</div>
                   {/* add contract balance */}
                 </div>
