@@ -12,7 +12,7 @@
 
 - ⏱ Create a Challenge mechanism, so that clients are protected from a service provider who goes offline while funds are locked on-chain (either by accident, or as a theft attempt).
 
-- ⁉ Consider some security a usability holes in the current design.
+- ⁉ Consider some security / usability holes in the current design.
 
 // todo
 
