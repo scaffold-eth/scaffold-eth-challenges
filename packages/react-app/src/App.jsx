@@ -795,8 +795,6 @@ function App(props) {
                       </Button>
                     </List.Item>
                   )}
-                ></List>
-                <div style={{ padding: 8 }}>
                   <div>Total ETH locked:</div>
                   {/* add contract balance */}
                 </div>
