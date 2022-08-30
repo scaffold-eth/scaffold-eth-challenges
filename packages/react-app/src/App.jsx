@@ -382,6 +382,21 @@ function App(props) {
     const hashed = ethers.utils.keccak256(packed);
     const arrayified = ethers.utils.arrayify(hashed);
 
+    // why not just sign the updatedBalance string directly?
+    //
+    // Two considerations:
+    // 1) this signature is going to verified both off-chain (by the service provider)
+    //    and on-chain (by the Streamer contract). These are distinct runtimes, so
+    //    care needs to be taken that signatures are applied to well-specified data encodings.
+    //
+    //    the arrarify call below encodes this data in an EVM compatible way
+    //
+    //    see: https://blog.ricmoo.com/verifying-messages-in-solidity-50a94f82b2ca for some
+    //         more on EVM verification of messages signed off-chain
+    // 2) because of (1), it's useful to apply signatures to the hash of any given message
+    //    rather than to arbitrary messages themselves. This way the encoding strategy for
+    //    the fixed-length hash can be reused for any message format.
+
     const signature = await userSigner.signMessage(arrayified);
 
     channel.postMessage({
