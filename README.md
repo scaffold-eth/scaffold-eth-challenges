@@ -4,7 +4,7 @@
 
 🎫 Create a simple NFT to learn basics of 🏗 scaffold-eth. You'll use [👷‍♀️ HardHat](https://hardhat.org/getting-started/) to compile and deploy smart contracts. Then, you'll use a template React app full of important Ethereum components and hooks. Finally, you'll deploy an NFT to a public network to share with friends! 🚀
 
-🏆 The final deliverable is an app that lets users purchase and transfer NFTs. Deploy your contracts to Rinkeby and then build and upload your app to a public web server. Share the url in the [Challenge 0 telegram channel](https://t.me/+Y2vqXZZ_pEFhMGMx)!!! 🍾
+🏆 The final deliverable is an app that lets users purchase and transfer NFTs. Deploy your contracts to Goerli or Mumbai and then build and upload your app to a public web server. Share the url in the [Challenge 0 telegram channel](https://t.me/+Y2vqXZZ_pEFhMGMx)!!! 🍾
 
 ---
 
@@ -108,7 +108,7 @@ yarn deploy
 
 🛰 Ready to deploy to a public testnet?!?
 
-> Change the `defaultNetwork` in `packages/hardhat/hardhat.config.js` to `rinkeby`
+> Change the `defaultNetwork` in `packages/hardhat/hardhat.config.js` to `mumbai` or `goerli`
 
 ![networkSelect](https://user-images.githubusercontent.com/12072395/146871168-29b3d87a-7d25-4972-9b3c-0ec8c979171b.PNG)
 
@@ -130,13 +130,13 @@ yarn deploy
 yarn deploy
 ```
 
-> 💬 Hint: You can set the `defaultNetwork` in `hardhat.config.js` to `Rinkeby` OR you can `yarn deploy --network rinkeby`. 
+> 💬 Hint: You can set the `defaultNetwork` in `hardhat.config.js` to `goerli` or `mumbai` OR you can `yarn deploy --network goerli`. 
 
 ---
 
 # Checkpoint 4: 🚢 Ship it! 🚁
 
-> ✏️ Edit your frontend `App.jsx` in `packages/react-app/src` to change the `targetNetwork` to `NETWORKS.rinkeby`:
+> ✏️ Edit your frontend `App.jsx` in `packages/react-app/src` to change the `targetNetwork` to `NETWORKS.goerli` or `NETWORKS.mumbai`:
 
 ![image](https://user-images.githubusercontent.com/2653167/142491593-a032ebf2-38c7-4d1c-a4c5-5e02485e21b4.png)
 
@@ -177,6 +177,7 @@ Update the `api-key` in `packages/hardhat/package.json` file. You can get your k
 ![Screen Shot 2021-11-30 at 10 21 01 AM](https://user-images.githubusercontent.com/9419140/144075208-c50b70aa-345f-4e36-81d6-becaa5f74857.png)
 
 > Now you are ready to run the `yarn verify --network your_network` command to verify your contracts on etherscan 🛰
+> ** Note that you will need a different etherscan API key for Mumbai or Polygon.
 
 ---
 
