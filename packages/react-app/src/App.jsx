@@ -372,20 +372,20 @@ function App(props) {
     const costPerCharacter = ethers.utils.parseEther("0.001");
     const duePayment = costPerCharacter.mul(ethers.BigNumber.from(wisdom.length));
 
-    let newFinal = initialBalance.sub(duePayment);
+    let updatedBalance = initialBalance.sub(duePayment);
 
-    if (newFinal.lt(ethers.BigNumber.from(0))) {
-      newFinal = ethers.BigNumber.from(0);
+    if (updatedBalance.lt(ethers.BigNumber.from(0))) {
+      updatedBalance = ethers.BigNumber.from(0);
     }
 
-    const packed = ethers.utils.solidityPack(["uint256"], [newFinal]);
+    const packed = ethers.utils.solidityPack(["uint256"], [updatedBalance]);
     const hashed = ethers.utils.keccak256(packed);
     const arrayified = ethers.utils.arrayify(hashed);
 
     const signature = await userSigner.signMessage(arrayified);
 
     channel.postMessage({
-      finalBalance: newFinal.toHexString(),
+      updatedBalance: updatedBalance.toHexString(),
       signature,
     });
   }
@@ -409,7 +409,7 @@ function App(props) {
    */
 
   /**
-   * @returns { {[x: string]: {finalBalance: ethers.BigNumber, signature: string}} }
+   * @returns { {[x: string]: {updatedBalance: ethers.BigNumber, signature: string}} }
    */
   function vouchers() {
     if (window.vouchers === undefined) {
@@ -431,12 +431,12 @@ function App(props) {
        * If autoPay is turned on, instantly recalculate due payment
        * and submit.
        *
-       * @param {MessageEvent<{finalBalance: string, signature: string}>} e
+       * @param {MessageEvent<{updatedBalance: string, signature: string}>} e
        */
       channels[address].onmessage = e => {
-        // recreate a BigNumber object from the message. finalBalance is
+        // recreate a BigNumber object from the message. updatedBalance is
         // the hex string representation of the BigNumber.
-        const bn = ethers.BigNumber.from(e.data.finalBalance);
+        const bn = ethers.BigNumber.from(e.data.updatedBalance);
 
         // check that the voucher is signed by the correct user
         const packed = ethers.utils.solidityPack(["uint256"], [bn]);
@@ -454,9 +454,9 @@ function App(props) {
         // update the stored voucher if it is more valuable
         const existingVoucher = vouchers()[address];
 
-        if (existingVoucher === undefined || bn.lt(existingVoucher.finalBalance)) {
+        if (existingVoucher === undefined || bn.lt(existingVoucher.updatedBalance)) {
           vouchers()[address] = e.data;
-          vouchers()[address].finalBalance = bn;
+          vouchers()[address].updatedBalance = bn;
           updateClaimable(address);
           logVouchers();
         }
@@ -475,9 +475,9 @@ function App(props) {
     }
 
     const init = ethers.utils.parseEther("0.5");
-    const final = vouchers()[address].finalBalance;
+    const updated = vouchers()[address].updatedBalance;
 
-    const updated = init.sub(final);
+    const updated = init.sub(updated);
     let patch = {};
     patch[address] = updated;
     // window.claimable[address] = updated;
@@ -541,12 +541,12 @@ function App(props) {
       return;
     }
 
-    const finalBalance = vouchers()[address].finalBalance;
+    const updatedBalance = vouchers()[address].updatedBalance;
     const sig = ethers.utils.splitSignature(vouchers()[address].signature);
 
     tx(
       writeContracts.Streamer.withdrawEarnings({
-        finalBalance,
+        updatedBalance,
         sig,
       }),
     );

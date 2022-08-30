@@ -9,6 +9,7 @@ contract Streamer is Ownable {
   event Opened(address, uint256);
   event Challenged(address);
   event Closed(address);
+  event Withdrawn(address, uint256);
 
   mapping(address => uint256) balances;
   mapping(address => uint256) closeAt;
@@ -48,13 +49,13 @@ contract Streamer is Ownable {
 
   function withdrawEarnings(Voucher calldata v) public onlyOwner {
     string memory prefix = '\x19Ethereum Signed Message:\n32';
-    bytes32 hashed = keccak256(abi.encode(v.finalBalance));
+    bytes32 hashed = keccak256(abi.encode(v.updatedBalance));
 
     bytes memory prefixed = abi.encodePacked(prefix, hashed);
     bytes32 prefixedHashed = keccak256(prefixed);
 
     // console.log("Voucher balance:");
-    // console.log(v.finalBalance);
+    // console.log(v.updatedBalance);
 
     // console.log("Signature - r,s,v (all):");
     // console.log(uint256(v.sig.r));
@@ -66,15 +67,15 @@ contract Streamer is Ownable {
     console.log("The voucer was signed by:");
     console.log(signer);
 
-    require(balances[signer] > v.finalBalance, "voucher signer balance too low");
+    require(balances[signer] > v.updatedBalance, "voucher signer balance too low");
 
-    uint256 payment = balances[signer] - v.finalBalance;
+    uint256 payment = balances[signer] - v.updatedBalance;
     owner().call{value: payment}("");
-    balances[signer] = v.finalBalance;
+    balances[signer] = v.updatedBalance;
   }
 
   struct Voucher {
-    uint256 finalBalance;
+    uint256 updatedBalance;
     Signature sig;
   }
   struct Signature {
