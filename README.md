@@ -112,7 +112,7 @@ yarn deploy
 
 > Change the `defaultNetwork` in `packages/hardhat/hardhat.config.js` to `mumbai` or `goerli`
 
-![networkSelect](https://user-images.githubusercontent.com/12072395/146871168-29b3d87a-7d25-4972-9b3c-0ec8c979171b.PNG)
+![networkSelect](https://user-images.githubusercontent.com/12072395/187536000-52a97be7-719e-4e3f-93cf-948abed2c489.PNG)
 
 🔐 Generate a **deployer address** with `yarn generate`
 
@@ -140,11 +140,11 @@ yarn deploy
 
 > ✏️ Edit your frontend `App.jsx` in `packages/react-app/src` to change the `targetNetwork` to `NETWORKS.goerli` or `NETWORKS.mumbai`:
 
-![image](https://user-images.githubusercontent.com/2653167/142491593-a032ebf2-38c7-4d1c-a4c5-5e02485e21b4.png)
+![image](https://user-images.githubusercontent.com/12072395/187535786-25837212-0c49-4403-b9e6-e8a3255bcd16.PNG)
 
 You should see the correct network in the frontend (http://localhost:3000):
 
-![nft10](https://user-images.githubusercontent.com/526558/124387099-9a3edd80-dcb3-11eb-9a57-54a7d370589a.png)
+![nft10](https://user-images.githubusercontent.com/12072395/187537642-11a60aae-2b1d-4c8f-a3fa-65e4ce36830e.PNG)
 
 > 🦊 At this moment, you will need to connect the dapp to a browser wallet where you have some ether available to mint tokens. Again, you can use a faucet like [faucet.paradigm.xyz]. Keep in mind that the address you generated in the previous step to deploy the contract will likely be different from the one you have configured in your wallet.
 
