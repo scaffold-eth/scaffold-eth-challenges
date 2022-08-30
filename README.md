@@ -2,21 +2,27 @@
 
 ## 🚩 Challenge N: A state channel application
 
-> 🐌 The Ethereum blockchain has great decentralization & security properties. These properties come at a price: transaction throughput is low, and transactions can be expensive (see: blockchain trilemma). This makes many traditional web applications infeasible on a blockchain... or does it?
+> 🐌 The Ethereum blockchain has great decentralization & security properties. These properties come at a price: transaction throughput is low, and transactions can be expensive (search term: blockchain trilemma). This makes many traditional web applications infeasible on a blockchain... or does it?
 
-> 🍰 A number of scaling solutions have been developed, collectively referred to as layer-2s (L2s). Among them is the concept of payment channels, state channels, and state channel networks. This tutorial walks through the creation of a simple state-channel application, where users seeking a service lock collatoral on-chain with a single transaction, interact with their service provider entirely off-chain, and finalize the interaction with a second on-chain transaction.
+> 🍰 A number of approaches to scaling have been developed, collectively referred to as layer-2s (L2s). Among them is the concept of payment channels, state channels, and state channel networks. This tutorial walks through the creation of a simple state channel application, where users seeking a service lock collatoral on-chain with a single transaction, interact with their service provider entirely off-chain, and finalize the interaction with a second on-chain transaction. We will:
 
-> 🛣️ Build a `Streamer.sol` contract that collects **ETH** from numerous addresses using a payable `fundChannel()` function and keeps track of `balances`. Use the UI to exchange service for
+- 🛣️ Build a `Streamer.sol` contract that collects **ETH** from numerous client addresses using a payable `fundChannel()` function and keeps track of `balances`.
 
-> After some `deadline` if it has at least some `threshold` of ETH, it sends it to an `ExampleExternalContract` and triggers the `complete()` action sending the full balance. If not enough **ETH** is collected, allow users to `withdraw()`.
+- 💵 Exchange paid services off-chain between the `Streamer.sol` contract owner and clients with funded channels. The **Streamer** provides the service in exchange for signed vouchers which can later be redeemed on-chain.
 
-> 🎛 Building the frontend to display the information and UI is just as important as writing the contract. The goal is to deploy the contract and the app to allow anyone to stake using your app. Use a `Stake(address,uint256)` event to <List/> all stakes.
+- ⏱ Create a Challenge mechanism, so that clients are protected from a service provider who goes offline while funds are locked on-chain (either by accident, or as a theft attempt).
+
+- ⁉ Consider some security a usability holes in the current design.
+
+// todo
 
 > 🌟 The final deliverable is deploying a Dapp that lets users send ether to a contract and stake if the conditions are met, then `yarn build` and `yarn surge` your app to a public webserver. Submit the url on [SpeedRunEthereum.com](https://speedrunethereum.com)!
 
+// todo
+
 > 💬 Meet other builders working on this challenge and get help in the [Challenge 1 telegram](https://t.me/joinchat/E6r91UFt4oMJlt01)!
 
-🧫 Everything starts by ✏️ Editing `Staker.sol` in `packages/hardhat/contracts`
+🧫 Everything starts by ✏️ Editing `Streamer.sol` in `packages/hardhat/contracts`
 
 ---
 
@@ -24,21 +30,19 @@
 
 Want a fresh cloud environment? Click this to open a gitpod workspace, then skip to Checkpoint 1 after the tasks are complete.
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-1-decentralized-staking)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-1-decentralized-staking) // todo
 
 ```bash
 
-git clone https://github.com/scaffold-eth/scaffold-eth-challenges.git challenge-1-decentralized-staking
+git clone https://github.com/statechannels/speedrun-statechannels.git challenge-N-statechannels
 
-cd challenge-1-decentralized-staking
-
-git checkout challenge-1-decentralized-staking
+cd challenge-N-statechannels
 
 yarn install
 
 ```
 
-🔏 Edit your smart contract `Staker.sol` in `packages/hardhat/contracts`
+🔏 Edit your smart contract `Streamer.sol` in `packages/hardhat/contracts`
 
 ---
 
@@ -58,101 +62,13 @@ yarn deploy  (to compile, deploy, and publish your contracts to the frontend)
 
 ---
 
-### Checkpoint 2: 🥩 Staking 💵
-
-You'll need to track individual `balances` using a mapping:
-
-```solidity
-mapping ( address => uint256 ) public balances;
-```
-
-And also track a constant `threshold` at `1 ether`
-
-```solidity
-uint256 public constant threshold = 1 ether;
-```
-
-> 👩‍💻 Write your `stake()` function and test it with the `Debug Contracts` tab in the frontend
-
-💸 Need more funds from the faucet? Enter your frontend address into the wallet to get as much as you need!
-![Wallet_Medium](https://user-images.githubusercontent.com/12072395/159990402-d5535875-f1eb-4c75-86a7-6fbd5e6cbe5f.png)
-
-✏ Need to troubleshoot your code? If you import `hardhat/console.sol` to your contract, you can call `console.log()` right in your Solidity code. The output will appear in your `yarn chain` terminal.
-
-#### 🥅 Goals
-
-- [ ] Do you see the balance of the `Staker` contract go up when you `stake()`?
-- [ ] Is your `balance` correctly tracked?
-- [ ] Do you see the events in the `Staker UI` tab?
-
----
-
-### Checkpoint 3: 🔬 State Machine / Timing ⏱
-
-> ⚙️ Think of your smart contract like a _state machine_. First, there is a **stake** period. Then, if you have gathered the `threshold` worth of ETH, there is a **success** state. Or, we go into a **withdraw** state to let users withdraw their funds.
-
-Set a `deadline` of `block.timestamp + 30 seconds`
-
-```solidity
-uint256 public deadline = block.timestamp + 30 seconds;
-```
-
-👨‍🏫 Smart contracts can't execute automatically, you always need to have a transaction execute to change state. Because of this, you will need to have an `execute()` function that _anyone_ can call, just once, after the `deadline` has expired.
-
-> 👩‍💻 Write your `execute()` function and test it with the `Debug Contracts` tab
-
-If the `address(this).balance` of the contract is over the `threshold` by the `deadline`, you will want to call: `exampleExternalContract.complete{value: address(this).balance}()`
-
-If the balance is less than the `threshold`, you want to set a `openForWithdraw` bool to `true` and allow users to `withdraw()` their funds.
-
-(You'll have 30 seconds after deploying until the deadline is reached, you can adjust this in the contract.)
-
-> 👩‍💻 Create a `timeLeft()` function including `public view returns (uint256)` that returns how much time is left.
-
-⚠️ Be careful! if `block.timestamp >= deadline` you want to `return 0;`
-
-⏳ The time will only update if a transaction occurs. You can see the time update by getting funds from the faucet just to trigger a new block.
-
-> 👩‍💻 You can call `yarn deploy --reset` any time you want a fresh contract
-
-#### 🥅 Goals
-
-- [ ] Can you see `timeLeft` counting down in the `Staker UI` tab when you trigger a transaction with the faucet?
-- [ ] If you `stake()` enough ETH before the `deadline`, does it call `complete()`?
-- [ ] If you don't `stake()` enough can you `withdraw()` your funds?
-
----
-
-### Checkpoint 4: 💵 Receive Function / UX 🙎
-
-🎀 To improve the user experience, set your contract up so it accepts ETH sent to it and calls `stake()`. You will use what is called the `receive()` function.
-
-> Use the [receive()](https://docs.soliditylang.org/en/v0.8.9/contracts.html?highlight=receive#receive-ether-function) function in solidity to "catch" ETH sent to the contract and call `stake()` to update `balances`.
-
----
-
-#### 🥅 Goals
-
-- [ ] If you send ETH directly to the contract address does it update your `balance`?
-
----
-
-## ⚔️ Side Quests
-
-- [ ] Can execute get called more than once, and is that okay?
-- [ ] Can you stake and withdraw freely after the `deadline`, and is that okay?
-- [ ] What are other implications of _anyone_ being able to withdraw for someone?
-
----
-
-## 🐸 It's a trap!
-
-- [ ] Make sure funds can't get trapped in the contract! **Try sending funds after you have executed! What happens?**
-- [ ] Try to create a [modifier](https://solidity-by-example.org/function-modifier/) called `notCompleted`. It will check that `ExampleExternalContract` is not completed yet. Use it to protect your `execute` and `withdraw` functions.
+// todo: write checkpoints
 
 ---
 
 #### ⚠️ Test it!
+
+// todo: write tests
 
 - Now is a good time to run `yarn test` to run the automated testing function. It will test that you hit the core checkpoints. You are looking for all green checkmarks and passing tests!
 
