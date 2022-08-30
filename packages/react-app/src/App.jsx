@@ -165,6 +165,8 @@ const web3Modal = new Web3Modal({
   },
 });
 
+window.claimable = {};
+
 function App(props) {
   const mainnetProvider =
     poktMainnetProvider && poktMainnetProvider._isProvider
@@ -280,6 +282,7 @@ function App(props) {
   console.log("User:  %s\nOwner: %s", userAddress, ownerAddress);
 
   const userIsOwner = ownerAddress == userAddress;
+  const UIReady = true;
 
   /*
     The off-chain app:
@@ -455,7 +458,7 @@ function App(props) {
         if (existingVoucher === undefined || bn.lt(existingVoucher.finalBalance)) {
           vouchers()[address] = e.data;
           vouchers()[address].finalBalance = bn;
-          console.log(`updated voucher`);
+          updateClaimable(address);
           logVouchers();
         }
       };
@@ -467,14 +470,23 @@ function App(props) {
    * @param {string} address
    * @returns {ethers.BigNumber}
    */
-  function claimable(address) {
+  function updateClaimable(address) {
     if (vouchers()[address] === undefined) {
       return ethers.utils.parseEther("0");
     }
 
     const init = ethers.utils.parseEther("0.5");
     const final = vouchers()[address].finalBalance;
-    return init.sub(final);
+
+    const updated = init.sub(final);
+    let patch = {};
+    patch[address] = updated;
+    // window.claimable[address] = updated;
+    window.claimable = Object.assign(window.claimable, patch);
+    // window.claimable = { ...window.claimable }; // trigger react rerender
+
+    forceUpdate();
+    return updated;
   }
 
   /**
@@ -517,33 +529,28 @@ function App(props) {
   }
 
   /**
-   * This takes the best payment voucher recieved from user at
-   * `address` and applies it to the streamer contract on-chain.
+   * Take the best payment voucher recieved from user at
+   * `address` and apply it to the streamer contract on-chain.
    * @param {string} address
    */
   async function claimPaymentOnChain(address) {
     console.log("Claiming voucher on chain...");
-    logVouchers();
+    // logVouchers();
 
     if (vouchers()[address] == undefined) {
       console.warn(`no voucher found for ${address}`);
       return;
     }
 
-    const coder = ethers.utils.defaultAbiCoder;
-    const rsv = ethers.utils.splitSignature(vouchers()[address].signature);
+    const finalBalance = vouchers()[address].finalBalance;
+    const sig = ethers.utils.splitSignature(vouchers()[address].signature);
 
-    // let signatureEnc = coder.encode(["bytes32 r", "bytes32 s", "uint8 v"], [rsv.r, rsv.s, rsv.v]);
-    const voucherEnc = coder.encode(
-      ["uint256 finalBalance", "tuple (bytes32 r, bytes32 s, uint8 v) sig"],
-      [vouchers()[address].finalBalance, [rsv.r, rsv.s, rsv.v]],
+    tx(
+      writeContracts.Streamer.withdrawEarnings({
+        finalBalance,
+        sig,
+      }),
     );
-    console.log(`Encoded voucher: ${voucherEnc}`);
-
-    const withdrawTx = writeContracts.Streamer.withdrawEarnings(voucherEnc);
-    console.log(`Transaction: ${JSON.stringify(withdrawTx)}`);
-
-    tx(withdrawTx);
   }
 
   //
@@ -771,7 +778,8 @@ function App(props) {
                       ></TextArea>
 
                       <Card style={{ margin: 5 }}>
-                        Claimable Balance: <Balance balance={claimable(address)} fontSize={16} />
+                        {/* todo: this should rerender on receipt of new vouchers instead of sporadically */}
+                        Claimable Balance: <Balance balance={window.claimable[address]} fontSize={14} />
                       </Card>
 
                       <Button
@@ -799,8 +807,6 @@ function App(props) {
               //
               <div>
                 <h1>Hello Rube!</h1>
-
-                {/*  */}
 
                 {hasOpenChannel() ? (
                   <div style={{ padding: 8 }}>
