@@ -828,7 +828,7 @@ function App(props) {
                           onClick={() => {
                             // disable the production of further voucher signatures
                             autoPay = false;
-                            tx(writeContracts.Streamer.closeChannel());
+                            tx(writeContracts.Streamer.challengeChannel());
                           }}
                         >
                           Close this channel!

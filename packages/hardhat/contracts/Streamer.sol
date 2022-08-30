@@ -21,7 +21,7 @@ contract Streamer is Ownable {
       emit Opened(msg.sender, msg.value);
   }
 
-  function closeChannel() public {
+  function challengeChannel() public {
       require(balances[msg.sender] > 0, "no user channel exists");
   
       closeAt[msg.sender] = block.timestamp + 2 minutes;
