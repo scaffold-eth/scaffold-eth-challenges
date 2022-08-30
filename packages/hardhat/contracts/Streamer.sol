@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
 
-// import "hardhat/console.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "hardhat/console.sol";
 
 
 contract Streamer is Ownable {
@@ -47,7 +47,26 @@ contract Streamer is Ownable {
   }
 
   function withdrawEarnings(Voucher calldata v) public onlyOwner {
-    address signer = ecrecover( bytes32( v.finalBalance ), v.sig.v, v.sig.r, v.sig.s);
+    string memory prefix = '\x19Ethereum Signed Message:\n32';
+    bytes32 hashed = keccak256(abi.encode(v.finalBalance));
+
+    bytes memory prefixed = abi.encodePacked(prefix, hashed);
+    bytes32 prefixedHashed = keccak256(prefixed);
+
+    // console.log("Voucher balance:");
+    // console.log(v.finalBalance);
+
+    // console.log("Signature - r,s,v (all):");
+    // console.log(uint256(v.sig.r));
+    // console.log(uint256(v.sig.s));
+    // console.log(uint256(v.sig.v));
+
+    address signer = ecrecover( prefixedHashed , v.sig.v, v.sig.r, v.sig.s);
+    
+    console.log("The voucer was signed by:");
+    console.log(signer);
+
+    require(balances[signer] > v.finalBalance, "voucher signer balance too low");
 
     uint256 payment = balances[signer] - v.finalBalance;
     owner().call{value: payment}("");

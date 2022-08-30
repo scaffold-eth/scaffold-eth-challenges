@@ -376,11 +376,15 @@ function App(props) {
       newFinal = ethers.BigNumber.from(0);
     }
 
-    const sig = await userSigner.signMessage(newFinal.toHexString());
+    const packed = ethers.utils.solidityPack(["uint256"], [newFinal]);
+    const hashed = ethers.utils.keccak256(packed);
+    const arrayified = ethers.utils.arrayify(hashed);
+
+    const signature = await userSigner.signMessage(arrayified);
 
     channel.postMessage({
       finalBalance: newFinal.toHexString(),
-      signature: sig,
+      signature,
     });
   }
 
@@ -428,8 +432,16 @@ function App(props) {
        * @param {MessageEvent<{finalBalance: string, signature: string}>} e
        */
       channels[address].onmessage = e => {
+        // recreate a BigNumber object from the message. finalBalance is
+        // the hex string representation of the BigNumber.
+        const bn = ethers.BigNumber.from(e.data.finalBalance);
+
         // check that the voucher is signed by the correct user
-        const signer = ethers.utils.verifyMessage(e.data.finalBalance, e.data.signature);
+        const packed = ethers.utils.solidityPack(["uint256"], [bn]);
+        const hashed = ethers.utils.keccak256(packed);
+        const arrayified = ethers.utils.arrayify(hashed);
+
+        const signer = ethers.utils.verifyMessage(arrayified, e.data.signature);
 
         if (signer != address) {
           console.warn("received malformed or forged signature!");
@@ -439,7 +451,6 @@ function App(props) {
 
         // update the stored voucher if it is more valuable
         const existingVoucher = vouchers()[address];
-        const bn = ethers.BigNumber.from(e.data.finalBalance);
 
         if (existingVoucher === undefined || bn.lt(existingVoucher.finalBalance)) {
           vouchers()[address] = e.data;
