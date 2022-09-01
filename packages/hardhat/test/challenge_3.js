@@ -7,7 +7,6 @@ use(solidity);
 
 describe("🚩 Challenge 3: 🎲 Dice Game", function () {
   let deployer;
-  let account1;
   let diceGame;
   let riggedRoll;
   let provider;
@@ -37,20 +36,20 @@ describe("🚩 Challenge 3: 🎲 Dice Game", function () {
     });
   }
 
-  async function changeStatesToGetRequiredRoll(getRollLessThanTwo) {
+  async function getRoll(getRollLessThanTwo) {
     let expectedRoll;
     while (true) {
-      let latestBlockNumber = await provider.getBlockNumber();
-      let block = await provider.getBlock(latestBlockNumber);
-      let prevHash = block.hash;
-      let nonce = await diceGame.nonce();
+      const latestBlockNumber = await provider.getBlockNumber();
+      const block = await provider.getBlock(latestBlockNumber);
+      const prevHash = block.hash;
+      const nonce = await diceGame.nonce();
 
-      let hash = ethers.utils.solidityKeccak256(
+      const hash = ethers.utils.solidityKeccak256(
         ["bytes32", "address", "uint256"],
         [prevHash, diceGame.address, nonce]
       );
 
-      let bigNum = BigNumber.from(hash);
+      const bigNum = BigNumber.from(hash);
       expectedRoll = bigNum.mod(16);
       if (expectedRoll.lte(2) == getRollLessThanTwo) {
         break;
@@ -65,33 +64,30 @@ describe("🚩 Challenge 3: 🎲 Dice Game", function () {
   describe("⚙️ Setup contracts", function () {
     it("Should deploy contracts", async function () {
       await deployContracts();
-      await expect(await riggedRoll.diceGame()).to.equal(diceGame.address);
+      expect(await riggedRoll.diceGame()).to.equal(diceGame.address);
     });
 
     it("Should revert if balance less than .002 ethers", async function () {
-      await expect(riggedRoll.riggedRoll()).to.reverted;
+      await expect(riggedRoll.riggedRoll()).to.be.reverted;
     });
 
     it("Should transfer sufficient eth to RiggedRoll", async function () {
+      console.log('\t',"💸 Funding RiggedRoll contract");
       await fundRiggedContract();
-      let balance = await provider.getBalance(riggedRoll.address);
-      await expect(balance).to.above(ethers.utils.parseEther(".002"));
+      const balance = await provider.getBalance(riggedRoll.address);
+      console.log('\t',"💲 RiggedRoll balance: ",ethers.utils.formatEther(balance));
+      expect(balance).to.above(ethers.utils.parseEther(".002"));
     });
   });
 
   describe("🔑 Rigged Rolls", function () {
     it("Should call DiceGame for a roll less than 2", async () => {
       //first change states and create the inputs required to produce a roll <= 2
-      let getRollLessThanTwo = true;
-      let expectedRoll = await changeStatesToGetRequiredRoll(
-        getRollLessThanTwo
-      );
-      console.log(
-        "EXPECT ROLL TO BE LESS THAN OR EQUAL TO 2: ",
-        expectedRoll.toNumber()
-      );
+      const getRollLessThanTwo = true;
+      const expectedRoll = await getRoll(getRollLessThanTwo);
+      console.log('\t',"🎲 Expect roll to be less than or equal to 2: ",expectedRoll.toNumber());
 
-      let tx = riggedRoll.riggedRoll();
+      const tx = riggedRoll.riggedRoll();
 
       it("Should emit Roll event!", async () => {
        await expect(tx)
@@ -105,28 +101,27 @@ describe("🚩 Challenge 3: 🎲 Dice Game", function () {
     });
 
     it("Should not call DiceGame for a roll greater than 2", async () => {
-      let getRollLessThanTwo = false;
-      let expectedRoll = await changeStatesToGetRequiredRoll(
-        getRollLessThanTwo
-      );
-      console.log(
-        "EXPECTED ROLL TO BE GREATER THAN 2: ",
-        expectedRoll.toNumber()
-      );
+      const getRollLessThanTwo = false;
+      const expectedRoll = await getRoll(getRollLessThanTwo);
+      console.log('\t',"🎲 Expect roll to be greater than 2: ",expectedRoll.toNumber());
 
-      await expect(riggedRoll.riggedRoll()).to.reverted;
+      await expect(riggedRoll.riggedRoll()).to.be.reverted;
     });
 
     it("Should withdraw funds", async () => {
-      //deployer is the owner by default so should be able to withdraw
+      console.log('\t',"💸 Funding RiggedRoll contract");
       await fundRiggedContract();
 
-      let prevBalance = await deployer.getBalance();
+      const prevBalance = await deployer.getBalance();
+      console.log('\t',"💲 Current RiggedRoll balance: ",ethers.utils.formatEther(prevBalance));
       await riggedRoll.withdraw(
         deployer.address,
         provider.getBalance(riggedRoll.address)
       );
-      let curBalance = await deployer.getBalance();
+
+      const curBalance = await deployer.getBalance();
+      console.log('\t',"💲 New RiggedRoll balance: ",ethers.utils.formatEther(curBalance));
+
       expect(prevBalance.lt(curBalance)).to.true;
     });
   });
