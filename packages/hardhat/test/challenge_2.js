@@ -98,7 +98,7 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
 
       console.log('\t'," 🙄 Approving...")
       const approveTokensResult = await yourToken.approve(vendor.address, ethers.utils.parseEther("0.1"));
-      console.log('\t'," 🏷  approveTokens Result Result: ",approveTokensResult.hash)
+      console.log('\t'," 🏷  approveTokens Result: ",approveTokensResult.hash)
 
       console.log('\t'," ⏳ Waiting for confirmation...")
       const atxResult =  await approveTokensResult.wait()
