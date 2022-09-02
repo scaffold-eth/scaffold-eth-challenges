@@ -110,7 +110,7 @@ yarn deploy
 
 🛰 Ready to deploy to a public testnet?!?
 
-> Change the `defaultNetwork` in `packages/hardhat/hardhat.config.js` to `mumbai` or `goerli`
+> Change the `defaultNetwork` in `packages/hardhat/hardhat.config.js` to `goerli`
 
 ![networkSelect](https://user-images.githubusercontent.com/12072395/187536000-52a97be7-719e-4e3f-93cf-948abed2c489.PNG)
 
@@ -132,13 +132,13 @@ yarn deploy
 yarn deploy
 ```
 
-> 💬 Hint: You can set the `defaultNetwork` in `hardhat.config.js` to `goerli` or `mumbai` OR you can `yarn deploy --network goerli`. 
+> 💬 Hint: You can set the `defaultNetwork` in `hardhat.config.js` to `goerli` OR you can `yarn deploy --network goerli`. 
 
 ---
 
 # Checkpoint 4: 🚢 Ship it! 🚁
 
-> ✏️ Edit your frontend `App.jsx` in `packages/react-app/src` to change the `targetNetwork` to `NETWORKS.goerli` or `NETWORKS.mumbai`:
+> ✏️ Edit your frontend `App.jsx` in `packages/react-app/src` to change the `targetNetwork` to `NETWORKS.goerli`:
 
 ![image](https://user-images.githubusercontent.com/12072395/187535786-25837212-0c49-4403-b9e6-e8a3255bcd16.PNG)
 
@@ -185,7 +185,6 @@ Update the `api-key` in `packages/hardhat/package.json` file. You can get your k
 ![Screen Shot 2021-11-30 at 10 21 01 AM](https://user-images.githubusercontent.com/9419140/144075208-c50b70aa-345f-4e36-81d6-becaa5f74857.png)
 
 > Now you are ready to run the `yarn verify --network your_network` command to verify your contracts on etherscan 🛰
-> ** Note that you will need a different etherscan API key for Mumbai or Polygon.
 
 ---
 
