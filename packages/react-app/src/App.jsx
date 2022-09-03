@@ -14,8 +14,6 @@ import {
 import { useExchangeEthPrice } from "eth-hooks/dapps/dex";
 import { useEventListener } from "eth-hooks/events/useEventListener";
 import Fortmatic from "fortmatic";
-// https://www.npmjs.com/package/ipfs-http-client
-// import { create } from "ipfs-http-client";
 import React, { useCallback, useEffect, useState } from "react";
 import ReactJson from "react-json-view";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
@@ -27,7 +25,6 @@ import { Account, Address, AddressInput, Contract, Faucet, GasGauge, Header, Ram
 import { INFURA_ID, NETWORK, NETWORKS } from "./constants";
 import { Transactor } from "./helpers";
 import { useContractConfig } from "./hooks";
-// import Hints from "./Hints";
 
 const projectId = "2DDHiA47zFkJXtnxzl2jFkyuaoq";
 const projectSecret = "96a91eeafc0a390ab66e6a87f61152aa";;
@@ -36,22 +33,12 @@ const projectIdAndSecret = `${projectId}:${projectSecret}`;
 const { BufferList } = require("bl");
 const ipfsAPI = require("ipfs-http-client");
 
-/*
-const ipfs = ipfsAPI({
-  host: "ipfs.nifty.ink",
-  port: "3001",
-  protocol: "https",
-});
-*/
-
-
 const ipfs = ipfsAPI({
   host: "ipfs.infura.io",
   port: "5001",
   protocol: "https",
   headers: { authorization: `Basic ${Buffer.from(projectIdAndSecret).toString("base64")}` },
 });
-
 
 const { ethers } = require("ethers");
 
@@ -118,7 +105,7 @@ const getFromIPFS = async hashToGet => {
 if (DEBUG) console.log("📡 Connecting to Mainnet Ethereum");
 // const mainnetProvider = getDefaultProvider("mainnet", { infura: INFURA_ID, etherscan: ETHERSCAN_KEY, quorum: 1 });
 // const mainnetProvider = new InfuraProvider("mainnet",INFURA_ID);
-//
+
 // attempt to connect to our own scaffold eth rpc and if that fails fall back to infura...
 // Using StaticJsonRpcProvider as the chainId won't change see https://github.com/ethers-io/ethers.js/issues/901
 const scaffoldEthProvider = navigator.onLine
@@ -152,10 +139,7 @@ const walletLink = new WalletLink({
 // WalletLink provider
 const walletLinkProvider = walletLink.makeWeb3Provider(`https://mainnet.infura.io/v3/${INFURA_ID}`, 1);
 
-// Portis ID: 6255fb2b-58c8-433b-a2c9-62098c05ddc9
-/*
-  Web3 modal helps us "connect" external wallets:
-*/
+/* Web3 modal helps us "connect" external wallets: */
 const web3Modal = new Web3Modal({
   network: "mainnet", // Optional. If using WalletConnect on xDai, change network to "xdai" and add RPC info below for xDai chain.
   cacheProvider: true, // optional
@@ -208,7 +192,7 @@ const web3Modal = new Web3Modal({
   },
 });
 
-function App(props) {
+function App() {
   const mainnetProvider =
     poktMainnetProvider && poktMainnetProvider._isProvider
       ? poktMainnetProvider
@@ -341,9 +325,7 @@ function App(props) {
   console.log("🏷 Resolved austingriffith.eth as:",addressFromENS)
   */
 
-  //
   // 🧫 DEBUG 👨🏻‍🔬
-  //
   useEffect(() => {
     if (
       DEBUG &&
