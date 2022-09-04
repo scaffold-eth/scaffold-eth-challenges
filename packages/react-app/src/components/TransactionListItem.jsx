@@ -17,11 +17,22 @@ const TransactionListItem = function ({item, mainnetProvider, blockExplorer, pri
     setIsModalVisible(false);
   };
 
+  const  buildTxnTransferData = (transaction) => {
+    return {
+      functionFragment: {
+        inputs: [],
+        name: 'Transfer',
+      },
+      signature: '',
+      args: [transaction.to],
+      sighash: item.data
+    }
+  };
 
   console.log("🔥🔥🔥🔥", item)
   let txnData;
   try {
-    txnData = readContracts[contractName].interface.parseTransaction(item);
+    txnData = item.data === "" || item.data === "0x" || item.data === "0x00" ? buildTxnTransferData(item) : readContracts[contractName].interface.parseTransaction(item);
   } catch (error){
     console.log("ERROR", error)
   }
