@@ -276,7 +276,8 @@ Let’s create two new functions that let us deposit and withdraw liquidity. How
         uint256 ethReserve = address(this).balance.sub(msg.value);
         uint256 tokenReserve = token.balanceOf(address(this));
         uint256 tokenDeposit;
-
+        
+        // 🤔 Why are we adding 1 wei here ? 
         tokenDeposit = (msg.value.mul(tokenReserve) / ethReserve).add(1);
         uint256 liquidityMinted = msg.value.mul(totalLiquidity) / ethReserve;
         liquidity[msg.sender] = liquidity[msg.sender].add(liquidityMinted);
@@ -306,6 +307,59 @@ Let’s create two new functions that let us deposit and withdraw liquidity. How
     }
 
 ```
+
+<details markdown='2'><summary>🤔 Why are we adding 1 wei in `tokenDeposit` calculation ?</summary>
+
+Let's say we initialize the DEX ( `init()` ) with 1000000(1millon) ETH and 1000000 Tokens. 
+
+Current contract state: 
+* `ethReserve = 1000000 ether`
+* `tokenReserve = 1000000 ether`
+* `totalLiquidity = 1000000 ether` 
+
+> Note: `ether` here is a unit in solidity 1 ether = 1e18 [docs](https://docs.soliditylang.org/en/v0.8.15/units-and-global-variables.html#ether-units)
+
+<p align="center">
+  <img src="images/1.png" width = "300" />
+</p>
+
+Now someone swap 1000 ETH  i.e he calls `ethToToken()` …. as we have already calculated it.…he will get 996 **BAL tokens** 🎈 back. 
+
+New state of the contract : 
+* `ethReserve = 1000000 ether + 1000 ether = 1001000 ether`
+* `tokenReserve = 1000000 - 996 = 999004 ether` 
+
+_**What if we don't add 1 wei ?**_
+
+Now if someone deposit **1ETH**  i.e calls `deposit()`  function : 
+
+```solidity
+// inside deposit()
+// ....
+// lets assume we don't use .add(1)
+tokenDeposit = (msg.value.mul(tokenReserve) / ethReserve); 
+/// .... 
+```
+In the above code line `msg.value = 1 ether`  and `tokenReserve = 999004 ether`  therefore,  
+
+`msg.value.mul(tokenReserve) = 999004 ether`  and our  `ethReserve = 1001000 ether`
+
+diving this both :  `999004 ether / 1001000 ether =  0.998005994` . 
+> **As we know solidity will truncate it to 0 (Solidity takes the floor value).** 
+
+So we can see that if we don’t use `.add(1)`  we actually get `tokenDeposit = 0` .
+
+_**If we use add(1) :**_
+
+```solidity
+tokenDeposit = (msg.value.mul(tokenReserve) / ethReserve).add(1); 
+```
+
+`999004 ether / 1001000 ether =  0.998005994 = 0`  and now will add 1 to result therefore
+
+`tokenDeposit = 0 + 1 = 1 `
+</details>
+
 
  </details>
 
