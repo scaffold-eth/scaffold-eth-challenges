@@ -184,7 +184,9 @@ Update the `api-key` in `packages/hardhat/package.json` file. You can get your k
 
 ![Screen Shot 2021-11-30 at 10 21 01 AM](https://user-images.githubusercontent.com/9419140/144075208-c50b70aa-345f-4e36-81d6-becaa5f74857.png)
 
-> Now you are ready to run the `yarn verify --network your_network` command to verify your contracts on etherscan 🛰
+Now you are ready to run the `yarn verify --network your_network` command to verify your contracts on etherscan 🛰
+
+> It is okay if it says your contract is already verified.  Copy the address of YourCollectable.sol and search it on goerli Etherscan to find the correct URL you need to submit this challenge.
 
 ---
 
