@@ -62,7 +62,29 @@ yarn deploy  (to compile, deploy, and publish your contracts to the frontend)
 
 ---
 
-// todo: write checkpoints
+### Checkpoint 2: Configure Deployment & Wallets
+
+Like the [token vendor challenge](https://speedrunethereum.com/challenge/token-vendor), we'll be building an `Ownable` contract. The contract owner will be the service provider in this application, and you will use multiple browsers or tabs to assume the roles of server and client.
+
+> 📝 Edit Streamer.sol to inherit `Ownable`. (TIP: Openzeppelin )
+
+> In `packages/hardhat/deploy/00_deploy_streamer.js`, supply an address from your frontend wallet to the `streamer.transferOwnership()` function.
+
+You'll have to redeploy with `yarn deploy --reset`.
+
+We'll need another active to act as the client in our app. There are a few ways to go about this. Either:
+
+1. open `localhost:3000` with a different browser
+2. open `localhost:3000` in a private window
+3. open `localhost:3000` in a separate tab / window of your current browser, click the wallet icon (top right) to open up the wallet, then `private key` > `generate` will reload the page from a new account.
+
+`1` and `2` are quicker, but `3` gives a little more flexibility with respect to running the app with several clients at once.
+
+#### 🥅 Goals
+
+- [ ] does your original frontend address recieve the `Hello Guru` UI?
+- [ ] do your alternate addresses recieve the `Hello Rube` UI?
+
 
 ---
 
