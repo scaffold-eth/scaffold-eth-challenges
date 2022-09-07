@@ -20,16 +20,12 @@ contract Staker {
   // If the deadline has passed and the threshold is met, it should call `exampleExternalContract.complete{value: address(this).balance}()`
 
 
-  // If the `threshold` was not met, allow everyone to call a `withdraw()` function
-
-
-  // Add a `withdraw()` function to let users withdraw their balance
+  // If the `threshold` was not met, allow everyone to call a `withdraw()` function to withdraw their balance
 
 
   // Add a `timeLeft()` view function that returns the time left before the deadline for the frontend
 
 
   // Add the `receive()` special function that receives eth and calls stake()
-
 
 }

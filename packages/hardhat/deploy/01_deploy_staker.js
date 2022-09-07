@@ -19,10 +19,10 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   });
 
   // Getting a previously deployed contract
-  // const Staker = await ethers.getContract(
-  //   "Staker",
-  //   deployer
-  // );
+  //const Staker = await ethers.getContract(
+  // "Staker",
+  //  deployer
+  //);
 
   // await YourContract.setPurpose("Hello");
 
