@@ -15,10 +15,14 @@ contract Streamer {
   mapping(address => uint256) closeAt;
 
   function fundChannel() public payable {
-      require(balances[msg.sender] == 0, "channel already exists");
+    /*
+      Checkpoint 3: fund a channel
 
-      balances[msg.sender] = msg.value;
-      emit Opened(msg.sender, msg.value);
+      complete this function so that it:
+      - reverts if msg.sender already has a running channel (ie, if balances[msg.sender] != 0)
+      - updates the balances mapping with the eth recieved in the function call
+      - emits an Opened event
+    */
   }
 
   function challengeChannel() public {

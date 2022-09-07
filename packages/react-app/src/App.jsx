@@ -820,7 +820,7 @@ function App(props) {
                 {hasOpenChannel() ? (
                   <div style={{ padding: 8 }}>
                     <Row align="middle">
-                      <Col span={3}>
+                      {/* <Col span={3}>
                         <Checkbox
                           defaultChecked={autoPay}
                           onChange={e => {
@@ -830,13 +830,14 @@ function App(props) {
                         >
                           AutoPay
                         </Checkbox>
-                      </Col>
+                      </Col> */}
                       <Col span={16}>
                         <Card title="Received Wisdom">
                           <span id={"recievedWisdom-" + userAddress}></span>
                         </Card>
                       </Col>
-                      <Col span={5}>
+
+                      {/* <Col span={5}>
                         <Button
                           disabled={hasClosingChannel()}
                           type="primary"
@@ -863,8 +864,7 @@ function App(props) {
                         >
                           Withdraw remaining funds
                         </Button>
-                        <div />
-                      </Col>
+                      </Col> */}
                     </Row>
                   </div>
                 ) : hasClosedChannel() ? (

@@ -87,6 +87,27 @@ The wallet icon now lets you move between accounts. Eventually you'll probably w
 - [ ] does your original frontend address recieve the `Hello Guru` UI?
 - [ ] do your alternate addresses recieve the `Hello Rube` UI?
 
+---
+
+### Checkpoint 3: Fund a channel
+
+Like the [decentralized staking challenge](https://speedrunethereum.com/challenge/decentralized-staking), we'll track balances for individual channels / users in a mapping:
+
+```
+mapping (address => uint256) balances;
+```
+
+Clients opening a channel will use a **payable** `fundChannel()` function, which will update this mapping with the supplied balance.
+
+> 📝 Edit Streamer.sol to complete the `fundChannel()` function
+
+> 👓 Check App.jsx to see the frontend hook for this function. (ctrl-f fundChannel)
+
+#### 🥅 Goals:
+
+- [ ] does opening a channel cause a `Recieved Wisdom` box to appear?
+- [ ] do opened channels appear on the contract owner's UI as well?
+- [ ] using the _Debug UI_ tab, does a repeated call to `fundChannel` fail?
 
 ---
 
