@@ -201,16 +201,14 @@ Now you are ready to run the `yarn verify --network your_network` command to ver
 # ⚔️ Side Quests
 
 ## 🐟 Open Sea
-> Add your contract to OpenSea
-> 1. hover over your profile photo in the top right and navigate to `Collections` or go to `https://opensea.io/collections`
-> ![my_collections](https://user-images.githubusercontent.com/46639943/150223014-92a2e32d-d2a2-4fd4-ac3b-bd2d0fcb5840.png)
-> 2. click the vertical elipsis and select `Import an existing smart contract`
-> ![import_contract](https://user-images.githubusercontent.com/46639943/150225448-815a17c1-4ea6-4663-8aff-8f757bebbb54.png)
-> 3. select `Live on a testnet`
-> ![live_on_testnet](https://user-images.githubusercontent.com/46639943/150229334-038100bb-22e0-4240-a293-c2b88adc1219.png)
-> 4. be sure you're on the same network you deployed to and enter your contract address!
-> ![contract_address](https://user-images.githubusercontent.com/46639943/150229361-e50e8c57-3918-450f-8bee-29cf42d65b52.png)
 
+> 🐃 Want to see your new NFTs on Opensea?  Head to [Testnets Opensea](https://testnets.opensea.io/)
+
+> 🎫 Make sure you have minted some NFTs on your Surge page, then connect to Opensea using that same wallet.
+
+![nft14](https://user-images.githubusercontent.com/12072395/188957491-bb5eeaf9-5b3c-4667-9d75-9f88bc7acc5d.PNG)
+
+> You can see your collection of shiny new NFTs on a testnet!
 
 (It can take a while before they show up, but here is an example:)
 https://testnets.opensea.io/assets/0xc2839329166d3d004aaedb94dde4173651babccf/1
