@@ -155,7 +155,7 @@ await vendor.transferOwnership("**YOUR FRONTEND ADDRESS**");
 
 🤓 The `Vendor` should call `yourToken.transferFrom(msg.sender, address(this), theAmount)` and if the user has approved the `Vendor` correctly, tokens should transfer to the `Vendor` and ETH should be sent to the user.
 
-> 📝 Edit `Vendor.sol` and add a `sellTokens()` function!
+> 📝 Edit `Vendor.sol` and add a `sellTokens(uint256 amount)` function!
 
 ⚠️ You will need extra UI for calling `approve()` before calling `sellTokens(uint256 amount)`.
 
