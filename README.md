@@ -72,13 +72,15 @@ Like the [token vendor challenge](https://speedrunethereum.com/challenge/token-v
 
 You'll have to redeploy with `yarn deploy --reset`.
 
-We'll need another active to act as the client in our app. There are a few ways to go about this. Either:
+We'll need another active address to act as the client in our app. To do this,
 
-1. open `localhost:3000` with a different browser
-2. open `localhost:3000` in a private window
-3. open `localhost:3000` in a separate tab / window of your current browser, click the wallet icon (top right) to open up the wallet, then `private key` > `generate` will reload the page from a new account.
+- open `localhost:3000` in a new tab / window of the current browser
+- click the wallet icon (top right) to open the wallet
+- `private key` -> `generate` will reload the page under a new address
 
-`1` and `2` are quicker, but `3` gives a little more flexibility with respect to running the app with several clients at once.
+The wallet icon now lets you move between accounts. Eventually you'll probably want a few wallets & windows open simultaneously.
+
+(**Note**: previous challenges created alt addresses by opening the page with a private window or a different browser. This will **not** work for this challenge, because the off-chain application uses a very simple communication pipe that doesn't work between different browsers or private windows.)
 
 #### 🥅 Goals
 
