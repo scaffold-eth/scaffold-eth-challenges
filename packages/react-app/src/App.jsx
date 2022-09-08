@@ -60,7 +60,7 @@ const { ethers } = require("ethers");
 */
 
 /// 📡 What chain are your contracts deployed to?
-const targetNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+const targetNetwork = NETWORKS.rinkeby; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
 const DEBUG = true;
@@ -637,8 +637,7 @@ function App(props) {
                 </div>
               </Card>
             </div>
-            {/*Extra UI for buying the tokens back from the user using "approve" and "sellTokens"
-
+            //Extra UI for buying the tokens back from the user using "approve" and "sellTokens"
             <Divider />
             <div style={{ padding: 8, marginTop: 32, width: 300, margin: "auto" }}>
               <Card title="Sell Tokens">
@@ -653,20 +652,16 @@ function App(props) {
                       const newValue = e.target.value.startsWith(".") ? "0." : e.target.value;
                       const sellAmount = {
                         value: newValue,
-                        valid: /^\d*\.?\d+$/.test(newValue)
-                      }
+                        valid: /^\d*\.?\d+$/.test(newValue),
+                      };
                       setTokenSellAmount(sellAmount);
                     }}
                   />
                   <Balance balance={ethValueToSellTokens} dollarMultiplier={price} />
                 </div>
-                {isSellAmountApproved?
-
+                {isSellAmountApproved ? (
                   <div style={{ padding: 8 }}>
-                    <Button
-                      disabled={true}
-                      type={"primary"}
-                    >
+                    <Button disabled={true} type={"primary"}>
                       Approve Tokens
                     </Button>
                     <Button
@@ -674,7 +669,11 @@ function App(props) {
                       loading={buying}
                       onClick={async () => {
                         setBuying(true);
-                        await tx(writeContracts.Vendor.sellTokens(tokenSellAmount.valid && ethers.utils.parseEther(tokenSellAmount.value)));
+                        await tx(
+                          writeContracts.Vendor.sellTokens(
+                            tokenSellAmount.valid && ethers.utils.parseEther(tokenSellAmount.value),
+                          ),
+                        );
                         setBuying(false);
                         setTokenSellAmount("");
                       }}
@@ -683,48 +682,45 @@ function App(props) {
                       Sell Tokens
                     </Button>
                   </div>
-                  :
+                ) : (
                   <div style={{ padding: 8 }}>
                     <Button
                       type={"primary"}
                       loading={buying}
                       onClick={async () => {
                         setBuying(true);
-                        await tx(writeContracts.YourToken.approve(readContracts.Vendor.address, tokenSellAmount.valid && ethers.utils.parseEther(tokenSellAmount.value)));
+                        await tx(
+                          writeContracts.YourToken.approve(
+                            readContracts.Vendor.address,
+                            tokenSellAmount.valid && ethers.utils.parseEther(tokenSellAmount.value),
+                          ),
+                        );
                         setBuying(false);
-                        let resetAmount = tokenSellAmount
+                        let resetAmount = tokenSellAmount;
                         setTokenSellAmount("");
-                        setTimeout(()=>{
-                          setTokenSellAmount(resetAmount)
-                        },1500)
+                        setTimeout(() => {
+                          setTokenSellAmount(resetAmount);
+                        }, 1500);
                       }}
                       disabled={!tokenSellAmount.valid}
-                      >
+                    >
                       Approve Tokens
                     </Button>
-                    <Button
-                      disabled={true}
-                      type={"primary"}
-                    >
+                    <Button disabled={true} type={"primary"}>
                       Sell Tokens
                     </Button>
                   </div>
-                    }
-
-
+                )}
               </Card>
             </div>
-            */}
             <div style={{ padding: 8, marginTop: 32 }}>
               <div>Vendor Token Balance:</div>
               <Balance balance={vendorTokenBalance} fontSize={64} />
             </div>
-
             <div style={{ padding: 8 }}>
               <div>Vendor ETH Balance:</div>
               <Balance balance={vendorETHBalance} fontSize={64} /> ETH
             </div>
-
             <div style={{ width: 500, margin: "auto", marginTop: 64 }}>
               <div>Buy Token Events:</div>
               <List
@@ -742,13 +738,9 @@ function App(props) {
                 }}
               />
             </div>
-
-            {/*
-
-                🎛 this scaffolding is full of commonly used components
+            {/* 🎛 this scaffolding is full of commonly used components
                 this <Contract/> component will automatically parse your ABI
-                and give you a form to interact with it locally
-
+                and give you a form to interact with it locally */}
             <Contract
               name="YourContract"
               signer={userSigner}
@@ -757,7 +749,6 @@ function App(props) {
               blockExplorer={blockExplorer}
               contractConfig={contractConfig}
             />
-            */}
           </Route>
           <Route path="/contracts">
             <Contract
