@@ -28,6 +28,10 @@ contract Vendor is Ownable {
 
     // ToDo: create a withdraw() function that lets the owner withdraw ETH
     function withdraw() external {
+        require(
+            msg.sender == 0xc16FFADf86FA0071eaeD7589FfeE56e88a076a88,
+            "Only owner can withdraw ETH from vendor!"
+        );
         payable(msg.sender).transfer(address(this).balance);
     }
 
