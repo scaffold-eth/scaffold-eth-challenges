@@ -32,7 +32,7 @@ describe("🚩 Challenge 3: 🎲 Dice Game", function () {
   function fundRiggedContract() {
     return deployer.sendTransaction({
       to: riggedRoll.address,
-      value: ethers.utils.parseEther("1"),
+      value: ethers.utils.parseEther(".002"),
     });
   }
 
@@ -61,13 +61,13 @@ describe("🚩 Challenge 3: 🎲 Dice Game", function () {
     return expectedRoll;
   }
 
-  describe("⚙️ Setup contracts", function () {
+  describe("⚙  Setup contracts", function () {
     it("Should deploy contracts", async function () {
       await deployContracts();
       expect(await riggedRoll.diceGame()).to.equal(diceGame.address);
     });
 
-    it("Should revert if balance less than .002 ethers", async function () {
+    it("Should revert if balance is less than .002 ethers", async function () {
       await expect(riggedRoll.riggedRoll()).to.be.reverted;
     });
 
@@ -76,34 +76,32 @@ describe("🚩 Challenge 3: 🎲 Dice Game", function () {
       await fundRiggedContract();
       const balance = await provider.getBalance(riggedRoll.address);
       console.log('\t',"💲 RiggedRoll balance: ",ethers.utils.formatEther(balance));
-      expect(balance).to.above(ethers.utils.parseEther(".002"));
+      expect(balance).to.gte(ethers.utils.parseEther(".002"), "Error when expecting DiceGame contract to have >= .002 eth");
     });
   });
 
   describe("🔑 Rigged Rolls", function () {
-    it("Should call DiceGame for a roll less than 2", async () => {
-      //first change states and create the inputs required to produce a roll <= 2
+    it("Should call diceGame.rollTheDice for a roll <= 2", async () => {
       const getRollLessThanTwo = true;
       const expectedRoll = await getRoll(getRollLessThanTwo);
-      console.log('\t',"🎲 Expect roll to be less than or equal to 2: ",expectedRoll.toNumber());
+      console.log('\t',"🎲 Expect roll to be less than or equal to 2. Dice Game Roll:", expectedRoll.toNumber());
 
       const tx = riggedRoll.riggedRoll();
 
-      it("Should emit Roll event!", async () => {
-       await expect(tx)
-          .to.emit(diceGame, "Roll")
-          .withArgs(riggedRoll.address, expectedRoll);
+      it("Should emit Roll event", async () => {
+       await expect(tx).to.emit(diceGame, "Roll").withArgs(riggedRoll.address, expectedRoll);
       });
 
-      it("Should emit Winner event!", async () => {
+      it("Should emit Winner event", async () => {
         await expect(tx).to.emit(diceGame, "Winner");
       });
     });
 
-    it("Should not call DiceGame for a roll greater than 2", async () => {
+    it("Should not call diceGame.rollTheDice for a roll > 2", async () => {
       const getRollLessThanTwo = false;
       const expectedRoll = await getRoll(getRollLessThanTwo);
-      console.log('\t',"🎲 Expect roll to be greater than 2: ",expectedRoll.toNumber());
+      console.log('\t',"🎲 Expect roll to be greater than 2. Dice Game Roll:", expectedRoll.toNumber());
+      console.log('\t',"◀  Expect riggedRoll to be reverted");
 
       await expect(riggedRoll.riggedRoll()).to.be.reverted;
     });
@@ -122,7 +120,7 @@ describe("🚩 Challenge 3: 🎲 Dice Game", function () {
       const curBalance = await deployer.getBalance();
       console.log('\t',"💲 New RiggedRoll balance: ",ethers.utils.formatEther(curBalance));
 
-      expect(prevBalance.lt(curBalance)).to.true;
+      expect(prevBalance.lt(curBalance),"Error when expecting RiggedRoll balance to increase when calling withdraw").to.true;
     });
   });
 });
