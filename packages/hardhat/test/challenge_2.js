@@ -119,7 +119,7 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
       const newETHBalance = await ethers.provider.getBalance(owner.address)
       console.log('\t'," 🔎 New ETH balance: ", ethers.utils.formatEther(newETHBalance))
       const ethChange = newETHBalance.sub(startingETHBalance).toNumber()
-      expect(ethChange).to.greaterThan(100000000000000, "Error when expecting the ether returned by sellTokens to be sufficient");
+      expect(ethChange).to.greaterThan(100000000000000, "Error when expecting the ether returned to the user by the sellTokens function to be correct");
 
     });
   })
