@@ -17,7 +17,7 @@ describe("🚩 Challenge 3: 🎲 Dice Game", function () {
 
     let contractArtifact;
     if (process.env.CONTRACT_ADDRESS) {
-      contractArtifact = `contracts/${process.env.CONTRACT_ADDRESS}.sol:RiggedRoll`
+      contractArtifact = `contracts/${process.env.CONTRACT_ADDRESS}.sol:RiggedRoll`;
     } else {
       contractArtifact = "contracts/RiggedRoll.sol:RiggedRoll";
     }
@@ -72,10 +72,14 @@ describe("🚩 Challenge 3: 🎲 Dice Game", function () {
     });
 
     it("Should transfer sufficient eth to RiggedRoll", async function () {
-      console.log('\t',"💸 Funding RiggedRoll contract");
+      console.log("\t", "💸 Funding RiggedRoll contract");
       await fundRiggedContract();
       const balance = await provider.getBalance(riggedRoll.address);
-      console.log('\t',"💲 RiggedRoll balance: ",ethers.utils.formatEther(balance));
+      console.log(
+        "\t",
+        "💲 RiggedRoll balance: ",
+        ethers.utils.formatEther(balance)
+      );
       expect(balance).to.above(ethers.utils.parseEther(".002"));
     });
   });
@@ -85,12 +89,16 @@ describe("🚩 Challenge 3: 🎲 Dice Game", function () {
       //first change states and create the inputs required to produce a roll <= 2
       const getRollLessThanTwo = true;
       const expectedRoll = await getRoll(getRollLessThanTwo);
-      console.log('\t',"🎲 Expect roll to be less than or equal to 2: ",expectedRoll.toNumber());
+      console.log(
+        "\t",
+        "🎲 Expect roll to be less than or equal to 2: ",
+        expectedRoll.toNumber()
+      );
 
       const tx = riggedRoll.riggedRoll();
 
       it("Should emit Roll event!", async () => {
-       await expect(tx)
+        await expect(tx)
           .to.emit(diceGame, "Roll")
           .withArgs(riggedRoll.address, expectedRoll);
       });
@@ -103,24 +111,36 @@ describe("🚩 Challenge 3: 🎲 Dice Game", function () {
     it("Should not call DiceGame for a roll greater than 2", async () => {
       const getRollLessThanTwo = false;
       const expectedRoll = await getRoll(getRollLessThanTwo);
-      console.log('\t',"🎲 Expect roll to be greater than 2: ",expectedRoll.toNumber());
+      console.log(
+        "\t",
+        "🎲 Expect roll to be greater than 2: ",
+        expectedRoll.toNumber()
+      );
 
       await expect(riggedRoll.riggedRoll()).to.be.reverted;
     });
 
     it("Should withdraw funds", async () => {
-      console.log('\t',"💸 Funding RiggedRoll contract");
+      console.log("\t", "💸 Funding RiggedRoll contract");
       await fundRiggedContract();
 
       const prevBalance = await deployer.getBalance();
-      console.log('\t',"💲 Current RiggedRoll balance: ",ethers.utils.formatEther(prevBalance));
+      console.log(
+        "\t",
+        "💲 Current RiggedRoll balance: ",
+        ethers.utils.formatEther(prevBalance)
+      );
       await riggedRoll.withdraw(
         deployer.address,
         provider.getBalance(riggedRoll.address)
       );
 
       const curBalance = await deployer.getBalance();
-      console.log('\t',"💲 New RiggedRoll balance: ",ethers.utils.formatEther(curBalance));
+      console.log(
+        "\t",
+        "💲 New RiggedRoll balance: ",
+        ethers.utils.formatEther(curBalance)
+      );
 
       expect(prevBalance.lt(curBalance)).to.true;
     });
