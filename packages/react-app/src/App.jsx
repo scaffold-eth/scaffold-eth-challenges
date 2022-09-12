@@ -531,15 +531,15 @@ function App(props) {
 
   /**
    * sends the provided wisdom across the application channel
-   * with user at `address`.
-   * @param {string} address
+   * with user at `clientAddress`.
+   * @param {string} clientAddress
    */
-  function provideService(address) {
+  function provideService(clientAddress) {
     console.log("calling provideService");
-    const channelInput = document.getElementById("input-" + address);
+    const channelInput = document.getElementById("input-" + clientAddress);
     if (channelInput) {
       console.log("sending: %s", channelInput.value);
-      channels[address].postMessage(channelInput.value);
+      channels[clientAddress].postMessage(channelInput.value);
     } else {
       console.log(`ChannelInput: ${channelInput}`);
     }
