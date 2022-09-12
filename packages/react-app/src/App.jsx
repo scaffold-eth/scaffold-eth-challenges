@@ -541,21 +541,21 @@ function App(props) {
   }
 
   /**
-   * Take the best payment voucher recieved from user at
-   * `address` and apply it to the streamer contract on-chain.
-   * @param {string} address
+   * Take the stored payment voucher recieved from user at
+   * `clientAddress` and apply it to the streamer contract on-chain.
+   * @param {string} clientAddress
    */
-  async function claimPaymentOnChain(address) {
+  async function claimPaymentOnChain(clientAddress) {
     console.log("Claiming voucher on chain...");
     // logVouchers();
 
-    if (vouchers()[address] == undefined) {
-      console.warn(`no voucher found for ${address}`);
+    if (vouchers()[clientAddress] == undefined) {
+      console.warn(`no voucher found for ${clientAddress}`);
       return;
     }
 
-    const updatedBalance = vouchers()[address].updatedBalance;
-    const sig = ethers.utils.splitSignature(vouchers()[address].signature);
+    const updatedBalance = vouchers()[clientAddress].updatedBalance;
+    const sig = ethers.utils.splitSignature(vouchers()[clientAddress].signature);
 
     tx(
       writeContracts.Streamer.withdrawEarnings({
