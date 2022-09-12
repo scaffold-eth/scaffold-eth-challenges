@@ -136,6 +136,33 @@ The first two are complete - we will work on `processVoucher`, where the service
 
 - [ ] can `provideService` be modified to prevent continued service to deadbeat clients?
 
+### Checkpoint 5: Recover Service Provider's Earnings
+
+Now that we've collected some vouchers, we'd like to redeem them on-chain in order to move funds from the contract's `balances` map to the contract owner. The `withdrawEarnings` function of `Streamer.sol` takes a voucher (balance + signature) as input, and should:
+
+- recover the signer using `ecrecover()` on the `prefixedHashed` message and supplied signature
+- check that the signer has a running channel with balance greater than the voucher's `updatedBalance`
+- calculate the payout (`balances[signer] - updatedBalance`)
+- update the channel balance
+- pay the contract owner
+
+Reminders:
+
+- changes to contracts must be redeployed to the local chain with `yarn deploy --reset`.
+- for troubleshooting / debugging, your contract can use hardhat's `console.log`, which will print to your console running the chain
+
+> 📝 Edit Streamer.sol to complete the `withdrawEarnings()` function as described
+
+> 📝 Edit App.jsx to enable the UI button for withdrawals
+
+#### 🥅 Goals:
+
+- [ ] Recover funds on-chain for services rendered! After the guru submits a voucher to chain, you should be able to see the wallet's ETH balance increase.
+
+#### ⚔️ Side Quest:
+
+- [ ] `withdrawEarnings` is a function that only the service provider would be interested in calling. Should it be marked `onlyOwner`?
+
 #### ⚠️ Test it!
 
 // todo: write tests

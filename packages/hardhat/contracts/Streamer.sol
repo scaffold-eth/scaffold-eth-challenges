@@ -51,31 +51,38 @@ contract Streamer {
     emit Closed(msg.sender);
   }
 
-  function withdrawEarnings(Voucher calldata v) public onlyOwner {
-    string memory prefix = '\x19Ethereum Signed Message:\n32';
+  function withdrawEarnings(Voucher calldata v) public {
+    // like the off-chain code, signatures are applied to the hash of the data
+    // instead of the raw data itself
     bytes32 hashed = keccak256(abi.encode(v.updatedBalance));
 
-    bytes memory prefixed = abi.encodePacked(prefix, hashed);
+    // The prefix string here is part of a convention used in ethereum for signing
+    // and verification of off-chain messages. The trailing 32 refers to the 32 byte
+    // length of the attached hash message.
+    //
+    // There are seemingly extra steps here compared to what was done in the off-chain
+    // `reimburseService` and `processVoucher`. Note that those ethers signing and verification
+    // functinos do the same under the hood.
+    //
+    // again, see https://blog.ricmoo.com/verifying-messages-in-solidity-50a94f82b2ca
+    bytes memory prefixed = abi.encodePacked('\x19Ethereum Signed Message:\n32', hashed);
     bytes32 prefixedHashed = keccak256(prefixed);
 
-    // console.log("Voucher balance:");
-    // console.log(v.updatedBalance);
+    /*
+      Checkpoint 5: Recover earnings
 
-    // console.log("Signature - r,s,v (all):");
-    // console.log(uint256(v.sig.r));
-    // console.log(uint256(v.sig.s));
-    // console.log(uint256(v.sig.v));
+      The service provider would like to cash out their hard earned ether.
+    */
 
-    address signer = ecrecover( prefixedHashed , v.sig.v, v.sig.r, v.sig.s);
+    // use ecrecover on prefixedHashed and the supplied signature
+
+    // require that the recovered signer has a running channel with balances[signer] > v.updatedBalance
+
+    // calculate the payment when reducing balances[signer] to v.updatedBalance
+
+    // adjust the channel balance, and pay the contract owner. (Get the owner address with 
+    // the `owner()` function)
     
-    console.log("The voucer was signed by:");
-    console.log(signer);
-
-    require(balances[signer] > v.updatedBalance, "voucher signer balance too low");
-
-    uint256 payment = balances[signer] - v.updatedBalance;
-    owner().call{value: payment}("");
-    balances[signer] = v.updatedBalance;
   }
 
   struct Voucher {
