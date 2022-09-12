@@ -18,10 +18,6 @@ contract DiceGame {
         prize = ((address(this).balance * 10) / 100);
     }
 
-    function getNonce() public view returns (uint256) {
-        return nonce;
-    }
-
     function rollTheDice() public payable {
         require(msg.value >= 0.002 ether, "Failed to send enough value");
 
@@ -30,10 +26,6 @@ contract DiceGame {
             abi.encodePacked(prevHash, address(this), nonce)
         );
         uint256 roll = uint256(hash) % 16;
-        console.log("\t", "   Roll:", roll);
-        console.log("\t", "   Nonce:", nonce);
-        console.log("\t", "   prev blockNumber:", block.number - 1);
-        console.log("\t", "   Rigged hash:", uint256(hash));
 
         nonce++;
         prize += ((msg.value * 40) / 100);
