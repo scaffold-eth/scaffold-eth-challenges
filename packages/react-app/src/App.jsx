@@ -775,32 +775,32 @@ function App(props) {
                 <List
                   const
                   dataSource={chainChannels.opened}
-                  renderItem={address => (
-                    <List.Item key={address}>
-                      <Address value={address} ensProvider={mainnetProvider} fontSize={12} />
+                  renderItem={clientAddress => (
+                    <List.Item key={clientAddress}>
+                      <Address value={clientAddress} ensProvider={mainnetProvider} fontSize={12} />
                       <TextArea
                         style={{ margin: 5 }}
                         rows={3}
                         placeholder="Provide your wisdom here..."
-                        id={"input-" + address}
+                        id={"input-" + clientAddress}
                         onChange={e => {
                           e.stopPropagation();
-                          provideService(address);
+                          provideService(clientAddress);
                         }}
                       ></TextArea>
 
                       <Card style={{ margin: 5 }}>
                         {/* todo: this should rerender on receipt of new vouchers instead of sporadically */}
-                        Claimable Balance: <Balance balance={window.claimable[address]} fontSize={14} />
+                        Claimable Balance: <Balance balance={window.claimable[clientAddress]} fontSize={14} />
                       </Card>
 
                       <Button
                         style={{ margin: 5 }}
                         type="primary"
-                        danger={chainChannels.challenged.includes(address)}
-                        disabled={chainChannels.closed.includes(address)}
+                        danger={chainChannels.challenged.includes(clientAddress)}
+                        disabled={chainChannels.closed.includes(clientAddress)}
                         onClick={() => {
-                          claimPaymentOnChain(address);
+                          claimPaymentOnChain(clientAddress);
                         }}
                       >
                         Cash out latest voucher
