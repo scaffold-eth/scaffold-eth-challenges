@@ -431,50 +431,64 @@ function App(props) {
     return window.vouchers;
   }
 
-  chainChannels.opened.forEach(address => {
-    setClientChannel(channels, address);
-    channels[address] = window.clientChannels[address];
+  chainChannels.opened.forEach(clientAddress => {
+    setClientChannel(channels, clientAddress);
+    channels[clientAddress] = window.clientChannels[clientAddress];
   });
 
   if (userIsOwner) {
-    Object.keys(channels).forEach(address => {
-      /**
-       * Handle incoming payments from the
-       *
-       * If autoPay is turned on, instantly recalculate due payment
-       * and submit.
-       *
-       * @param {MessageEvent<{updatedBalance: string, signature: string}>} e
-       */
-      channels[address].onmessage = e => {
-        // recreate a BigNumber object from the message. e.data.updatedBalance is
-        // a string representation of the BigNumber for transit over the network
-        const updatedBalance = ethers.BigNumber.from(e.data.updatedBalance);
-
-        // check that the voucher is signed by the correct user
-        const packed = ethers.utils.solidityPack(["uint256"], [updatedBalance]);
-        const hashed = ethers.utils.keccak256(packed);
-        const arrayified = ethers.utils.arrayify(hashed);
-
-        const signer = ethers.utils.verifyMessage(arrayified, e.data.signature);
-
-        if (signer != address) {
-          console.warn("received malformed or forged signature!");
-          console.warn(`expected signature from ${address}, but found signature from ${signer}`);
-          return;
-        }
-
-        // update the stored voucher if it is more valuable
-        const existingVoucher = vouchers()[address];
-
-        if (existingVoucher === undefined || updatedBalance.lt(existingVoucher.updatedBalance)) {
-          vouchers()[address] = e.data;
-          vouchers()[address].updatedBalance = updatedBalance;
-          updateClaimable(address);
-          logVouchers();
-        }
-      };
+    Object.keys(channels).forEach(clientAddress => {
+      channels[clientAddress].onmessage = recieveVoucher(clientAddress);
     });
+  }
+
+  /**
+   * Handle incoming payments from the
+   *
+   * If autoPay is turned on, instantly recalculate due payment
+   * and submit.
+   *
+   * @param {MessageEvent<{updatedBalance: string, signature: string}>} v
+   */
+  function recieveVoucher(clientAddress) {
+    return processVoucher;
+
+    /**
+     * Handle incoming payments from the
+     *
+     * If autoPay is turned on, instantly recalculate due payment
+     * and submit.
+     *
+     * @param {MessageEvent<{updatedBalance: string, signature: string}>} v
+     */
+    function processVoucher(v) {
+      // recreate a BigNumber object from the message. v.data.updatedBalance is
+      // a string representation of the BigNumber for transit over the network
+      const updatedBalance = ethers.BigNumber.from(v.data.updatedBalance);
+
+      // check that the voucher is signed by the correct user
+      const packed = ethers.utils.solidityPack(["uint256"], [updatedBalance]);
+      const hashed = ethers.utils.keccak256(packed);
+      const arrayified = ethers.utils.arrayify(hashed);
+
+      const signer = ethers.utils.verifyMessage(arrayified, v.data.signature);
+
+      if (signer != clientAddress) {
+        console.warn("received malformed or forged signature!");
+        console.warn(`expected signature from ${clientAddress}, but found signature from ${signer}`);
+        return;
+      }
+
+      // update the stored voucher if it is more valuable
+      const existingVoucher = vouchers()[clientAddress];
+
+      if (existingVoucher === undefined || updatedBalance.lt(existingVoucher.updatedBalance)) {
+        vouchers()[clientAddress] = v.data;
+        vouchers()[clientAddress].updatedBalance = updatedBalance;
+        updateClaimable(clientAddress);
+        logVouchers();
+      }
+    }
   }
 
   /**
