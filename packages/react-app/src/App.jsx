@@ -447,12 +447,12 @@ function App(props) {
        * @param {MessageEvent<{updatedBalance: string, signature: string}>} e
        */
       channels[address].onmessage = e => {
-        // recreate a BigNumber object from the message. updatedBalance is
-        // the hex string representation of the BigNumber.
-        const bn = ethers.BigNumber.from(e.data.updatedBalance);
+        // recreate a BigNumber object from the message. e.data.updatedBalance is
+        // a string representation of the BigNumber for transit over the network
+        const updatedBalance = ethers.BigNumber.from(e.data.updatedBalance);
 
         // check that the voucher is signed by the correct user
-        const packed = ethers.utils.solidityPack(["uint256"], [bn]);
+        const packed = ethers.utils.solidityPack(["uint256"], [updatedBalance]);
         const hashed = ethers.utils.keccak256(packed);
         const arrayified = ethers.utils.arrayify(hashed);
 
@@ -467,9 +467,9 @@ function App(props) {
         // update the stored voucher if it is more valuable
         const existingVoucher = vouchers()[address];
 
-        if (existingVoucher === undefined || bn.lt(existingVoucher.updatedBalance)) {
+        if (existingVoucher === undefined || updatedBalance.lt(existingVoucher.updatedBalance)) {
           vouchers()[address] = e.data;
-          vouchers()[address].updatedBalance = bn;
+          vouchers()[address].updatedBalance = updatedBalance;
           updateClaimable(address);
           logVouchers();
         }
