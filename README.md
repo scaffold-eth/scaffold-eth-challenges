@@ -111,6 +111,31 @@ Clients opening a channel will use a **payable** `fundChannel()` function, which
 
 ---
 
+### Checkpoint 4: Exchange the Service
+
+Now that the channel is funded, and all participants have observed the funding via the emitted event, we can begin our off-chain exchange of service. State channels really excel as a scaling solution in cases where a fixed set of participants want to exchange value-for-service at high frequency. The canonical example is in file sharing or media streaming: the server exchanges chunks of a file in exchange for micropayments.
+
+In our case, the service provider will provide off-the-cuff wisdom to each client through a one-way chat box. Each character of text that is delivered is expected to be compensated with a payment of `0.001 ETH`. The exchange of service is entirely off chain, so we are now working in `packages/react-app/src/App.jsx`.
+
+Functions of note:
+
+- `provideService`: the service provider sends wisdom over the wire to the client
+- `reimburseService`: the client creates a voucher for the recieved service, signs it, and returns it
+- `processVoucher`: the service provider recieves and stores vouchers
+
+The first two are complete - we will work on `processVoucher`, where the service provider examines returned payments, confirms their authenticity, and stores them.
+
+> 📝 Edit App.jsx to complete the `processVoucher()` function and secure this off-chain exchange. You'll need to recreate the encoded message that the client has signed, and then verify that the received signature was in fact produced by the client on that same data.
+
+#### 🥅 Goals:
+
+- [ ] secure your service! Validate the incoming voucher & signature according to instructions inside `processVoucher(v)`
+- [ ] with an open channel, check the console in the Guru's tab. Can you see the claimable balance updates as service is rendered?
+
+#### ⚔️ Side Quest:
+
+- [ ] can `provideService` be modified to prevent continued service to deadbeat clients?
+
 #### ⚠️ Test it!
 
 // todo: write tests

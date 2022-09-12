@@ -436,6 +436,7 @@ function App(props) {
     channels[clientAddress] = window.clientChannels[clientAddress];
   });
 
+  // attach a voucher handler for each client
   if (userIsOwner) {
     Object.keys(channels).forEach(clientAddress => {
       channels[clientAddress].onmessage = recieveVoucher(clientAddress);
@@ -443,21 +444,13 @@ function App(props) {
   }
 
   /**
-   * Handle incoming payments from the
-   *
-   * If autoPay is turned on, instantly recalculate due payment
-   * and submit.
-   *
-   * @param {MessageEvent<{updatedBalance: string, signature: string}>} v
+   * wraps a voucher processing function for each client.
    */
   function recieveVoucher(clientAddress) {
     return processVoucher;
 
     /**
-     * Handle incoming payments from the
-     *
-     * If autoPay is turned on, instantly recalculate due payment
-     * and submit.
+     * Handle incoming payments from the given client.
      *
      * @param {MessageEvent<{updatedBalance: string, signature: string}>} v
      */
@@ -466,27 +459,24 @@ function App(props) {
       // a string representation of the BigNumber for transit over the network
       const updatedBalance = ethers.BigNumber.from(v.data.updatedBalance);
 
-      // check that the voucher is signed by the correct user
-      const packed = ethers.utils.solidityPack(["uint256"], [updatedBalance]);
-      const hashed = ethers.utils.keccak256(packed);
-      const arrayified = ethers.utils.arrayify(hashed);
+      /**
+       * Checkpoint 4:
+       *
+       *  currently, this function recieves and stores vouchers uncritically.
+       *
+       *  recreate the packed, hashed, and arrarified message from reimburseService (above),
+       *  and then use ethers.utils.verifyMessage() to confirm that voucher signer was
+       *  `clientAddress`. (If it wasn't, log some error message and return).
+       */
 
-      const signer = ethers.utils.verifyMessage(arrayified, v.data.signature);
-
-      if (signer != clientAddress) {
-        console.warn("received malformed or forged signature!");
-        console.warn(`expected signature from ${clientAddress}, but found signature from ${signer}`);
-        return;
-      }
-
-      // update the stored voucher if it is more valuable
       const existingVoucher = vouchers()[clientAddress];
 
+      // update our stored voucher if this new one is more valuable
       if (existingVoucher === undefined || updatedBalance.lt(existingVoucher.updatedBalance)) {
         vouchers()[clientAddress] = v.data;
         vouchers()[clientAddress].updatedBalance = updatedBalance;
         updateClaimable(clientAddress);
-        logVouchers();
+        // logVouchers();
       }
     }
   }
