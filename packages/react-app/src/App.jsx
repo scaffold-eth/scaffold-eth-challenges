@@ -493,19 +493,20 @@ function App(props) {
 
   /**
    *
-   * @param {string} address
+   * @param {string} clientAddress
    * @returns {ethers.BigNumber}
    */
-  function updateClaimable(address) {
-    if (vouchers()[address] === undefined) {
+  function updateClaimable(clientAddress) {
+    if (vouchers()[clientAddress] === undefined) {
       return ethers.utils.parseEther("0");
     }
 
     const init = ethers.utils.parseEther("0.5");
-    const updated = vouchers()[address].updatedBalance;
+    const updated = vouchers()[clientAddress].updatedBalance;
 
     const claimable = init.sub(updated);
-    window.claimable[address] = claimable; // todo: doesn't update react Balances component
+    console.log("Can now claim %s from %s", ethers.utils.formatEther(claimable), clientAddress);
+    window.claimable[clientAddress] = claimable; // todo: doesn't update react Balances component
 
     return claimable;
   }
