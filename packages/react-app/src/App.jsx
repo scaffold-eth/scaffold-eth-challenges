@@ -405,8 +405,6 @@ function App(props) {
     });
   }
 
-  const coder = ethers.utils.defaultAbiCoder;
-
   /*
     Streamer perspective:
     - streamer has a channel per client
