@@ -25,10 +25,6 @@
 
 ### Checkpoint 0: 📦 install 📚
 
-Want a fresh cloud environment? Click this to open a gitpod workspace, then skip to Checkpoint 1 after the tasks are complete.
-
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-1-decentralized-staking) // todo
-
 ```bash
 
 git clone https://github.com/statechannels/speedrun-statechannels.git challenge-N-statechannels
