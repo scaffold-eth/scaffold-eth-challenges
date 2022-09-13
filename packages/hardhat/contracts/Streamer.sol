@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
 
-// import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
 
 
-contract Streamer {
+contract Streamer is Ownable {
   event Opened(address, uint256);
   event Challenged(address);
   event Closed(address);
@@ -23,13 +23,6 @@ contract Streamer {
       - updates the balances mapping with the eth recieved in the function call
       - emits an Opened event
     */
-  }
-
-  function challengeChannel() public {
-      require(balances[msg.sender] > 0, "no user channel exists");
-  
-      closeAt[msg.sender] = block.timestamp + 2 minutes;
-      emit Challenged(msg.sender);
   }
 
   function timeLeft(address channel) public view returns (uint256) {
