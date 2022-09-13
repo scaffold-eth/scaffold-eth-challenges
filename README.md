@@ -7,11 +7,8 @@
 > 🍰 A number of approaches to scaling have been developed, collectively referred to as layer-2s (L2s). Among them is the concept of payment channels, state channels, and state channel networks. This tutorial walks through the creation of a simple state channel application, where users seeking a service **lock** collatoral on-chain with a single transaction, **interact** with their service provider entirely off-chain, and **finalize** the interaction with a second on-chain transaction. We will:
 
 - 🛣️ Build a `Streamer.sol` contract that collects **ETH** from numerous client addresses using a payable `fundChannel()` function and keeps track of `balances`.
-
 - 💵 Exchange paid services off-chain between the `Streamer.sol` contract owner and clients with funded channels. The **Streamer** provides the service in exchange for signed vouchers which can later be redeemed on-chain.
-
 - ⏱ Create a Challenge mechanism, so that clients are protected from a service provider who goes offline while funds are locked on-chain (either by accident, or as a theft attempt).
-
 - ⁉ Consider some security / usability holes in the current design.
 
 // todo
