@@ -841,7 +841,9 @@ function App(props) {
                         </Card>
                       </Col>
 
-                      {/* <Col span={5}>
+                      {/* Checkpoint 6: challenge & closure
+
+                      <Col span={5}>
                         <Button
                           disabled={hasClosingChannel()}
                           type="primary"
@@ -851,7 +853,7 @@ function App(props) {
                             tx(writeContracts.Streamer.challengeChannel());
                           }}
                         >
-                          Close this channel!
+                          Challenge this channel!
                         </Button>
 
                         <div style={{ padding: 8, marginTop: 32 }}>
@@ -863,10 +865,10 @@ function App(props) {
                           disabled={timeLeft}
                           type="primary"
                           onClick={() => {
-                            tx(writeContracts.Streamer.liquidateChannel());
+                            tx(writeContracts.Streamer.closeChannel());
                           }}
                         >
-                          Withdraw remaining funds
+                          Close and withdraw funds
                         </Button>
                       </Col> */}
                     </Row>

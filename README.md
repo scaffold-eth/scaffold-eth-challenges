@@ -163,6 +163,45 @@ Reminders:
 
 - [ ] `withdrawEarnings` is a function that only the service provider would be interested in calling. Should it be marked `onlyOwner`?
 
+### Checkpoint 6: Challenge & Close the channel
+
+So far so good. The service provider and client can connect via the on-chain deposit, exchange service for value off-chain, and the service provider can recover earnings with their received vouchers.
+
+But what if the client is unimpressed with the service, and wishes to close a channel and recover whatever funds remain? What if the service provider is a no-show after the initial channel funding deposit?
+
+A payment channel is a cryptoeconomic protocol - care needs to be taken so that everyone's financial interests are protected. We'll implement a two step **challenge** and **close** mechanism that allows clients to recover funds, while keeping the service provider's earnings safe.
+
+> 📝 Edit Streamer.sol to create a public `challengeChannel()` function
+
+> 📝 Edit App.jsx to enable the challenge and closure buttons for service clients
+
+The `challengeChannel()` function should:
+
+- check in the `balances` map that a channel is already open in the name of `msg.sender`
+- declare this channel to be closing by setting `closeAt[msg.sender]` to `block.timestamp + 30 seconds`
+- emit a `Challenged` event with the sender's address
+
+The emitted event gives notice to the service provider the channel will soon be emptied, so they should apply whatever vouchers they have before the timeout period ends.
+
+> 📝 Edit Streamer.sol to create a public `closeChannel()` function
+
+The `closeChannel()` function should:
+
+- check that `msg.sender` has a closed channel, by ensuring a non-zero `closeAt[msg.sender]` is lower than the current timestamp
+- transfer `balances[msg.sender]` to the sender
+- emit a `Closed` event
+
+#### 🥅 Goals:
+
+- [ ] Launch a challenge as a channel client. The guru's UI should show an alert via their `Cash out latest voucher` button.
+- [ ] Recover the guru's best voucher before the channel closes.
+- [ ] Close the channel and recover client funds.
+
+#### ⚔️ Side Quest:
+
+- [ ] Currently, the service provider has to manually submit their vouchers after a challenge is registered on chain. Should their channel wallet do that automatically? Can you implement that in this application?
+- [ ] Suppose some client enjoyed their first round of advice. Is it safe for them to open a new channel under `Streamer.sol`? (hint: what data does the guru still hold?)
+
 #### ⚠️ Test it!
 
 // todo: write tests

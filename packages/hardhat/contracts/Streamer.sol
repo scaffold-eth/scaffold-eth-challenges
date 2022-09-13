@@ -37,20 +37,6 @@ contract Streamer {
     return closeAt[channel] - block.timestamp;
   }
 
-
-  function liquidateChannel() public {
-    require(balances[msg.sender] > 0, "no channel exists");
-    require(closeAt[msg.sender] != 0, "channel is not marked for closure");
-    require(block.timestamp > closeAt[msg.sender], "not yet ready to close");
-
-    bool sent;
-    bytes memory mem;
-    (sent, mem) = msg.sender.call{value: balances[msg.sender]}("");
-    require(sent, "liquidation failed");
-    balances[msg.sender] = 0;
-    emit Closed(msg.sender);
-  }
-
   function withdrawEarnings(Voucher calldata v) public {
     // like the off-chain code, signatures are applied to the hash of the data
     // instead of the raw data itself
@@ -82,8 +68,27 @@ contract Streamer {
 
     // adjust the channel balance, and pay the contract owner. (Get the owner address with 
     // the `owner()` function)
-    
+
   }
+
+  /*
+    Checkpoint 6a: Challenge the channel
+
+    create a public challengeChannel() function that:
+    - checks that msg.sender has an open channel
+    - updates closeAt[msg.sender] to some future time
+    - emits a Challenged event
+  */
+
+  /*
+    Checkpoint 6b: Close the channel
+
+    create a public closeChannel() function that:
+    - checks that msg.sender has a closing channel
+    - checks that the current time is later than the closing time
+    - sends the channel's remaining funds to msg.sender, and sets
+      the balance to 0
+  */
 
   struct Voucher {
     uint256 updatedBalance;
