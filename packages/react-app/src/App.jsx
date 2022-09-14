@@ -482,23 +482,18 @@ function App(props) {
   }
 
   /**
-   *
    * @param {string} clientAddress
-   * @returns {ethers.BigNumber}
    */
   function updateClaimable(clientAddress) {
     if (vouchers()[clientAddress] === undefined) {
-      return ethers.utils.parseEther("0");
+      return;
     }
 
     const init = ethers.utils.parseEther("0.5");
     const updated = vouchers()[clientAddress].updatedBalance;
 
     const claimable = init.sub(updated);
-    console.log("Can now claim %s from %s", ethers.utils.formatEther(claimable), clientAddress);
-    window.claimable[clientAddress] = claimable; // todo: doesn't update react Balances component
-
-    return claimable;
+    document.getElementById(`claimable-${clientAddress}`).innerText = ethers.utils.formatEther(claimable);
   }
 
   /**
@@ -790,8 +785,7 @@ function App(props) {
                       ></TextArea>
 
                       <Card style={{ margin: 5 }}>
-                        {/* todo: this should rerender on receipt of new vouchers instead of sporadically */}
-                        Claimable Balance: <Balance balance={window.claimable[clientAddress]} fontSize={14} />
+                        Claimable Balance: <strong id={`claimable-${clientAddress}`}>0</strong>&nbsp;ETH
                       </Card>
 
                       {/* Checkpoint 5:
