@@ -19,8 +19,6 @@
 
 > 💬 Meet other builders working on this challenge and get help in the [Challenge 1 telegram](https://t.me/joinchat/E6r91UFt4oMJlt01)!
 
-🧫 Everything starts by ✏️ Editing `Streamer.sol` in `packages/hardhat/contracts`
-
 ---
 
 ### Checkpoint 0: 📦 install 📚
