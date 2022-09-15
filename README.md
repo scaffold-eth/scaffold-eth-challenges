@@ -39,6 +39,8 @@ Files that we'll be editing in this tutorial are:
 - `Streamer.sol` in `packages/hardhat/contracts`
 - `App.jsx` in `packages/react-app/src`
 
+> 🔍 **Tip**: entry points for each of the checkpoints that involve writing code can be located by searching these files for `Checkpoint N` (for whatever `N` value)
+
 ---
 
 ### Checkpoint 1: 🔭 Environment 📺
