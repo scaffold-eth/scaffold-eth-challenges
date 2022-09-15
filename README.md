@@ -133,7 +133,7 @@ The first two are complete - we will work on `processVoucher`, where the service
 #### 🥅 Goals:
 
 - [ ] secure your service! Validate the incoming voucher & signature according to instructions inside `processVoucher(v)`
-- [ ] with an open channel, check the console in the Guru's tab. Can you see the claimable balance updates as service is rendered?
+- [ ] with an open channel, start sending advice. Can you see the claimable balance update as service is rendered?
 
 #### ⚔️ Side Quest:
 
