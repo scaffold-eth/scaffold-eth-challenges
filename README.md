@@ -49,6 +49,8 @@ yarn chain   (hardhat backend)
 yarn deploy  (to compile, deploy, and publish your contracts to the frontend)
 ```
 
+> ⚠️ Note: `yarn deploy` will report an unexpected error. We will fix this in Checkpoint 2 and redeploy.
+
 > 💻 View your frontend at http://localhost:3000/
 
 > 👩‍💻 Rerun `yarn deploy --reset` whenever you want to deploy new contracts to the frontend.
