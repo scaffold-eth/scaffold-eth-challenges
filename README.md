@@ -73,7 +73,7 @@ Like the [token vendor challenge](https://speedrunethereum.com/challenge/token-v
 
 > 👁 `contract Streamer` inherits `Ownable` with the `is` keyword. `Ownable` comes from [openzeppelin-contracts](https://github.com/OpenZeppelin/openzeppelin-contracts) - a collection of high quality smart contract library code.
 
-> In `packages/hardhat/deploy/00_deploy_streamer.js`, supply an address from your frontend wallet to the `streamer.transferOwnership()` function.
+> 📝 In `packages/hardhat/deploy/00_deploy_streamer.js`, supply an address from your frontend wallet to the `streamer.transferOwnership()` function.
 
 You'll have to redeploy with `yarn deploy --reset`.
 
@@ -106,7 +106,7 @@ Rubes seeking wisdom will use a **payable** `fundChannel()` function, which will
 
 > 📝 Edit Streamer.sol to complete the `fundChannel()` function
 
-> 👓 Check App.jsx to see the frontend hook for this function. (ctrl-f fundChannel)
+> 👁 Check App.jsx to see the frontend hook for this function. (ctrl-f fundChannel)
 
 #### 🥅 Goals:
 
