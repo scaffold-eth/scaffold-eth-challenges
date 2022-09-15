@@ -4,17 +4,11 @@
 
 > 🐌 The Ethereum blockchain has great decentralization & security properties. These properties come at a price: transaction throughput is low, and transactions can be expensive (search term: blockchain trilemma). This makes many traditional web applications infeasible on a blockchain... or does it?
 
-> 🍰 A number of approaches to scaling have been developed, collectively referred to as layer-2s (L2s). Among them is the concept of payment channels, state channels, and state channel networks. This tutorial walks through the creation of a simple state channel application, where users seeking a service **lock** collatoral on-chain with a single transaction, **interact** with their service provider entirely off-chain, and **finalize** the interaction with a second on-chain transaction.
-
-> 🧑‍🤝‍🧑 State channels really excel as a scaling solution in cases where a fixed set of participants want to exchange value-for-service at high frequency. The canonical example is in file sharing or media streaming: the server exchanges chunks of a file in exchange for micropayments.
-
-> 🧙 In our case, the service provider is a `Guru` who provides off-the-cuff wisdom to each client `Rube` through a one-way chat box. Each character of text that is delivered is expected to be compensated with a payment of `0.001 ETH`.
-
-We will:
+> 🍰 A number of approaches to scaling have been developed, collectively referred to as layer-2s (L2s). Among them is the concept of payment channels, state channels, and state channel networks. This tutorial walks through the creation of a simple state channel application, where users seeking a service **lock** collatoral on-chain with a single transaction, **interact** with their service provider entirely off-chain, and **finalize** the interaction with a second on-chain transaction. We will:
 
 - 🛣️ Build a `Streamer.sol` contract that collects **ETH** from numerous client addresses using a payable `fundChannel()` function and keeps track of `balances`.
-- 💵 Exchange paid services off-chain between the `Streamer.sol` contract owner (the **Guru**) and **rube** clients with funded channels. The **Guru** provides the service in exchange for signed vouchers which can later be redeemed on-chain.
-- ⏱ Create a Challenge mechanism with a timeout, so that **rubes** are protected from a **Guru** who goes offline while funds are locked on-chain (either by accident, or as a theft attempt).
+- 💵 Exchange paid services off-chain between the `Streamer.sol` contract owner and clients with funded channels. The **Streamer** provides the service in exchange for signed vouchers which can later be redeemed on-chain.
+- ⏱ Create a Challenge mechanism, so that clients are protected from a service provider who goes offline while funds are locked on-chain (either by accident, or as a theft attempt).
 - ⁉ Consider some security / usability holes in the current design.
 
 // todo
@@ -69,15 +63,15 @@ yarn deploy  (to compile, deploy, and publish your contracts to the frontend)
 
 ### Checkpoint 2: Configure Deployment & Wallets
 
-Like the [token vendor challenge](https://speedrunethereum.com/challenge/token-vendor), we'll be building an `Ownable` contract. The contract owner is the **Guru** - the service provider in this application, and you will use multiple browser windows or tabs to assume the roles of Guru and rube (service provider & client).
+Like the [token vendor challenge](https://speedrunethereum.com/challenge/token-vendor), we'll be building an `Ownable` contract. The contract owner will be the service provider in this application, and you will use multiple browsers or tabs to assume the roles of server and client.
 
 > 👁 `contract Streamer` inherits `Ownable` with the `is` keyword. `Ownable` comes from [openzeppelin-contracts](https://github.com/OpenZeppelin/openzeppelin-contracts) - a collection of high quality smart contract library code.
 
-> 📝 In `packages/hardhat/deploy/00_deploy_streamer.js`, supply an address from your frontend wallet to the `streamer.transferOwnership()` function.
+> In `packages/hardhat/deploy/00_deploy_streamer.js`, supply an address from your frontend wallet to the `streamer.transferOwnership()` function.
 
 You'll have to redeploy with `yarn deploy --reset`.
 
-We'll need another active address to act as the rube in our app. To do this,
+We'll need another active address to act as the client in our app. To do this,
 
 - open `localhost:3000` in a new tab / window of the current browser
 - click the wallet icon (top right) to open the wallet
@@ -102,28 +96,30 @@ Like the [decentralized staking challenge](https://speedrunethereum.com/challeng
 mapping (address => uint256) balances;
 ```
 
-Rubes seeking wisdom will use a **payable** `fundChannel()` function, which will update this mapping with the supplied balance.
+Clients opening a channel will use a **payable** `fundChannel()` function, which will update this mapping with the supplied balance.
 
 > 📝 Edit Streamer.sol to complete the `fundChannel()` function
 
-> 👁 Check App.jsx to see the frontend hook for this function. (ctrl-f fundChannel)
+> 👓 Check App.jsx to see the frontend hook for this function. (ctrl-f fundChannel)
 
 #### 🥅 Goals:
 
 - [ ] does opening a channel cause a `Recieved Wisdom` box to appear?
-- [ ] do opened channels appear on the guru's UI as well?
+- [ ] do opened channels appear on the contract owner's UI as well?
 - [ ] using the _Debug UI_ tab, does a repeated call to `fundChannel` fail?
 
 ---
 
 ### Checkpoint 4: Exchange the Service
 
-Now that the channel is funded, and all participants have observed the funding via the emitted event, we can begin our off-chain exchange of service. We are now working in `packages/react-app/src/App.jsx`.
+Now that the channel is funded, and all participants have observed the funding via the emitted event, we can begin our off-chain exchange of service. State channels really excel as a scaling solution in cases where a fixed set of participants want to exchange value-for-service at high frequency. The canonical example is in file sharing or media streaming: the server exchanges chunks of a file in exchange for micropayments.
+
+In our case, the service provider will provide off-the-cuff wisdom to each client through a one-way chat box. Each character of text that is delivered is expected to be compensated with a payment of `0.001 ETH`. The exchange of service is entirely off chain, so we are now working in `packages/react-app/src/App.jsx`.
 
 Functions of note:
 
-- `provideService`: the guru sends wisdom over the wire to the client
-- `reimburseService`: the rube creates a voucher for the recieved service, signs it, and returns it
+- `provideService`: the service provider sends wisdom over the wire to the client
+- `reimburseService`: the client creates a voucher for the recieved service, signs it, and returns it
 - `processVoucher`: the service provider recieves and stores vouchers
 
 The first two are complete - we will work on `processVoucher`, where the service provider examines returned payments, confirms their authenticity, and stores them.
@@ -133,15 +129,15 @@ The first two are complete - we will work on `processVoucher`, where the service
 #### 🥅 Goals:
 
 - [ ] secure your service! Validate the incoming voucher & signature according to instructions inside `processVoucher(v)`
-- [ ] with an open channel, start sending advice. Can you see the claimable balance update as service is rendered?
+- [ ] with an open channel, check the console in the Guru's tab. Can you see the claimable balance updates as service is rendered?
 
 #### ⚔️ Side Quest:
 
-- [ ] can `provideService` be modified to prevent continued service to deadbeat clients whose vouchers aren't up to date? _Hint_: you'll want to compare the size of your best voucher against the size of your provided wisdom. If there's too big a discrepency, cut them off!
+- [ ] can `provideService` be modified to prevent continued service to deadbeat clients?
 
 ### Checkpoint 5: Recover Service Provider's Earnings
 
-Now that we've collected some vouchers, we'd like to redeem them on-chain and move funds from the `Streamer` contract's `balances` map to the Guru's own address. The `withdrawEarnings` function of `Streamer.sol` takes a voucher (balance + signature) as input, and should:
+Now that we've collected some vouchers, we'd like to redeem them on-chain in order to move funds from the contract's `balances` map to the contract owner. The `withdrawEarnings` function of `Streamer.sol` takes a voucher (balance + signature) as input, and should:
 
 - recover the signer using `ecrecover()` on the `prefixedHashed` message and supplied signature
 - check that the signer has a running channel with balance greater than the voucher's `updatedBalance`
@@ -164,19 +160,15 @@ Reminders:
 
 #### ⚔️ Side Quest:
 
-- [ ] `withdrawEarnings` is a function that only the service provider would be interested in calling. Should it be marked `onlyOwner`? (the `onlyOwner` modifier makes a function accessible only to the contract owner - anyone else who tries to call it will be immediately rejected).
+- [ ] `withdrawEarnings` is a function that only the service provider would be interested in calling. Should it be marked `onlyOwner`?
 
 ### Checkpoint 6: Challenge & Close the channel
 
-So far so good:
+So far so good. The service provider and client can connect via the on-chain deposit, exchange service for value off-chain, and the service provider can recover earnings with their received vouchers.
 
-- rubes can connect to the Guru via an on-chain deposit
-- the pair can then transact off-chain with high throughput
-- the Guru can recover earnings with their received vouchers
+But what if the client is unimpressed with the service, and wishes to close a channel and recover whatever funds remain? What if the service provider is a no-show after the initial channel funding deposit?
 
-But what if a rube is unimpressed with the service, and wishes to close a channel and recover whatever funds remain? What if the guru is a no-show after the initial channel funding deposit?
-
-A payment channel is a cryptoeconomic protocol - care needs to be taken so that everyone's financial interests are protected. We'll implement a two step **challenge** and **close** mechanism that allows rubes to recover unspent funds, while keeping the guru's earnings safe.
+A payment channel is a cryptoeconomic protocol - care needs to be taken so that everyone's financial interests are protected. We'll implement a two step **challenge** and **close** mechanism that allows clients to recover funds, while keeping the service provider's earnings safe.
 
 > 📝 Edit Streamer.sol to create a public `challengeChannel()` function
 
@@ -188,7 +180,7 @@ The `challengeChannel()` function should:
 - declare this channel to be closing by setting `closeAt[msg.sender]` to `block.timestamp + 30 seconds`
 - emit a `Challenged` event with the sender's address
 
-The emitted event gives notice to the Guru that the channel will soon be emptied, so they should apply whatever vouchers they have before the timeout period ends.
+The emitted event gives notice to the service provider the channel will soon be emptied, so they should apply whatever vouchers they have before the timeout period ends.
 
 > 📝 Edit Streamer.sol to create a public `closeChannel()` function
 
@@ -202,12 +194,12 @@ The `closeChannel()` function should:
 
 - [ ] Launch a challenge as a channel client. The guru's UI should show an alert via their `Cash out latest voucher` button.
 - [ ] Recover the guru's best voucher before the channel closes.
-- [ ] Close the channel and recover rube funds.
+- [ ] Close the channel and recover client funds.
 
 #### ⚔️ Side Quest:
 
 - [ ] Currently, the service provider has to manually submit their vouchers after a challenge is registered on chain. Should their channel wallet do that automatically? Can you implement that in this application?
-- [ ] Suppose some rube enjoyed their first round of advice. Is it safe for them to open a new channel with `Streamer.sol`? (_Hint_: what data does the guru still hold?)
+- [ ] Suppose some client enjoyed their first round of advice. Is it safe for them to open a new channel under `Streamer.sol`? (hint: what data does the guru still hold?)
 
 #### ⚠️ Test it!
 
