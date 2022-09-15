@@ -33,7 +33,11 @@ yarn install
 
 ```
 
-🔏 Edit your smart contract `Streamer.sol` in `packages/hardhat/contracts`
+Files that we'll be editing in this tutorial are:
+
+- `00_deploy_streamer.js` in `packages/hardhat/deploy`
+- `Streamer.sol` in `packages/hardhat/contracts`
+- `App.jsx` in `packages/react-app/src`
 
 ---
 
