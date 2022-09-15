@@ -164,7 +164,7 @@ Reminders:
 
 #### ⚔️ Side Quest:
 
-- [ ] `withdrawEarnings` is a function that only the service provider would be interested in calling. Should it be marked `onlyOwner`?
+- [ ] `withdrawEarnings` is a function that only the service provider would be interested in calling. Should it be marked `onlyOwner`? (the `onlyOwner` modifier makes a function accessible only to the contract owner - anyone else who tries to call it will be immediately rejected).
 
 ### Checkpoint 6: Challenge & Close the channel
 
