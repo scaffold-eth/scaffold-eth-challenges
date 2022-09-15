@@ -59,7 +59,7 @@ yarn deploy  (to compile, deploy, and publish your contracts to the frontend)
 
 Like the [token vendor challenge](https://speedrunethereum.com/challenge/token-vendor), we'll be building an `Ownable` contract. The contract owner will be the service provider in this application, and you will use multiple browsers or tabs to assume the roles of server and client.
 
-> 📝 Edit Streamer.sol to inherit `Ownable`. (TIP: Openzeppelin )
+> 👁 `contract Streamer` inherits `Ownable` with the `is` keyword. `Ownable` comes from [openzeppelin-contracts](https://github.com/OpenZeppelin/openzeppelin-contracts) - a collection of high quality smart contract library code.
 
 > In `packages/hardhat/deploy/00_deploy_streamer.js`, supply an address from your frontend wallet to the `streamer.transferOwnership()` function.
 
