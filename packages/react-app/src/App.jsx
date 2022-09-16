@@ -362,6 +362,8 @@ function App(props) {
   }
 
   /**
+   * reimburseService prepares, signs, and delivers a voucher for the service provider
+   * that pays for the recieved wisdom.
    *
    * @param {string} wisdom
    */
