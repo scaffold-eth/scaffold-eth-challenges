@@ -137,7 +137,7 @@ The first two are complete - we will work on `processVoucher`, where the service
 
 #### ⚔️ Side Quest:
 
-- [ ] can `provideService` be modified to prevent continued service to deadbeat clients?
+- [ ] can `provideService` be modified to prevent continued service to clients who don't keep up with their payments? (_hint_: you'll want to compare the size of your best voucher against the size of your provided wisdom. If there's too big a discrepency, cut them off!)
 
 ### Checkpoint 5: Recover Service Provider's Earnings
 
