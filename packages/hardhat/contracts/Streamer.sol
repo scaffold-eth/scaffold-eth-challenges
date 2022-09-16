@@ -41,7 +41,7 @@ contract Streamer is Ownable {
     //
     // There are seemingly extra steps here compared to what was done in the off-chain
     // `reimburseService` and `processVoucher`. Note that those ethers signing and verification
-    // functinos do the same under the hood.
+    // functions do the same under the hood.
     //
     // again, see https://blog.ricmoo.com/verifying-messages-in-solidity-50a94f82b2ca
     bytes memory prefixed = abi.encodePacked('\x19Ethereum Signed Message:\n32', hashed);

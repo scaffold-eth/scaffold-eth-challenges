@@ -110,9 +110,9 @@ Rubes seeking wisdom will use a **payable** `fundChannel()` function, which will
 
 #### 🥅 Goals:
 
-- [ ] does opening a channel cause a `Recieved Wisdom` box to appear?
+- [ ] does opening a channel (from Rube's tab, you may need some funds from the faucet) cause a `Recieved Wisdom` box to appear?
 - [ ] do opened channels appear on the guru's UI as well?
-- [ ] using the _Debug UI_ tab, does a repeated call to `fundChannel` fail?
+- [ ] using the _Debug Contracts_ tab, does a repeated call to `fundChannel` fail?
 
 ---
 
@@ -144,6 +144,7 @@ The first two are complete - we will work on `processVoucher`, where the service
 Now that we've collected some vouchers, we'd like to redeem them on-chain and move funds from the `Streamer` contract's `balances` map to the Guru's own address. The `withdrawEarnings` function of `Streamer.sol` takes a voucher (balance + signature) as input, and should:
 
 - recover the signer using `ecrecover()` on the `prefixedHashed` message and supplied signature
+  - _Hint_: `ecrecover` takes the signature in its decomposed form with `v,`,`r`, and`s` values. The string signature produced in `App.jsx` is just a concatenation of these values, which we split to create the on-chain friendly signature with `ethers.utils.splitSignature`
 - check that the signer has a running channel with balance greater than the voucher's `updatedBalance`
 - calculate the payout (`balances[signer] - updatedBalance`)
 - update the channel balance

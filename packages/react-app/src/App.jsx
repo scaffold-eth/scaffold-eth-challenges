@@ -386,10 +386,10 @@ function App(props) {
     //
     // Two considerations:
     // 1) this signature is going to verified both off-chain (by the service provider)
-    //    and on-chain (by the Streamer contract). These are distinct runtimes, so
-    //    care needs to be taken that signatures are applied to well-specified data encodings.
+    //    and on-chain (by the Streamer contract). These are distinct runtime environments, so
+    //    care needs to be taken that signatures are applied to specific data encodings.
     //
-    //    the arrarify call below encodes this data in an EVM compatible way
+    //    the arrayify call below encodes this data in an EVM compatible way
     //
     //    see: https://blog.ricmoo.com/verifying-messages-in-solidity-50a94f82b2ca for some
     //         more on EVM verification of messages signed off-chain
@@ -464,7 +464,7 @@ function App(props) {
        *
        *  currently, this function recieves and stores vouchers uncritically.
        *
-       *  recreate the packed, hashed, and arrarified message from reimburseService (above),
+       *  recreate the packed, hashed, and arrayified message from reimburseService (above),
        *  and then use ethers.utils.verifyMessage() to confirm that voucher signer was
        *  `clientAddress`. (If it wasn't, log some error message and return).
        */
