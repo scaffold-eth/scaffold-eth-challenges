@@ -786,10 +786,10 @@ function App(props) {
 
                       <Card style={{ margin: 5 }} id={`status-${clientAddress}`}>
                         <div>
-                          Service Provided: <strong id={`provided-${clientAddress}`}>0</strong>&nbsp;chars
+                          Served: <strong id={`provided-${clientAddress}`}>0</strong>&nbsp;chars
                         </div>
                         <div>
-                          Payment Returned: <strong id={`claimable-${clientAddress}`}>0</strong>&nbsp;ETH
+                          Recieved: <strong id={`claimable-${clientAddress}`}>0</strong>&nbsp;ETH
                         </div>
                       </Card>
 
