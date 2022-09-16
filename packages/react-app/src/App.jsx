@@ -823,17 +823,23 @@ function App(props) {
                 {hasOpenChannel() ? (
                   <div style={{ padding: 8 }}>
                     <Row align="middle">
-                      {/* <Col span={3}>
+                      <Col span={3}>
                         <Checkbox
                           defaultChecked={autoPay}
                           onChange={e => {
                             autoPay = e.target.checked;
                             console.log("AutoPay: " + autoPay);
+
+                            if (autoPay) {
+                              const wisdom = document.getElementById(`recievedWisdom-${userAddress}`).innerText;
+                              reimburseService(wisdom);
+                            }
                           }}
                         >
                           AutoPay
                         </Checkbox>
-                      </Col> */}
+                      </Col>
+
                       <Col span={16}>
                         <Card title="Received Wisdom">
                           <span id={"recievedWisdom-" + userAddress}></span>
