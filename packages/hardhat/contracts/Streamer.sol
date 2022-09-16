@@ -76,7 +76,7 @@ contract Streamer is Ownable {
   /*
     Checkpoint 6b: Close the channel
 
-    create a public closeChannel() function that:
+    create a public defundChannel() function that:
     - checks that msg.sender has a closing channel
     - checks that the current time is later than the closing time
     - sends the channel's remaining funds to msg.sender, and sets

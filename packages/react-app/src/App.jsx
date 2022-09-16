@@ -870,7 +870,7 @@ function App(props) {
                           disabled={timeLeft}
                           type="primary"
                           onClick={() => {
-                            tx(writeContracts.Streamer.closeChannel());
+                            tx(writeContracts.Streamer.defundChannel());
                           }}
                         >
                           Close and withdraw funds

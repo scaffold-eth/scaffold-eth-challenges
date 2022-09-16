@@ -191,9 +191,9 @@ The `challengeChannel()` function should:
 
 The emitted event gives notice to the Guru that the channel will soon be emptied, so they should apply whatever vouchers they have before the timeout period ends.
 
-> 📝 Edit Streamer.sol to create a public `closeChannel()` function
+> 📝 Edit Streamer.sol to create a public `defundChannel()` function
 
-The `closeChannel()` function should:
+The `defundChannel()` function should:
 
 - check that `msg.sender` has a closed channel, by ensuring a non-zero `closeAt[msg.sender]` is lower than the current timestamp
 - transfer `balances[msg.sender]` to the sender
