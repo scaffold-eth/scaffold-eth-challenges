@@ -12,7 +12,7 @@ contract Streamer is Ownable {
   event Withdrawn(address, uint256);
 
   mapping(address => uint256) balances;
-  mapping(address => uint256) closeAt;
+  mapping(address => uint256) canCloseAt;
 
   function fundChannel() public payable {
     /*
@@ -26,8 +26,8 @@ contract Streamer is Ownable {
   }
 
   function timeLeft(address channel) public view returns (uint256) {
-    require(closeAt[channel] != 0, "channel is not closing");
-    return closeAt[channel] - block.timestamp;
+    require(canCloseAt[channel] != 0, "channel is not closing");
+    return canCloseAt[channel] - block.timestamp;
   }
 
   function withdrawEarnings(Voucher calldata v) public {
@@ -69,7 +69,7 @@ contract Streamer is Ownable {
 
     create a public challengeChannel() function that:
     - checks that msg.sender has an open channel
-    - updates closeAt[msg.sender] to some future time
+    - updates canCloseAt[msg.sender] to some future time
     - emits a Challenged event
   */
 

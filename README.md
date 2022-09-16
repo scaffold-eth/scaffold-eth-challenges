@@ -186,7 +186,7 @@ A payment channel is a cryptoeconomic protocol - care needs to be taken so that 
 The `challengeChannel()` function should:
 
 - check in the `balances` map that a channel is already open in the name of `msg.sender`
-- declare this channel to be closing by setting `closeAt[msg.sender]` to `block.timestamp + 30 seconds`
+- declare this channel to be closing by setting `canCloseAt[msg.sender]` to `block.timestamp + 30 seconds`
 - emit a `Challenged` event with the sender's address
 
 The emitted event gives notice to the Guru that the channel will soon be emptied, so they should apply whatever vouchers they have before the timeout period ends.
@@ -195,7 +195,7 @@ The emitted event gives notice to the Guru that the channel will soon be emptied
 
 The `defundChannel()` function should:
 
-- check that `msg.sender` has a closed channel, by ensuring a non-zero `closeAt[msg.sender]` is lower than the current timestamp
+- check that `msg.sender` has a closed channel, by ensuring a non-zero `canCloseAt[msg.sender]` is lower than the current timestamp
 - transfer `balances[msg.sender]` to the sender
 - emit a `Closed` event
 
