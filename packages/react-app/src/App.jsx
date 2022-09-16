@@ -521,13 +521,14 @@ function App(props) {
    * @param {string} clientAddress
    */
   function provideService(clientAddress) {
-    console.log("calling provideService");
     const channelInput = document.getElementById("input-" + clientAddress);
     if (channelInput) {
-      console.log("sending: %s", channelInput.value);
-      channels[clientAddress].postMessage(channelInput.value);
+      const wisdom = channelInput.value;
+      // console.log("sending: %s", wisdom);
+      channels[clientAddress].postMessage(wisdom);
+      document.getElementById(`provided-${clientAddress}`).innerText = wisdom.length;
     } else {
-      console.log(`ChannelInput: ${channelInput}`);
+      console.warn(`Failed to get ChannelInput. Found: ${channelInput}`);
     }
   }
 
@@ -783,8 +784,13 @@ function App(props) {
                         }}
                       ></TextArea>
 
-                      <Card style={{ margin: 5 }}>
-                        Claimable Balance: <strong id={`claimable-${clientAddress}`}>0</strong>&nbsp;ETH
+                      <Card style={{ margin: 5 }} id={`status-${clientAddress}`}>
+                        <div>
+                          Service Provided: <strong id={`provided-${clientAddress}`}>0</strong>&nbsp;chars
+                        </div>
+                        <div>
+                          Payment Returned: <strong id={`claimable-${clientAddress}`}>0</strong>&nbsp;ETH
+                        </div>
                       </Card>
 
                       {/* Checkpoint 5:
