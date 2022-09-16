@@ -205,7 +205,7 @@ The `closeChannel()` function should:
 - [ ] Recover the guru's best voucher before the channel closes.
 - [ ] Close the channel and recover rube funds.
 
-#### ⚔️ Side Quest:
+#### ⚔️ Side Quests:
 
 - [ ] Currently, the service provider has to manually submit their vouchers after a challenge is registered on chain. Should their channel wallet do that automatically? Can you implement that in this application?
 - [ ] Suppose some rube enjoyed their first round of advice. Is it safe for them to open a new channel with `Streamer.sol`? (_Hint_: what data does the guru still hold?)
