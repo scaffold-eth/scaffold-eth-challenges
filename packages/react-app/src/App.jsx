@@ -165,7 +165,11 @@ const web3Modal = new Web3Modal({
   },
 });
 
-window.claimable = {};
+/**
+ * let the application pay for your received wisdom automatically.
+ * if false, the client will have to manually trigger each payment.
+ */
+let autoPay = true;
 
 function App(props) {
   const mainnetProvider =
@@ -321,12 +325,6 @@ function App(props) {
    * this is what you're paying for. It'd better be good.
    */
   let recievedWisdom = "";
-
-  /**
-   * let the application pay for your received wisdom automatically.
-   * if false, the client will have to manually trigger each payment.
-   */
-  let autoPay = true;
 
   /**
    * Handle incoming service data from the service provider.
