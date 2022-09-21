@@ -336,6 +336,10 @@ Now, a user can just enter the amount of ETH or tokens they want to swap and the
 
 ---
 
+> ❗ ❗  Note that the testing file is a work in progress, so \packages\hardhat-ts\test\challenge-4.ts is incomplete.  You can run `yarn test` if you like, but may have some failed tests, even with working code.
+
+---
+
 ### ⛳️ **Checkpoint 7: 💾 Deploy it!** 🛰
 
 📡 Edit the `defaultNetwork` in `packages/hardhat/hardhat.config.js`, as well as `targetNetwork` in `packages/react-app/src/App.jsx`, to [your choice of public EVM networks](https://ethereum.org/en/developers/docs/networks/)
