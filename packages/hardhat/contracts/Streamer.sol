@@ -61,7 +61,6 @@ contract Streamer is Ownable {
 
     // adjust the channel balance, and pay the contract owner. (Get the owner address with 
     // the `owner()` function)
-
   }
 
   /*
