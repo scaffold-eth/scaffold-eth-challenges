@@ -255,7 +255,7 @@ function App(props) {
       opened.push(chan.args[0]); // see the Opened event in Streamer.sol
     });
 
-    const challenged = [];
+    let challenged = [];
     challengeEvents.forEach(chan => {
       challenged.push(chan.args[0]); // see Challenged event in Streamer.sol
     });
@@ -266,6 +266,8 @@ function App(props) {
 
       // remove finalized channels from the list of running channels
       opened = opened.filter(addr => addr != chan.args[0]);
+      // removed finalized channels from list of open challenges
+      challenged = challenged.filter(addr => addr != chan.args[0]);
     });
 
     return {
@@ -286,6 +288,14 @@ function App(props) {
   console.log("User:  %s\nOwner: %s", userAddress, ownerAddress);
 
   const userIsOwner = ownerAddress == userAddress;
+
+  if (onchainChannels().challenged.length === 0) {
+    // turn off the noisy interval mining if there are
+    // no expected challenge channels after this tx
+    try {
+      localProvider.send("evm_setIntervalMining", [0]);
+    } catch (e) {}
+  }
 
   /*
     The off-chain app:
@@ -856,6 +866,11 @@ function App(props) {
                             // disable the production of further voucher signatures
                             autoPay = false;
                             tx(writeContracts.Streamer.challengeChannel());
+                            try {
+                              // ensure a 'ticking clock' for the UI without having
+                              // to send new transactions & mine new blocks
+                              localProvider.send("evm_setIntervalMining", [5000]);
+                            } catch (e) {}
                           }}
                         >
                           Challenge this channel!
@@ -867,7 +882,7 @@ function App(props) {
                         </div>
                         <Button
                           style={{ padding: 5, margin: 5 }}
-                          disabled={timeLeft}
+                          disabled={timeLeft && timeLeft.toNumber() != 0}
                           type="primary"
                           onClick={() => {
                             tx(writeContracts.Streamer.defundChannel());
