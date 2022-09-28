@@ -66,7 +66,7 @@ describe("Statechannel Challenge: The Guru's Offering", function () {
       const fundingTx = await streamerContract.fundChannel({
         value: ethers.utils.parseEther("1"),
       });
-      expect(fundingTx).to.emit(streamerContract, "Opened");
+      await expect(fundingTx).to.emit(streamerContract, "Opened");
     });
 
     it("refuses multiple funding from single user", async function () {
