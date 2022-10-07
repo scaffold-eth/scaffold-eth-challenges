@@ -27,3 +27,4 @@ vscode:
     - dbaeumer.vscode-eslint
     - esbenp.prettier-vscode
     - juanblanco.solidity
+    - synedra.auto-run-command
