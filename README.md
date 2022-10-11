@@ -59,8 +59,6 @@ yarn start   (react app frontend)
 yarn deploy  (to compile, deploy, and publish your contracts to the frontend)
 ```
 
-> ⚠️ Note: `yarn deploy` will report an unexpected error. We will fix this in Checkpoint 2 and redeploy.
-
 > 💻 View your frontend at http://localhost:3000/
 
 > 👩‍💻 Rerun `yarn deploy --reset` whenever you want to deploy new contracts to the frontend.
@@ -73,7 +71,7 @@ Like the [token vendor challenge](https://speedrunethereum.com/challenge/token-v
 
 > 👁 `contract Streamer` inherits `Ownable` with the `is` keyword. `Ownable` comes from [openzeppelin-contracts](https://github.com/OpenZeppelin/openzeppelin-contracts) - a collection of high quality smart contract library code.
 
-> 📝 In `packages/hardhat/deploy/00_deploy_streamer.js`, supply an address from your frontend wallet to the `streamer.transferOwnership()` function.
+> 📝 In `packages/hardhat/deploy/00_deploy_streamer.js`, uncomment the lines of code that deploy the contract and transfer ownership.  You will need to enter your own front end address.
 
 You'll have to redeploy with `yarn deploy --reset`.
 
