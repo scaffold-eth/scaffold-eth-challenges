@@ -1,7 +1,7 @@
 import WalletConnectProvider from "@walletconnect/web3-provider";
 //import Torus from "@toruslabs/torus-embed"
 import WalletLink from "walletlink";
-import { Alert, Button, Col, Menu, Row, List } from "antd";
+import { Alert, Button, Card, Checkbox, Col, Menu, Row, List, Space, Spin } from "antd";
 import "antd/dist/antd.css";
 import React, { useCallback, useEffect, useState } from "react";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
@@ -16,6 +16,7 @@ import {
   useContractReader,
   useGasPrice,
   useOnBlock,
+  useUserAddress,
   useUserProviderAndSigner,
 } from "eth-hooks";
 import { useEventListener } from "eth-hooks/events/useEventListener";
@@ -28,6 +29,7 @@ import Portis from "@portis/web3";
 import Fortmatic from "fortmatic";
 import Authereum from "authereum";
 import humanizeDuration from "humanize-duration";
+import TextArea from "antd/lib/input/TextArea";
 
 const { ethers } = require("ethers");
 /*
@@ -163,6 +165,12 @@ const web3Modal = new Web3Modal({
   },
 });
 
+/**
+ * let the application pay for your received wisdom automatically.
+ * if false, the client will have to manually trigger each payment.
+ */
+let autoPay = true;
+
 function App(props) {
   const mainnetProvider =
     poktMainnetProvider && poktMainnetProvider._isProvider
@@ -230,106 +238,353 @@ function App(props) {
   // If you want to make 🔐 write transactions to your contracts, use the userSigner:
   const writeContracts = useContractLoader(userSigner, contractConfig, localChainId);
 
-  // EXTERNAL CONTRACT EXAMPLE:
   //
-  // If you want to bring in the mainnet DAI contract it would look like:
-  const mainnetContracts = useContractLoader(mainnetProvider, contractConfig);
+  // statechannel specific listeners, application, etc.
+  //
 
-  // If you want to call a function on a new block
-  useOnBlock(mainnetProvider, () => {
-    console.log(`⛓ A new mainnet block is here: ${mainnetProvider._lastBlockNumber}`);
-  });
+  // ** 📟 Listen for on-chain channel events
+  const openEvents = useEventListener(readContracts, "Streamer", "Opened", localProvider, 1);
+  console.log("open events:", openEvents);
+  const challengeEvents = useEventListener(readContracts, "Streamer", "Challenged", localProvider, 1);
+  console.log("close events:", challengeEvents);
+  const closeEvents = useEventListener(readContracts, "Streamer", "Closed", localProvider, 1);
 
-  // Then read your DAI balance like:
-  const myMainnetDAIBalance = useContractReader(mainnetContracts, "DAI", "balanceOf", [
-    "0x34aA3F359A9D614239015126635CE7732c18fDF3",
-  ]);
+  function onchainChannels() {
+    let opened = [];
+    openEvents.forEach(chan => {
+      opened.push(chan.args[0]); // see the Opened event in Streamer.sol
+    });
 
-  //keep track of contract balance to know how much has been staked total:
-  const stakerContractBalance = useBalance(
-    localProvider,
-    readContracts && readContracts.Staker ? readContracts.Staker.address : null,
-  );
-  if (DEBUG) console.log("💵 stakerContractBalance", stakerContractBalance);
+    let challenged = [];
+    challengeEvents.forEach(chan => {
+      challenged.push(chan.args[0]); // see Challenged event in Streamer.sol
+    });
 
-  // ** keep track of total 'threshold' needed of ETH
-  const threshold = useContractReader(readContracts, "Staker", "threshold");
-  console.log("💵 threshold:", threshold);
+    const closed = [];
+    closeEvents.forEach(chan => {
+      closed.push(chan.args[0]); // see Closed event in Streamer.sol
 
-  // ** keep track of a variable from the contract in the local React state:
-  const balanceStaked = useContractReader(readContracts, "Staker", "balances", [address]);
-  console.log("💸 balanceStaked:", balanceStaked);
+      // remove finalized channels from the list of running channels
+      opened = opened.filter(addr => addr != chan.args[0]);
+      // removed finalized channels from list of open challenges
+      challenged = challenged.filter(addr => addr != chan.args[0]);
+    });
 
-  // ** 📟 Listen for broadcast events
-  const stakeEvents = useEventListener(readContracts, "Staker", "Stake", localProvider, 1);
-  console.log("📟 stake events:", stakeEvents);
+    return {
+      opened,
+      challenged,
+      closed,
+    };
+  }
 
-  // ** keep track of a variable from the contract in the local React state:
-  const timeLeft = useContractReader(readContracts, "Staker", "timeLeft");
-  console.log("⏳ timeLeft:", timeLeft);
+  const chainChannels = onchainChannels();
+  console.log(`chanStat:\n${JSON.stringify(chainChannels)}`);
 
-  // ** Listen for when the contract has been 'completed'
-  const complete = useContractReader(readContracts, "ExampleExternalContract", "completed");
-  console.log("✅ complete:", complete);
+  const timeLeft = useContractReader(readContracts, "Streamer", "timeLeft", [address]);
+  console.log("timeleft: " + timeLeft);
 
-  const exampleExternalContractBalance = useBalance(
-    localProvider,
-    readContracts && readContracts.ExampleExternalContract ? readContracts.ExampleExternalContract.address : null,
-  );
-  if (DEBUG) console.log("💵 exampleExternalContractBalance", exampleExternalContractBalance);
+  const userAddress = useUserAddress(userSigner);
+  const ownerAddress = useContractReader(readContracts, "Streamer", "owner");
+  console.log("User:  %s\nOwner: %s", userAddress, ownerAddress);
 
-  let completeDisplay = "";
-  if (complete) {
-    completeDisplay = (
-      <div style={{ padding: 64, backgroundColor: "#eeffef", fontWeight: "bolder", color: "rgba(0, 0, 0, 0.85)" }}>
-        🚀 🎖 👩‍🚀 -- Staking App triggered `ExampleExternalContract` -- 🎉 🍾 🎊
-        <Balance balance={exampleExternalContractBalance} fontSize={64} /> ETH staked!
-      </div>
-    );
+  const userIsOwner = ownerAddress == userAddress;
+
+  if (onchainChannels().challenged.length === 0) {
+    // turn off the noisy interval mining if there are
+    // no expected challenge channels after this tx
+    try {
+      localProvider.send("evm_setIntervalMining", [0]);
+    } catch (e) {}
   }
 
   /*
-  const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
-  console.log("🏷 Resolved austingriffith.eth as:", addressFromENS)
+    The off-chain app:
+    ==================
+    - the provider sends wisdom through the channel, the client
+      returns signed vouchers which the provider can redeem at their convenience
+    - Client pays per character. This type of transaction throughput is 
+    infeasible on L1 because of:
+      - gas costs per transaction dwarfing the cost of each transaction
+      - block-time constraints preventing real-time p2p payments
   */
+
+  /*
+    Client perspective:
+    - clients participate in a single channel - the client-streamer channel.    
+  */
+
+  /**
+   * the channel used to communicate application state
+   * and payment updates off chain.
+   */
+  const channel = getUserChannel();
+
+  /**
+   * to prevent repeated instantiations on react rerenders
+   * @returns {BroadcastChannel}
+   */
+  function getUserChannel() {
+    if (window.userChannel === undefined || window.userChannel.name === "") {
+      window.userChannel = new BroadcastChannel(userAddress);
+    }
+
+    return window.userChannel;
+  }
+
+  /**
+   * this is what you're paying for. It'd better be good.
+   */
+  let recievedWisdom = "";
+
+  /**
+   * Handle incoming service data from the service provider.
+   *
+   * If autoPay is turned on, instantly recalculate due payment
+   * and return to the service provider.
+   *
+   * @param {MessageEvent<string>} e
+   */
+  channel.onmessage = e => {
+    if (typeof e.data != "string") {
+      console.warn(`recieved unexpected channel data: ${JSON.stringify(e.data)}`);
+      return;
+    }
+
+    console.log("Received: %s", e.data);
+    recievedWisdom = e.data;
+    document.getElementById("recievedWisdom-" + userAddress).innerText = recievedWisdom;
+
+    if (autoPay) {
+      reimburseService(recievedWisdom);
+    }
+  };
+
+  function hasOpenChannel() {
+    return onchainChannels().opened.includes(userAddress);
+  }
+
+  function hasClosingChannel() {
+    return onchainChannels().challenged.includes(userAddress);
+  }
+
+  function hasClosedChannel() {
+    return onchainChannels().closed.includes(userAddress);
+  }
+
+  /**
+   * reimburseService prepares, signs, and delivers a voucher for the service provider
+   * that pays for the recieved wisdom.
+   *
+   * @param {string} wisdom
+   */
+  async function reimburseService(wisdom) {
+    const initialBalance = ethers.utils.parseEther("0.5");
+    const costPerCharacter = ethers.utils.parseEther("0.001");
+    const duePayment = costPerCharacter.mul(ethers.BigNumber.from(wisdom.length));
+
+    let updatedBalance = initialBalance.sub(duePayment);
+
+    if (updatedBalance.lt(ethers.BigNumber.from(0))) {
+      updatedBalance = ethers.BigNumber.from(0);
+    }
+
+    const packed = ethers.utils.solidityPack(["uint256"], [updatedBalance]);
+    const hashed = ethers.utils.keccak256(packed);
+    const arrayified = ethers.utils.arrayify(hashed);
+
+    // why not just sign the updatedBalance string directly?
+    //
+    // Two considerations:
+    // 1) this signature is going to verified both off-chain (by the service provider)
+    //    and on-chain (by the Streamer contract). These are distinct runtime environments, so
+    //    care needs to be taken that signatures are applied to specific data encodings.
+    //
+    //    the arrayify call below encodes this data in an EVM compatible way
+    //
+    //    see: https://blog.ricmoo.com/verifying-messages-in-solidity-50a94f82b2ca for some
+    //         more on EVM verification of messages signed off-chain
+    // 2) because of (1), it's useful to apply signatures to the hash of any given message
+    //    rather than to arbitrary messages themselves. This way the encoding strategy for
+    //    the fixed-length hash can be reused for any message format.
+
+    const signature = await userSigner.signMessage(arrayified);
+
+    channel.postMessage({
+      updatedBalance: updatedBalance.toHexString(),
+      signature,
+    });
+  }
+
+  /*
+    Streamer perspective:
+    - streamer has a channel per client
+    - streamer types advice into each client's text-box, and can monitor
+    */
+
+  /**
+   * an {address: BroadcastChannel} map. One channel for each subscribed channel.
+   */
+  const channels = {};
+
+  /**
+   * an {address: Voucher} that stores the highest paying voucher for each
+   * client.
+   */
+
+  /**
+   * @returns { {[x: string]: {updatedBalance: ethers.BigNumber, signature: string}} }
+   */
+  function vouchers() {
+    if (window.vouchers === undefined) {
+      window.vouchers = {};
+    }
+    return window.vouchers;
+  }
+
+  chainChannels.opened.forEach(clientAddress => {
+    setClientChannel(channels, clientAddress);
+    channels[clientAddress] = window.clientChannels[clientAddress];
+  });
+
+  // attach a voucher handler for each client
+  if (userIsOwner) {
+    Object.keys(channels).forEach(clientAddress => {
+      channels[clientAddress].onmessage = recieveVoucher(clientAddress);
+    });
+  }
+
+  /**
+   * wraps a voucher processing function for each client.
+   */
+  function recieveVoucher(clientAddress) {
+    return processVoucher;
+
+    /**
+     * Handle incoming payments from the given client.
+     *
+     * @param {MessageEvent<{updatedBalance: string, signature: string}>} v
+     */
+    function processVoucher(v) {
+      // recreate a BigNumber object from the message. v.data.updatedBalance is
+      // a string representation of the BigNumber for transit over the network
+      const updatedBalance = ethers.BigNumber.from(v.data.updatedBalance);
+
+      /**
+       * Checkpoint 4:
+       *
+       *  currently, this function recieves and stores vouchers uncritically.
+       *
+       *  recreate the packed, hashed, and arrayified message from reimburseService (above),
+       *  and then use ethers.utils.verifyMessage() to confirm that voucher signer was
+       *  `clientAddress`. (If it wasn't, log some error message and return).
+       */
+
+      const existingVoucher = vouchers()[clientAddress];
+
+      // update our stored voucher if this new one is more valuable
+      if (existingVoucher === undefined || updatedBalance.lt(existingVoucher.updatedBalance)) {
+        vouchers()[clientAddress] = v.data;
+        vouchers()[clientAddress].updatedBalance = updatedBalance;
+        updateClaimable(clientAddress);
+        // logVouchers();
+      }
+    }
+  }
+
+  /**
+   * @param {string} clientAddress
+   */
+  function updateClaimable(clientAddress) {
+    if (vouchers()[clientAddress] === undefined) {
+      return;
+    }
+
+    const init = ethers.utils.parseEther("0.5");
+    const updated = vouchers()[clientAddress].updatedBalance;
+
+    const claimable = init.sub(updated);
+    document.getElementById(`claimable-${clientAddress}`).innerText = ethers.utils.formatEther(claimable);
+  }
+
+  /**
+   * to prevent repeated instantiations on react refresh.
+   */
+  function setClientChannel(channels, address) {
+    if (channels[address] !== undefined) {
+      return;
+    }
+
+    if (window.clientChannels === undefined) {
+      window.clientChannels = {};
+    }
+
+    if (window.clientChannels[address] === undefined) {
+      window.clientChannels[address] = new BroadcastChannel(address);
+    }
+
+    channels[address] = window.clientChannels[address];
+  }
+
+  /**
+   * sends the provided wisdom across the application channel
+   * with user at `clientAddress`.
+   * @param {string} clientAddress
+   */
+  function provideService(clientAddress) {
+    const channelInput = document.getElementById("input-" + clientAddress);
+    if (channelInput) {
+      const wisdom = channelInput.value;
+      // console.log("sending: %s", wisdom);
+      channels[clientAddress].postMessage(wisdom);
+      document.getElementById(`provided-${clientAddress}`).innerText = wisdom.length;
+    } else {
+      console.warn(`Failed to get ChannelInput. Found: ${channelInput}`);
+    }
+  }
+
+  function logVouchers() {
+    console.log(`Vouchers: ${JSON.stringify(vouchers())}`);
+  }
+
+  /**
+   * Take the stored payment voucher recieved from user at
+   * `clientAddress` and apply it to the streamer contract on-chain.
+   * @param {string} clientAddress
+   */
+  async function claimPaymentOnChain(clientAddress) {
+    console.log("Claiming voucher on chain...");
+    // logVouchers();
+
+    if (vouchers()[clientAddress] == undefined) {
+      console.warn(`no voucher found for ${clientAddress}`);
+      return;
+    }
+
+    const updatedBalance = vouchers()[clientAddress].updatedBalance;
+    const sig = ethers.utils.splitSignature(vouchers()[clientAddress].signature);
+
+    tx(
+      writeContracts.Streamer.withdrawEarnings({
+        updatedBalance,
+        sig,
+      }),
+    );
+  }
 
   //
   // 🧫 DEBUG 👨🏻‍🔬
   //
   useEffect(() => {
-    if (
-      DEBUG &&
-      mainnetProvider &&
-      address &&
-      selectedChainId &&
-      yourLocalBalance &&
-      yourMainnetBalance &&
-      readContracts &&
-      writeContracts &&
-      mainnetContracts
-    ) {
+    if (DEBUG && address && selectedChainId && yourLocalBalance && readContracts && writeContracts) {
       console.log("_____________________________________ 🏗 scaffold-eth _____________________________________");
-      console.log("🌎 mainnetProvider", mainnetProvider);
       console.log("🏠 localChainId", localChainId);
       console.log("👩‍💼 selected address:", address);
       console.log("🕵🏻‍♂️ selectedChainId:", selectedChainId);
       console.log("💵 yourLocalBalance", yourLocalBalance ? ethers.utils.formatEther(yourLocalBalance) : "...");
-      console.log("💵 yourMainnetBalance", yourMainnetBalance ? ethers.utils.formatEther(yourMainnetBalance) : "...");
       console.log("📝 readContracts", readContracts);
-      console.log("🌍 DAI contract on mainnet:", mainnetContracts);
-      console.log("💵 yourMainnetDAIBalance", myMainnetDAIBalance);
       console.log("🔐 writeContracts", writeContracts);
     }
-  }, [
-    mainnetProvider,
-    address,
-    selectedChainId,
-    yourLocalBalance,
-    yourMainnetBalance,
-    readContracts,
-    writeContracts,
-    mainnetContracts,
-  ]);
+  }, [address, selectedChainId, yourLocalBalance, readContracts, writeContracts]);
 
   let networkDisplay = "";
   if (NETWORKCHECK && localChainId && selectedChainId && localChainId !== selectedChainId) {
@@ -480,7 +735,6 @@ function App(props) {
 
   return (
     <div className="App">
-      {/* ✏️ Edit the header and change the title to your project name */}
       <Header />
       {networkDisplay}
       <BrowserRouter>
@@ -492,7 +746,7 @@ function App(props) {
               }}
               to="/"
             >
-              Staker UI
+              Streamer UI
             </Link>
           </Menu.Item>
           <Menu.Item key="/contracts">
@@ -509,104 +763,169 @@ function App(props) {
 
         <Switch>
           <Route exact path="/">
-            {completeDisplay}
+            {userIsOwner ? (
+              //
+              // UI for the service provider
+              //
+              <div>
+                <h1>Hello Guru!</h1>
+                <h2>
+                  You have {chainChannels.opened.length} channel{chainChannels.opened.length == 1 ? "" : "s"} open.
+                </h2>
+                Channels with{" "}
+                <Button size="small" danger type="primary">
+                  RED
+                </Button>{" "}
+                withdrawal buttons are under challenge on-chain, and should be redeemed ASAP.
+                <List
+                  const
+                  dataSource={chainChannels.opened}
+                  renderItem={clientAddress => (
+                    <List.Item key={clientAddress}>
+                      <Address value={clientAddress} ensProvider={mainnetProvider} fontSize={12} />
+                      <TextArea
+                        style={{ margin: 5 }}
+                        rows={3}
+                        placeholder="Provide your wisdom here..."
+                        id={"input-" + clientAddress}
+                        onChange={e => {
+                          e.stopPropagation();
+                          provideService(clientAddress);
+                        }}
+                      ></TextArea>
 
-            <div style={{ padding: 8, marginTop: 32 }}>
-              <div>Staker Contract:</div>
-              <Address value={readContracts && readContracts.Staker && readContracts.Staker.address} />
-            </div>
+                      <Card style={{ margin: 5 }} id={`status-${clientAddress}`}>
+                        <div>
+                          Served: <strong id={`provided-${clientAddress}`}>0</strong>&nbsp;chars
+                        </div>
+                        <div>
+                          Recieved: <strong id={`claimable-${clientAddress}`}>0</strong>&nbsp;ETH
+                        </div>
+                      </Card>
 
-            <div style={{ padding: 8, marginTop: 32 }}>
-              <div>Timeleft:</div>
-              {timeLeft && humanizeDuration(timeLeft.toNumber() * 1000)}
-            </div>
-
-            <div style={{ padding: 8 }}>
-              <div>Total staked:</div>
-              <Balance balance={stakerContractBalance} fontSize={64} />/<Balance balance={threshold} fontSize={64} />
-            </div>
-
-            <div style={{ padding: 8 }}>
-              <div>You staked:</div>
-              <Balance balance={balanceStaked} fontSize={64} />
-            </div>
-
-            <div style={{ padding: 8 }}>
-              <Button
-                type={"default"}
-                onClick={() => {
-                  tx(writeContracts.Staker.execute());
-                }}
-              >
-                📡 Execute!
-              </Button>
-            </div>
-
-            <div style={{ padding: 8 }}>
-              <Button
-                type={"default"}
-                onClick={() => {
-                  tx(writeContracts.Staker.withdraw());
-                }}
-              >
-                🏧 Withdraw
-              </Button>
-            </div>
-
-            <div style={{ padding: 8 }}>
-              <Button
-                type={balanceStaked ? "success" : "primary"}
-                onClick={() => {
-                  tx(writeContracts.Staker.stake({ value: ethers.utils.parseEther("0.5") }));
-                }}
-              >
-                🥩 Stake 0.5 ether!
-              </Button>
-            </div>
-
-            {/*
-                🎛 this scaffolding is full of commonly used components
-                this <Contract/> component will automatically parse your ABI
-                and give you a form to interact with it locally
-            */}
-
-            <div style={{ width: 500, margin: "auto", marginTop: 64 }}>
-              <div>Stake Events:</div>
-              <List
-                dataSource={stakeEvents}
-                renderItem={item => {
-                  return (
-                    <List.Item key={item.blockNumber}>
-                      <Address value={item.args[0]} ensProvider={mainnetProvider} fontSize={16} /> =>
-                      <Balance balance={item.args[1]} />
+                      {/* Checkpoint 5:
+                      <Button
+                        style={{ margin: 5 }}
+                        type="primary"
+                        danger={chainChannels.challenged.includes(clientAddress)}
+                        disabled={chainChannels.closed.includes(clientAddress)}
+                        onClick={() => {
+                          claimPaymentOnChain(clientAddress);
+                        }}
+                      >
+                        Cash out latest voucher
+                      </Button> */}
                     </List.Item>
-                  );
-                }}
-              />
-            </div>
+                  )}
+                ></List>
+                <div style={{ padding: 8 }}>
+                  <div>Total ETH locked:</div>
+                  {/* add contract balance */}
+                </div>
+              </div>
+            ) : (
+              //
+              // UI for the service consumer
+              //
+              <div>
+                <h1>Hello Rube!</h1>
 
-            {/* uncomment for a second contract:
-            <Contract
-              name="SecondContract"
-              signer={userProvider.getSigner()}
-              provider={localProvider}
-              address={address}
-              blockExplorer={blockExplorer}
-              contractConfig={contractConfig}
-            />
-            */}
+                {hasOpenChannel() ? (
+                  <div style={{ padding: 8 }}>
+                    <Row align="middle">
+                      <Col span={3}>
+                        <Checkbox
+                          defaultChecked={autoPay}
+                          onChange={e => {
+                            autoPay = e.target.checked;
+                            console.log("AutoPay: " + autoPay);
+
+                            if (autoPay) {
+                              const wisdom = document.getElementById(`recievedWisdom-${userAddress}`).innerText;
+                              reimburseService(wisdom);
+                            }
+                          }}
+                        >
+                          AutoPay
+                        </Checkbox>
+                      </Col>
+
+                      <Col span={16}>
+                        <Card title="Received Wisdom">
+                          <span id={"recievedWisdom-" + userAddress}></span>
+                        </Card>
+                      </Col>
+
+                      {/* Checkpoint 6: challenge & closure
+
+                      <Col span={5}>
+                        <Button
+                          disabled={hasClosingChannel()}
+                          type="primary"
+                          onClick={() => {
+                            // disable the production of further voucher signatures
+                            autoPay = false;
+                            tx(writeContracts.Streamer.challengeChannel());
+                            try {
+                              // ensure a 'ticking clock' for the UI without having
+                              // to send new transactions & mine new blocks
+                              localProvider.send("evm_setIntervalMining", [5000]);
+                            } catch (e) {}
+                          }}
+                        >
+                          Challenge this channel!
+                        </Button>
+
+                        <div style={{ padding: 8, marginTop: 32 }}>
+                          <div>Timeleft:</div>
+                          {timeLeft && humanizeDuration(timeLeft.toNumber() * 1000)}
+                        </div>
+                        <Button
+                          style={{ padding: 5, margin: 5 }}
+                          disabled={timeLeft && timeLeft.toNumber() != 0}
+                          type="primary"
+                          onClick={() => {
+                            tx(writeContracts.Streamer.defundChannel());
+                          }}
+                        >
+                          Close and withdraw funds
+                        </Button>
+                      </Col> */}
+                    </Row>
+                  </div>
+                ) : hasClosedChannel() ? (
+                  <div>
+                    <p>Thanks for stopping by - we hope you have enjoyed the guru's advice.</p>
+                    <p>
+                      {" "}
+                      This UI obstructs you from opening a second channel. Why? Is it safe to open another channel?
+                    </p>
+                  </div>
+                ) : (
+                  <div style={{ padding: 8 }}>
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        tx(writeContracts.Streamer.fundChannel({ value: ethers.utils.parseEther("0.5") }));
+                      }}
+                    >
+                      Open a 0.5 ETH channel for advice from the Guru.
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
           </Route>
+
+          {/*
+            this scaffolding is full of commonly used components.
+            
+            this <Contract/> component will automatically parse your ABI
+            and give you a form to interact with it locally
+          */}
           <Route path="/contracts">
             <Contract
-              name="Staker"
-              signer={userSigner}
-              provider={localProvider}
-              address={address}
-              blockExplorer={blockExplorer}
-              contractConfig={contractConfig}
-            />
-            <Contract
-              name="ExampleExternalContract"
+              name="Streamer"
               signer={userSigner}
               provider={localProvider}
               address={address}
@@ -636,11 +955,12 @@ function App(props) {
       </div>
 
       <div style={{ marginTop: 32, opacity: 0.5 }}>
-        {/* Add your address here */}
+        {/* todo: Add your address here */}
         Created by <Address value={"Your...address"} ensProvider={mainnetProvider} fontSize={16} />
       </div>
 
       <div style={{ marginTop: 32, opacity: 0.5 }}>
+        {/* todo: change fork location */}
         <a target="_blank" style={{ padding: 32, color: "#000" }} href="https://github.com/scaffold-eth/scaffold-eth">
           🍴 Fork me!
         </a>
@@ -648,30 +968,6 @@ function App(props) {
 
       {/* 🗺 Extra UI like gas price, eth price, faucet, and support: */}
       <div style={{ position: "fixed", textAlign: "left", left: 0, bottom: 20, padding: 10 }}>
-        <Row align="middle" gutter={[4, 4]}>
-          <Col span={8}>
-            <Ramp price={price} address={address} networks={NETWORKS} />
-          </Col>
-
-          <Col span={8} style={{ textAlign: "center", opacity: 0.8 }}>
-            <GasGauge gasPrice={gasPrice} />
-          </Col>
-          <Col span={8} style={{ textAlign: "center", opacity: 1 }}>
-            <Button
-              onClick={() => {
-                window.open("https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA");
-              }}
-              size="large"
-              shape="round"
-            >
-              <span style={{ marginRight: 8 }} role="img" aria-label="support">
-                💬
-              </span>
-              Support
-            </Button>
-          </Col>
-        </Row>
-
         <Row align="middle" gutter={[4, 4]}>
           <Col span={24}>
             {

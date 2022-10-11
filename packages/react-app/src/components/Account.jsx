@@ -1,4 +1,5 @@
 import { Button } from "antd";
+import { ethers } from "ethers";
 import React from "react";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import Address from "./Address";
@@ -103,6 +104,29 @@ export default function Account({
       />
     </span>
   );
+
+  document.body.onbeforeunload = async function (e) {
+    // search the stored private keys for the currently active key
+    // If found, set the active key to be recovered on next refresh
+
+    // net effect is that page loads now recover the address / wallet
+    // of the most recently closed tab, rather than the previous
+    // behaviour of recovering the wallet most recently configured
+    // in any tab
+
+    for (const key in window.localStorage) {
+      if (key.indexOf("metaPrivateKey_backup") >= 0) {
+        const signingKey = window.localStorage.getItem(key);
+        const wallet = new ethers.Wallet(signingKey);
+        const address = await wallet.getAddress();
+
+        if (address === userSigner.address) {
+          // console.log(`active key found: ${signingKey}`);
+          window.localStorage.setItem("metaPrivateKey", signingKey);
+        }
+      }
+    }
+  };
 
   return (
     <div>

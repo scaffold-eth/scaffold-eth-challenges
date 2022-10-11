@@ -1,41 +1,51 @@
 # 🏗 scaffold-eth | 🏰 BuidlGuidl
 
-## 🚩 Challenge 1: 🥩 Decentralized Staking App
+## 🚩 Challenge N: A state channel application
 
-> 🦸 A superpower of Ethereum is allowing you, the builder, to create a simple set of rules that an adversarial group of players can use to work together. In this challenge, you create a decentralized application where users can coordinate a group funding effort. If the users cooperate, the money is collected in a second smart contract. If they defect, the worst that can happen is everyone gets their money back. The users only have to trust the code.
+> 🐌 The Ethereum blockchain has great decentralization & security properties. These properties come at a price: transaction throughput is low, and transactions can be expensive (search term: blockchain trilemma). This makes many traditional web applications infeasible on a blockchain... or does it?
 
-> 🏦 Build a `Staker.sol` contract that collects **ETH** from numerous addresses using a payable `stake()` function and keeps track of `balances`. After some `deadline` if it has at least some `threshold` of ETH, it sends it to an `ExampleExternalContract` and triggers the `complete()` action sending the full balance. If not enough **ETH** is collected, allow users to `withdraw()`.
+> 🍰 A number of approaches to scaling have been developed, collectively referred to as layer-2s (L2s). Among them is the concept of payment channels, state channels, and state channel networks. This tutorial walks through the creation of a simple state channel application, where users seeking a service **lock** collatoral on-chain with a single transaction, **interact** with their service provider entirely off-chain, and **finalize** the interaction with a second on-chain transaction.
 
-> 🎛 Building the frontend to display the information and UI is just as important as writing the contract. The goal is to deploy the contract and the app to allow anyone to stake using your app. Use a `Stake(address,uint256)` event to <List/> all stakes.
+> 🧑‍🤝‍🧑 State channels really excel as a scaling solution in cases where a fixed set of participants want to exchange value-for-service at high frequency. The canonical example is in file sharing or media streaming: the server exchanges chunks of a file in exchange for micropayments.
 
-> 🌟 The final deliverable is deploying a Dapp that lets users send ether to a contract and stake if the conditions are met, then `yarn build` and `yarn surge` your app to a public webserver.  Submit the url on [SpeedRunEthereum.com](https://speedrunethereum.com)!
+> 🧙 In our case, the service provider is a `Guru` who provides off-the-cuff wisdom to each client `Rube` through a one-way chat box. Each character of text that is delivered is expected to be compensated with a payment of `0.001 ETH`.
+
+We will:
+
+- 🛣️ Build a `Streamer.sol` contract that collects **ETH** from numerous client addresses using a payable `fundChannel()` function and keeps track of `balances`.
+- 💵 Exchange paid services off-chain between the `Streamer.sol` contract owner (the **Guru**) and **rube** clients with funded channels. The **Guru** provides the service in exchange for signed vouchers which can later be redeemed on-chain.
+- ⏱ Create a Challenge mechanism with a timeout, so that **rubes** are protected from a **Guru** who goes offline while funds are locked on-chain (either by accident, or as a theft attempt).
+- ⁉ Consider some security / usability holes in the current design.
+
+// todo
+
+> 🌟 The final deliverable is deploying a Dapp that lets users send ether to a contract and stake if the conditions are met, then `yarn build` and `yarn surge` your app to a public webserver. Submit the url on [SpeedRunEthereum.com](https://speedrunethereum.com)!
+
+// todo
 
 > 💬 Meet other builders working on this challenge and get help in the [Challenge 1 telegram](https://t.me/joinchat/E6r91UFt4oMJlt01)!
 
-
-🧫 Everything starts by ✏️ Editing `Staker.sol` in `packages/hardhat/contracts`
-
 ---
+
 ### Checkpoint 0: 📦 install 📚
-
-Want a fresh cloud environment? Click this to open a gitpod workspace, then skip to Checkpoint 1 after the tasks are complete.
-
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-1-decentralized-staking)
-
 
 ```bash
 
-git clone https://github.com/scaffold-eth/scaffold-eth-challenges.git challenge-1-decentralized-staking
+git clone https://github.com/statechannels/speedrun-statechannels.git challenge-N-statechannels
 
-cd challenge-1-decentralized-staking
-
-git checkout challenge-1-decentralized-staking
+cd challenge-N-statechannels
 
 yarn install
 
 ```
 
-🔏 Edit your smart contract `Staker.sol` in `packages/hardhat/contracts`
+Files that we'll be editing in this tutorial are:
+
+- `00_deploy_streamer.js` in `packages/hardhat/deploy`
+- `Streamer.sol` in `packages/hardhat/contracts`
+- `App.jsx` in `packages/react-app/src`
+
+> 🔍 **Tip**: entry points for each of the checkpoints that involve writing code can be located by searching these files for `Checkpoint N` (for whatever `N` value)
 
 ---
 
@@ -49,105 +59,163 @@ yarn chain   (hardhat backend)
 yarn deploy  (to compile, deploy, and publish your contracts to the frontend)
 ```
 
+> ⚠️ Note: `yarn deploy` will report an unexpected error. We will fix this in Checkpoint 2 and redeploy.
+
 > 💻 View your frontend at http://localhost:3000/
 
 > 👩‍💻 Rerun `yarn deploy --reset` whenever you want to deploy new contracts to the frontend.
 
 ---
 
-### Checkpoint 2: 🥩 Staking 💵
+### Checkpoint 2: Configure Deployment & Wallets
 
-You'll need to track individual `balances` using a mapping:
-```solidity
-mapping ( address => uint256 ) public balances;
-```
+Like the [token vendor challenge](https://speedrunethereum.com/challenge/token-vendor), we'll be building an `Ownable` contract. The contract owner is the **Guru** - the service provider in this application, and you will use multiple browser windows or tabs to assume the roles of Guru and rube (service provider & client).
 
-And also track a constant `threshold` at ```1 ether```
-```solidity
-uint256 public constant threshold = 1 ether;
-```
+> 👁 `contract Streamer` inherits `Ownable` with the `is` keyword. `Ownable` comes from [openzeppelin-contracts](https://github.com/OpenZeppelin/openzeppelin-contracts) - a collection of high quality smart contract library code.
 
-> 👩‍💻 Write your `stake()` function and test it with the `Debug Contracts` tab in the frontend
+> 📝 In `packages/hardhat/deploy/00_deploy_streamer.js`, supply an address from your frontend wallet to the `streamer.transferOwnership()` function.
 
-💸 Need more funds from the faucet?  Enter your frontend address into the wallet to get as much as you need!
-![Wallet_Medium](https://user-images.githubusercontent.com/12072395/159990402-d5535875-f1eb-4c75-86a7-6fbd5e6cbe5f.png)
+You'll have to redeploy with `yarn deploy --reset`.
 
-✏ Need to troubleshoot your code?  If you import `hardhat/console.sol` to your contract, you can call `console.log()` right in your Solidity code.  The output will appear in your `yarn chain` terminal.
+We'll need another active address to act as the rube in our app. To do this,
 
-#### 🥅 Goals
+- open `localhost:3000` in a new tab / window of the current browser
+- click the wallet icon (top right) to open the wallet
+- `private key` -> `generate` will reload the page under a new address
 
-- [ ] Do you see the balance of the `Staker` contract go up when you `stake()`?
-- [ ] Is your `balance` correctly tracked?
-- [ ] Do you see the events in the `Staker UI` tab?
+The wallet icon now lets you move between accounts. Eventually you'll probably want a few wallets & windows open simultaneously.
 
-
----
-
-### Checkpoint 3: 🔬 State Machine / Timing ⏱
-
-> ⚙️  Think of your smart contract like a *state machine*. First, there is a **stake** period. Then, if you have gathered the `threshold` worth of ETH, there is a **success** state. Or, we go into a **withdraw** state to let users withdraw their funds.
-
-Set a `deadline` of ```block.timestamp + 30 seconds```
-```solidity
-uint256 public deadline = block.timestamp + 30 seconds;
-```
-
-👨‍🏫 Smart contracts can't execute automatically, you always need to have a transaction execute to change state. Because of this, you will need to have an `execute()` function that *anyone* can call, just once, after the `deadline` has expired.
-
-> 👩‍💻 Write your `execute()` function and test it with the `Debug Contracts` tab
-
-> Check the ExampleExternalContract.sol for the bool you can use to test if it has been completed or not.  But do not edit the ExampleExternalContract.sol as it can slow the auto grading.
-
-If the `address(this).balance` of the contract is over the `threshold` by the `deadline`, you will want to call: ```exampleExternalContract.complete{value: address(this).balance}()```
-
-If the balance is less than the `threshold`, you want to set a `openForWithdraw` bool to `true` and allow users to `withdraw()` their funds.
-
-(You'll have 30 seconds after deploying until the deadline is reached, you can adjust this in the contract.)
-
-> 👩‍💻 Create a `timeLeft()` function including ```public view returns (uint256)``` that returns how much time is left.
-
-⚠️ Be careful! if `block.timestamp >= deadline` you want to ```return 0;```
-
-⏳ The time will only update if a transaction occurs. You can see the time update by getting funds from the faucet just to trigger a new block.
-
-> 👩‍💻 You can call `yarn deploy --reset` any time you want a fresh contract
+(**Note**: previous challenges created alt addresses by opening the page with a private window or a different browser. This will **not** work for this challenge, because the off-chain application uses a very simple communication pipe that doesn't work between different browsers or private windows.)
 
 #### 🥅 Goals
-- [ ] Can you see `timeLeft` counting down in the `Staker UI` tab when you trigger a transaction with the faucet?
-- [ ] If you `stake()` enough ETH before the `deadline`, does it call `complete()`?
-- [ ] If you don't `stake()` enough can you `withdraw()` your funds?
 
-
----
-
-
-### Checkpoint 4: 💵 Receive Function / UX 🙎
-
-🎀 To improve the user experience, set your contract up so it accepts ETH sent to it and calls `stake()`. You will use what is called the `receive()` function.
-
-> Use the [receive()](https://docs.soliditylang.org/en/v0.8.9/contracts.html?highlight=receive#receive-ether-function) function in solidity to "catch" ETH sent to the contract and call `stake()` to update `balances`.
-
----
-#### 🥅 Goals
-- [ ] If you send ETH directly to the contract address does it update your `balance`?
+- [ ] does your original frontend address recieve the `Hello Guru` UI?
+- [ ] do your alternate addresses recieve the `Hello Rube` UI?
 
 ---
 
-## ⚔️ Side Quests
-- [ ] Can execute get called more than once, and is that okay?
-- [ ] Can you stake and withdraw freely after the `deadline`, and is that okay?
-- [ ] What are other implications of *anyone* being able to withdraw for someone?
+### Checkpoint 3: Fund a channel
+
+Like the [decentralized staking challenge](https://speedrunethereum.com/challenge/decentralized-staking), we'll track balances for individual channels / users in a mapping:
+
+```
+mapping (address => uint256) balances;
+```
+
+Rubes seeking wisdom will use a **payable** `fundChannel()` function, which will update this mapping with the supplied balance.
+
+> 📝 Edit Streamer.sol to complete the `fundChannel()` function
+
+> 👁 Check App.jsx to see the frontend hook for this function. (ctrl-f fundChannel)
+
+#### 🥅 Goals:
+
+- [ ] does opening a channel (from Rube's tab, you may need some funds from the faucet) cause a `Recieved Wisdom` box to appear?
+- [ ] do opened channels appear on the guru's UI as well?
+- [ ] using the _Debug Contracts_ tab, does a repeated call to `fundChannel` fail?
 
 ---
 
-## 🐸 It's a trap!
-- [ ] Make sure funds can't get trapped in the contract! **Try sending funds after you have executed! What happens?**
-- [ ] Try to create a [modifier](https://solidity-by-example.org/function-modifier/) called `notCompleted`. It will check that `ExampleExternalContract` is not completed yet. Use it to protect your `execute` and `withdraw` functions.
+### Checkpoint 4: Exchange the Service
 
----
+Now that the channel is funded, and all participants have observed the funding via the emitted event, we can begin our off-chain exchange of service. We are now working in `packages/react-app/src/App.jsx`.
+
+Functions of note:
+
+- `provideService`: the guru sends wisdom over the wire to the client
+- `reimburseService`: the rube creates a voucher for the recieved service, signs it, and returns it
+- `processVoucher`: the service provider recieves and stores vouchers
+
+The first two are complete - we will work on `processVoucher`, where the service provider examines returned payments, confirms their authenticity, and stores them.
+
+> 📝 Edit App.jsx to complete the `processVoucher()` function and secure this off-chain exchange. You'll need to recreate the encoded message that the client has signed, and then verify that the received signature was in fact produced by the client on that same data.
+
+#### 🥅 Goals:
+
+- [ ] secure your service! Validate the incoming voucher & signature according to instructions inside `processVoucher(v)`
+- [ ] with an open channel, start sending advice. Can you see the claimable balance update as service is rendered?
+
+#### ⚔️ Side Quest:
+
+- [ ] can `provideService` be modified to prevent continued service to clients who don't keep up with their payments? (_hint_: you'll want to compare the size of your best voucher against the size of your provided wisdom. If there's too big a discrepency, cut them off!)
+
+### Checkpoint 5: Recover Service Provider's Earnings
+
+Now that we've collected some vouchers, we'd like to redeem them on-chain and move funds from the `Streamer` contract's `balances` map to the Guru's own address. The `withdrawEarnings` function of `Streamer.sol` takes a voucher (balance + signature) as input, and should:
+
+- recover the signer using `ecrecover()` on the `prefixedHashed` message and supplied signature
+  - _Hint_: `ecrecover` takes the signature in its decomposed form with `v,`,`r`, and`s` values. The string signature produced in `App.jsx` is just a concatenation of these values, which we split to create the on-chain friendly signature with `ethers.utils.splitSignature`
+- check that the signer has a running channel with balance greater than the voucher's `updatedBalance`
+- calculate the payout (`balances[signer] - updatedBalance`)
+- update the channel balance
+- pay the contract owner
+
+Reminders:
+
+- changes to contracts must be redeployed to the local chain with `yarn deploy --reset`.
+- for troubleshooting / debugging, your contract can use hardhat's `console.log`, which will print to your console running the chain
+
+> 📝 Edit Streamer.sol to complete the `withdrawEarnings()` function as described
+
+> 📝 Edit App.jsx to enable the UI button for withdrawals
+
+#### 🥅 Goals:
+
+- [ ] Recover funds on-chain for services rendered! After the guru submits a voucher to chain, you should be able to see the wallet's ETH balance increase.
+
+#### ⚔️ Side Quest:
+
+- [ ] `withdrawEarnings` is a function that only the service provider would be interested in calling. Should it be marked `onlyOwner`? (the `onlyOwner` modifier makes a function accessible only to the contract owner - anyone else who tries to call it will be immediately rejected).
+
+### Checkpoint 6: Challenge & Close the channel
+
+So far so good:
+
+- rubes can connect to the Guru via an on-chain deposit
+- the pair can then transact off-chain with high throughput
+- the Guru can recover earnings with their received vouchers
+
+But what if a rube is unimpressed with the service, and wishes to close a channel and recover whatever funds remain? What if the guru is a no-show after the initial channel funding deposit?
+
+A payment channel is a cryptoeconomic protocol - care needs to be taken so that everyone's financial interests are protected. We'll implement a two step **challenge** and **close** mechanism that allows rubes to recover unspent funds, while keeping the guru's earnings safe.
+
+> 📝 Edit Streamer.sol to create a public `challengeChannel()` function
+
+> 📝 Edit App.jsx to enable the challenge and closure buttons for service clients
+
+The `challengeChannel()` function should:
+
+- check in the `balances` map that a channel is already open in the name of `msg.sender`
+- declare this channel to be closing by setting `canCloseAt[msg.sender]` to `block.timestamp + 30 seconds`
+- emit a `Challenged` event with the sender's address
+
+The emitted event gives notice to the Guru that the channel will soon be emptied, so they should apply whatever vouchers they have before the timeout period ends.
+
+> 📝 Edit Streamer.sol to create a public `defundChannel()` function
+
+The `defundChannel()` function should:
+
+- check that `msg.sender` has a closed channel, by ensuring a non-zero `canCloseAt[msg.sender]` is lower than the current timestamp
+- transfer `balances[msg.sender]` to the sender
+- emit a `Closed` event
+
+#### 🥅 Goals:
+
+- [ ] Launch a challenge as a channel client. The guru's UI should show an alert via their `Cash out latest voucher` button.
+- [ ] Recover the guru's best voucher before the channel closes.
+- [ ] Close the channel and recover rube funds.
+
+#### ⚔️ Side Quests:
+
+- [ ] Currently, the service provider has to manually submit their vouchers after a challenge is registered on chain. Should their channel wallet do that automatically? Can you implement that in this application?
+- [ ] Suppose some rube enjoyed their first round of advice. Is it safe for them to open a new channel with `Streamer.sol`? (_Hint_: what data does the guru still hold?)
 
 #### ⚠️ Test it!
--  Now is a good time to run `yarn test` to run the automated testing function. It will test that you hit the core checkpoints.  You are looking for all green checkmarks and passing tests!
+
+// todo: write tests
+
+- Now is a good time to run `yarn test` to run the automated testing function. It will test that you hit the core checkpoints. You are looking for all green checkmarks and passing tests!
+
 ---
 
 ### Checkpoint 5: 🚢 Ship it 🚁
@@ -160,25 +228,25 @@ If the balance is less than the `threshold`, you want to set a `openForWithdraw`
 
 ⛽️ You will need to send ETH to your **deployer address** with your wallet.
 
- > 📝 If you plan on submitting this challenge, be sure to set your ```deadline``` to at least ```block.timestamp + 72 hours```
+> 📝 If you plan on submitting this challenge, be sure to set your `deadline` to at least `block.timestamp + 72 hours`
 
- >  🚀 Run `yarn deploy` to deploy your smart contract to a public network (selected in hardhat.config.js)
+> 🚀 Run `yarn deploy` to deploy your smart contract to a public network (selected in hardhat.config.js)
 
 ---
 
 ### Checkpoint 6: 🎚 Frontend 🧘‍♀️
 
- > 📝 Edit the `targetNetwork` in `App.jsx` (in `packages/react-app/src`) to be the public network where you deployed your smart contract.
+> 📝 Edit the `targetNetwork` in `App.jsx` (in `packages/react-app/src`) to be the public network where you deployed your smart contract.
 
 > 💻 View your frontend at http://localhost:3000/
 
- 📡 When you are ready to ship the frontend app...
+📡 When you are ready to ship the frontend app...
 
- 📦  Run `yarn build` to package up your frontend.
+📦 Run `yarn build` to package up your frontend.
 
 💽 Upload your app to surge with `yarn surge` (you could also `yarn s3` or maybe even `yarn ipfs`?)
 
->  😬 Windows users beware!  You may have to change the surge code in `packages/react-app/package.json` to just `"surge": "surge ./build",`
+> 😬 Windows users beware! You may have to change the surge code in `packages/react-app/package.json` to just `"surge": "surge ./build",`
 
 ⚙ If you get a permissions error `yarn surge` again until you get a unique URL, or customize it in the command line.
 
@@ -187,6 +255,7 @@ If the balance is less than the `threshold`, you want to set a `openForWithdraw`
 🚔 Traffic to your url might break the [Infura](https://infura.io/) rate limit, edit your key: `constants.js` in `packages/ract-app/src`.
 
 ---
+
 ### Checkpoint 7: 📜 Contract Verification
 
 Update the api-key in packages/hardhat/package.json file. You can get your key [here](https://etherscan.io/myapikey).
