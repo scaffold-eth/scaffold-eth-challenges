@@ -1,6 +1,6 @@
 # 🏗 scaffold-eth | 🏰 BuidlGuidl
 
-## 🚩 Challenge N: A state channel application
+## 🚩 Challenge 9: A state channel application
 
 > 🐌 The Ethereum blockchain has great decentralization & security properties. These properties come at a price: transaction throughput is low, and transactions can be expensive (search term: blockchain trilemma). This makes many traditional web applications infeasible on a blockchain... or does it?
 
@@ -33,9 +33,11 @@ We will:
 
 ```bash
 
-git clone https://github.com/statechannels/speedrun-statechannels.git challenge-N-statechannels
+git clone https://github.com/scaffold-eth/scaffold-eth-challenges.git challenge-9-state-channels
 
-cd challenge-N-statechannels
+cd challenge-9-state-channels
+
+git checkout challenge-9-state-channels
 
 yarn install
 
@@ -56,8 +58,8 @@ Files that we'll be editing in this tutorial are:
 You'll have three terminals up for:
 
 ```bash
-yarn start   (react app frontend)
 yarn chain   (hardhat backend)
+yarn start   (react app frontend)
 yarn deploy  (to compile, deploy, and publish your contracts to the frontend)
 ```
 
