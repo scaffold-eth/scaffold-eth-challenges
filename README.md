@@ -21,10 +21,6 @@ We will:
 
 // todo
 
-> 🌟 The final deliverable is deploying a Dapp that lets users send ether to a contract and stake if the conditions are met, then `yarn build` and `yarn surge` your app to a public webserver. Submit the url on [SpeedRunEthereum.com](https://speedrunethereum.com)!
-
-// todo
-
 > 💬 Meet other builders working on this challenge and get help in the [Challenge 1 telegram](https://t.me/joinchat/E6r91UFt4oMJlt01)!
 
 ---
