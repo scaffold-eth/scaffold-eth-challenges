@@ -17,7 +17,7 @@ const { network } = require("hardhat");
 
 use(solidity);
 
-describe("Statechannel Challenge: The Guru's Offering", function () {
+describe(" 🕞 Statechannel Challenge: The Guru's Offering 👑", function () {
   this.timeout(120000);
   let streamerContract;
 
@@ -55,21 +55,29 @@ describe("Statechannel Challenge: The Guru's Offering", function () {
     return voucher;
   }
 
-  describe("contract Streamer.sol", function () {
-    it("deploys", async function () {
-      const streamerFct = await ethers.getContractFactory("Streamer");
+  describe("Streamer.sol", function () {
+
+    let contractArtifact;
+    if(process.env.CONTRACT_ADDRESS){
+      contractArtifact = `contracts/${process.env.CONTRACT_ADDRESS}.sol:Streamer`
+    } else {
+      contractArtifact = "contracts/Streamer.sol:Streamer";
+    }
+
+    it("Should deploy the contract", async function () {
+      const streamerFct = await ethers.getContractFactory(contractArtifact);
       streamerContract = await streamerFct.deploy();
-      // console.log(`Streamer deployed to: ${streamerContract.address}`);
+      console.log("\t", " ✈ Contract deployed",streamerContract.address);
     });
 
-    it("allows channel funding & emits 'Opened' event", async function () {
+    it("Should allow channel funding & emit Opened event", async function () {
       const fundingTx = await streamerContract.fundChannel({
         value: ethers.utils.parseEther("1"),
       });
       await expect(fundingTx).to.emit(streamerContract, "Opened");
     });
 
-    it("refuses multiple funding from single user", async function () {
+    it("Should refuse multiple funding from single user", async function () {
       await expect(
         streamerContract.fundChannel({
           value: ethers.utils.parseEther("1"), // first funded channel
@@ -77,7 +85,7 @@ describe("Statechannel Challenge: The Guru's Offering", function () {
       ).to.be.reverted;
     });
 
-    it("allows multiple client channels", async function () {
+    it("Should allow multiple client channels", async function () {
       const [, alice, bob] = await ethers.getSigners();
 
       await expect(
@@ -95,7 +103,7 @@ describe("Statechannel Challenge: The Guru's Offering", function () {
       await assertBalance("3"); // running total
     });
 
-    it("allows legitimate withdrawals", async function () {
+    it("Should allows legitimate withdrawals", async function () {
       const [, alice] = await ethers.getSigners();
 
       const updatedBalance = ethers.utils.parseEther("0.5"); // cut channel balance from 1 -> 0.5
@@ -108,7 +116,7 @@ describe("Statechannel Challenge: The Guru's Offering", function () {
       await assertBalance("2.5"); // 3 - 0.5 = 2.5
     });
 
-    it("refuses redundant withdrawals", async function () {
+    it("Should refuse redundant withdrawals", async function () {
       const [, alice] = await ethers.getSigners();
 
       const updatedBalance = ethers.utils.parseEther("0.5"); // equal to the current balance, should fail
@@ -118,7 +126,7 @@ describe("Statechannel Challenge: The Guru's Offering", function () {
       await assertBalance("2.5"); // contract total unchanged because withdrawal fails
     });
 
-    it("refuses illegitimate withdrawals", async function () {
+    it("Should refuse illegitimate withdrawals", async function () {
       const [, , , carol] = await ethers.getSigners(); // carol has no open channel
 
       const updatedBalance = ethers.utils.parseEther("0.5");
@@ -128,7 +136,7 @@ describe("Statechannel Challenge: The Guru's Offering", function () {
       await assertBalance("2.5"); // contract total unchanged because carol has no channel
     });
 
-    it("refusus defunding when no challenge has been registered", async function () {
+    it("Should refuse defunding when no challenge has been registered", async function () {
       const [, , bob] = await ethers.getSigners();
 
       await expect(streamerContract.connect(bob).defundChannel()).to.be
@@ -136,7 +144,7 @@ describe("Statechannel Challenge: The Guru's Offering", function () {
       await assertBalance("2.5"); // contract total unchanged because defund fails
     });
 
-    it("emits a challenged event", async function () {
+    it("Should emit a Challenged event", async function () {
       const [, , bob] = await ethers.getSigners();
       await expect(streamerContract.connect(bob).challengeChannel()).to.emit(
         streamerContract,
@@ -145,7 +153,7 @@ describe("Statechannel Challenge: The Guru's Offering", function () {
       await assertBalance("2.5"); // contract total unchanged because challenge does not move funds
     });
 
-    it("refusus defunding during the challenge period", async function () {
+    it("Should refuse defunding during the challenge period", async function () {
       const [, , bob] = await ethers.getSigners();
 
       await expect(streamerContract.connect(bob).defundChannel()).to.be
@@ -153,7 +161,7 @@ describe("Statechannel Challenge: The Guru's Offering", function () {
       await assertBalance("2.5"); // contract total unchanged becaues defund fails
     });
 
-    it("allows defunding after the challenge period", async function () {
+    it("Should allow defunding after the challenge period", async function () {
       const [, , bob] = await ethers.getSigners();
 
       const initBobBalance = ethers.BigNumber.from(

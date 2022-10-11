@@ -4,18 +4,17 @@ pragma solidity 0.8.4;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
 
-
 contract Streamer is Ownable {
-  event Opened(address, uint256);
-  event Challenged(address);
-  event Closed(address);
-  event Withdrawn(address, uint256);
+    event Opened(address, uint256);
+    event Challenged(address);
+    event Closed(address);
+    event Withdrawn(address, uint256);
 
-  mapping(address => uint256) balances;
-  mapping(address => uint256) canCloseAt;
+    mapping(address => uint256) balances;
+    mapping(address => uint256) canCloseAt;
 
-  function fundChannel() public payable {
-    /*
+    function fundChannel() public payable {
+        /*
       Checkpoint 3: fund a channel
 
       complete this function so that it:
@@ -23,47 +22,50 @@ contract Streamer is Ownable {
       - updates the balances mapping with the eth recieved in the function call
       - emits an Opened event
     */
-  }
+    }
 
-  function timeLeft(address channel) public view returns (uint256) {
-    require(canCloseAt[channel] != 0, "channel is not closing");
-    return canCloseAt[channel] - block.timestamp;
-  }
+    function timeLeft(address channel) public view returns (uint256) {
+        require(canCloseAt[channel] != 0, "channel is not closing");
+        return canCloseAt[channel] - block.timestamp;
+    }
 
-  function withdrawEarnings(Voucher calldata v) public {
-    // like the off-chain code, signatures are applied to the hash of the data
-    // instead of the raw data itself
-    bytes32 hashed = keccak256(abi.encode(v.updatedBalance));
+    function withdrawEarnings(Voucher calldata voucher) public {
+        // like the off-chain code, signatures are applied to the hash of the data
+        // instead of the raw data itself
+        bytes32 hashed = keccak256(abi.encode(voucher.updatedBalance));
 
-    // The prefix string here is part of a convention used in ethereum for signing
-    // and verification of off-chain messages. The trailing 32 refers to the 32 byte
-    // length of the attached hash message.
-    //
-    // There are seemingly extra steps here compared to what was done in the off-chain
-    // `reimburseService` and `processVoucher`. Note that those ethers signing and verification
-    // functions do the same under the hood.
-    //
-    // again, see https://blog.ricmoo.com/verifying-messages-in-solidity-50a94f82b2ca
-    bytes memory prefixed = abi.encodePacked('\x19Ethereum Signed Message:\n32', hashed);
-    bytes32 prefixedHashed = keccak256(prefixed);
+        // The prefix string here is part of a convention used in ethereum for signing
+        // and verification of off-chain messages. The trailing 32 refers to the 32 byte
+        // length of the attached hash message.
+        //
+        // There are seemingly extra steps here compared to what was done in the off-chain
+        // `reimburseService` and `processVoucher`. Note that those ethers signing and verification
+        // functions do the same under the hood.
+        //
+        // again, see https://blog.ricmoo.com/verifying-messages-in-solidity-50a94f82b2ca
+        bytes memory prefixed = abi.encodePacked(
+            "\x19Ethereum Signed Message:\n32",
+            hashed
+        );
+        bytes32 prefixedHashed = keccak256(prefixed);
 
-    /*
+        /*
       Checkpoint 5: Recover earnings
 
       The service provider would like to cash out their hard earned ether.
     */
 
-    // use ecrecover on prefixedHashed and the supplied signature
+        // use ecrecover on prefixedHashed and the supplied signature
 
-    // require that the recovered signer has a running channel with balances[signer] > v.updatedBalance
+        // require that the recovered signer has a running channel with balances[signer] > v.updatedBalance
 
-    // calculate the payment when reducing balances[signer] to v.updatedBalance
+        // calculate the payment when reducing balances[signer] to v.updatedBalance
 
-    // adjust the channel balance, and pay the contract owner. (Get the owner address with 
-    // the `owner()` function)
-  }
+        // adjust the channel balance, and pay the contract owner. (Get the owner address with
+        // the `owner()` function)
+    }
 
-  /*
+    /*
     Checkpoint 6a: Challenge the channel
 
     create a public challengeChannel() function that:
@@ -72,7 +74,7 @@ contract Streamer is Ownable {
     - emits a Challenged event
   */
 
-  /*
+    /*
     Checkpoint 6b: Close the channel
 
     create a public defundChannel() function that:
@@ -82,13 +84,13 @@ contract Streamer is Ownable {
       the balance to 0
   */
 
-  struct Voucher {
-    uint256 updatedBalance;
-    Signature sig;
-  }
-  struct Signature {
-    bytes32 r;
-    bytes32 s;
-    uint8 v;
-  }
+    struct Voucher {
+        uint256 updatedBalance;
+        Signature sig;
+    }
+    struct Signature {
+        bytes32 r;
+        bytes32 s;
+        uint8 v;
+    }
 }

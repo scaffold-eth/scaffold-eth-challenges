@@ -10,6 +10,8 @@
 
 > 🧙 In our case, the service provider is a `Guru` who provides off-the-cuff wisdom to each client `Rube` through a one-way chat box. Each character of text that is delivered is expected to be compensated with a payment of `0.001 ETH`.
 
+> 📖 Read more about state channels in the [Ethereum Docs.](https://ethereum.org/en/developers/docs/scaling/state-channels/)
+
 We will:
 
 - 🛣️ Build a `Streamer.sol` contract that collects **ETH** from numerous client addresses using a payable `fundChannel()` function and keeps track of `balances`.
@@ -141,10 +143,10 @@ The first two are complete - we will work on `processVoucher`, where the service
 
 ### Checkpoint 5: Recover Service Provider's Earnings
 
-Now that we've collected some vouchers, we'd like to redeem them on-chain and move funds from the `Streamer` contract's `balances` map to the Guru's own address. The `withdrawEarnings` function of `Streamer.sol` takes a voucher (balance + signature) as input, and should:
+Now that we've collected some vouchers, we'd like to redeem them on-chain and move funds from the `Streamer` contract's `balances` map to the Guru's own address. The `withdrawEarnings` function of `Streamer.sol` takes a Struct named voucher (balance + signature) as input, and should:
 
-- recover the signer using `ecrecover()` on the `prefixedHashed` message and supplied signature
-  - _Hint_: `ecrecover` takes the signature in its decomposed form with `v,`,`r`, and`s` values. The string signature produced in `App.jsx` is just a concatenation of these values, which we split to create the on-chain friendly signature with `ethers.utils.splitSignature`
+- recover the signer using `ecrecover(bytes32, uint8, bytes32, bytes32)` on the `prefixedHashed` message and supplied signature
+  - _Hint_: `ecrecover` takes the signature in its decomposed form with `v,`,`r`, and`s` values. The string signature produced in `App.jsx` is just a concatenation of these values, which we split using `ethers.utils.splitSignature` to create the on-chain friendly signature. Read about the [ecrecover function here](https://docs.soliditylang.org/en/v0.8.17/units-and-global-variables.html)
 - check that the signer has a running channel with balance greater than the voucher's `updatedBalance`
 - calculate the payout (`balances[signer] - updatedBalance`)
 - update the channel balance
@@ -211,8 +213,6 @@ The `defundChannel()` function should:
 - [ ] Suppose some rube enjoyed their first round of advice. Is it safe for them to open a new channel with `Streamer.sol`? (_Hint_: what data does the guru still hold?)
 
 #### ⚠️ Test it!
-
-// todo: write tests
 
 - Now is a good time to run `yarn test` to run the automated testing function. It will test that you hit the core checkpoints. You are looking for all green checkmarks and passing tests!
 

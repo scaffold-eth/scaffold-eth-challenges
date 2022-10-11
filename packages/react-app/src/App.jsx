@@ -462,12 +462,12 @@ function App(props) {
     /**
      * Handle incoming payments from the given client.
      *
-     * @param {MessageEvent<{updatedBalance: string, signature: string}>} v
+     * @param {MessageEvent<{updatedBalance: string, signature: string}>} voucher
      */
-    function processVoucher(v) {
+    function processVoucher(voucher) {
       // recreate a BigNumber object from the message. v.data.updatedBalance is
       // a string representation of the BigNumber for transit over the network
-      const updatedBalance = ethers.BigNumber.from(v.data.updatedBalance);
+      const updatedBalance = ethers.BigNumber.from(voucher.data.updatedBalance);
 
       /**
        * Checkpoint 4:
@@ -483,7 +483,7 @@ function App(props) {
 
       // update our stored voucher if this new one is more valuable
       if (existingVoucher === undefined || updatedBalance.lt(existingVoucher.updatedBalance)) {
-        vouchers()[clientAddress] = v.data;
+        vouchers()[clientAddress] = voucher.data;
         vouchers()[clientAddress].updatedBalance = updatedBalance;
         updateClaimable(clientAddress);
         // logVouchers();
