@@ -20,8 +20,7 @@ We will:
 - ⁉ Consider some security / usability holes in the current design.
 
 // todo
-
-> 💬 Meet other builders working on this challenge and get help in the [Challenge 1 telegram](https://t.me/joinchat/E6r91UFt4oMJlt01)!
+> 💬 Meet other builders working on this challenge and get help in the [Challenge 9 telegram](#)!
 
 ---
 
