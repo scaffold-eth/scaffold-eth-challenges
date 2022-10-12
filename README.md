@@ -77,22 +77,22 @@ You'll have to redeploy with `yarn deploy --reset`.
 
 We'll need another active address to act as the rube in our app. To do this,
 
-- open `localhost:3000` in a new tab / window of the current browser
-- click the wallet icon (top right) to open the wallet
+- Open `localhost:3000` in a new tab / window of the current browser
+- Click the wallet icon (top right) to open the wallet
 - `private key` -> `generate` will reload the page under a new address
 
 The wallet icon now lets you move between accounts. Eventually you'll probably want a few wallets & windows open simultaneously.
 
-(**Note**: previous challenges created alt addresses by opening the page with a private window or a different browser. This will **not** work for this challenge, because the off-chain application uses a very simple communication pipe that doesn't work between different browsers or private windows.)
+(**Note**: previous challenges created new addresses by opening an incognito window or a different browser. This will **not** work for this challenge, because the off-chain application uses a very simple communication pipe that doesn't work between different browsers or private windows.)
 
 #### 🥅 Goals
 
-- [ ] does your original frontend address recieve the `Hello Guru` UI?
-- [ ] do your alternate addresses recieve the `Hello Rube` UI?
+- [ ] Does your original frontend address recieve the `Hello Guru` UI?
+- [ ] Does your alternate addresses recieve the `Hello Rube` UI?
 
 ---
 
-### Checkpoint 3: Fund a channel
+### Checkpoint 3: Fund a Channel
 
 Like the [decentralized staking challenge](https://speedrunethereum.com/challenge/decentralized-staking), we'll track balances for individual channels / users in a mapping:
 
@@ -108,9 +108,9 @@ Rubes seeking wisdom will use a **payable** `fundChannel()` function, which will
 
 #### 🥅 Goals:
 
-- [ ] does opening a channel (from Rube's tab, you may need some funds from the faucet) cause a `Recieved Wisdom` box to appear?
-- [ ] do opened channels appear on the guru's UI as well?
-- [ ] using the _Debug Contracts_ tab, does a repeated call to `fundChannel` fail?
+- [ ] Does opening a channel (from Rube's tab, you may need some funds from the faucet) cause a `Recieved Wisdom` box to appear?
+- [ ] Do opened channels appear on the guru's UI as well?
+- [ ] Using the _Debug Contracts_ tab, does a repeated call to `fundChannel` fail?
 
 ---
 
@@ -120,87 +120,87 @@ Now that the channel is funded, and all participants have observed the funding v
 
 Functions of note:
 
-- `provideService`: the guru sends wisdom over the wire to the client
-- `reimburseService`: the rube creates a voucher for the recieved service, signs it, and returns it
-- `processVoucher`: the service provider recieves and stores vouchers
+- `provideService`: The guru sends wisdom over the wire to the client.
+- `reimburseService`: The rube creates a voucher for the recieved service, signs it, and returns it.
+- `processVoucher`: The service provider recieves and stores vouchers.
 
-The first two are complete - we will work on `processVoucher`, where the service provider examines returned payments, confirms their authenticity, and stores them.
+The first two functions are complete - we will work on `processVoucher`, where the service provider examines returned payments, confirms their authenticity, and stores them.
 
 > 📝 Edit App.jsx to complete the `processVoucher()` function and secure this off-chain exchange. You'll need to recreate the encoded message that the client has signed, and then verify that the received signature was in fact produced by the client on that same data.
 
 #### 🥅 Goals:
 
-- [ ] secure your service! Validate the incoming voucher & signature according to instructions inside `processVoucher(v)`
-- [ ] with an open channel, start sending advice. Can you see the claimable balance update as service is rendered?
+- [ ] Secure your service! Validate the incoming voucher & signature according to instructions inside `processVoucher(v)`
+- [ ] With an open channel, start sending advice. Can you see the claimable balance update as service is rendered?
 
 #### ⚔️ Side Quest:
 
-- [ ] can `provideService` be modified to prevent continued service to clients who don't keep up with their payments? (_hint_: you'll want to compare the size of your best voucher against the size of your provided wisdom. If there's too big a discrepency, cut them off!)
+- [ ] Can `provideService` be modified to prevent continued service to clients who don't keep up with their payments? (_hint_: you'll want to compare the size of your best voucher against the size of your provided wisdom. If there's too big a discrepency, cut them off!)
 
 ### Checkpoint 5: Recover Service Provider's Earnings
 
 Now that we've collected some vouchers, we'd like to redeem them on-chain and move funds from the `Streamer` contract's `balances` map to the Guru's own address. The `withdrawEarnings` function of `Streamer.sol` takes a Struct named voucher (balance + signature) as input, and should:
 
-- recover the signer using `ecrecover(bytes32, uint8, bytes32, bytes32)` on the `prefixedHashed` message and supplied signature
+- Recover the signer using `ecrecover(bytes32, uint8, bytes32, bytes32)` on the `prefixedHashed` message and supplied signature.
   - _Hint_: `ecrecover` takes the signature in its decomposed form with `v,`,`r`, and`s` values. The string signature produced in `App.jsx` is just a concatenation of these values, which we split using `ethers.utils.splitSignature` to create the on-chain friendly signature. Read about the [ecrecover function here](https://docs.soliditylang.org/en/v0.8.17/units-and-global-variables.html)
-- check that the signer has a running channel with balance greater than the voucher's `updatedBalance`
-- calculate the payout (`balances[signer] - updatedBalance`)
-- update the channel balance
-- pay the contract owner
+- Check that the signer has a running channel with balance greater than the voucher's `updatedBalance`
+- Calculate the payout (`balances[signer] - updatedBalance`)
+- Update the channel balance.
+- Pay the contract owner.
 
 Reminders:
 
-- changes to contracts must be redeployed to the local chain with `yarn deploy --reset`.
-- for troubleshooting / debugging, your contract can use hardhat's `console.log`, which will print to your console running the chain
+- Changes to contracts must be redeployed to the local chain with `yarn deploy --reset`.
+- For troubleshooting / debugging, your contract can use hardhat's `console.log`, which will print to your console running the chain.
 
-> 📝 Edit Streamer.sol to complete the `withdrawEarnings()` function as described
+> 📝 Edit Streamer.sol to complete the `withdrawEarnings()` function as described.
 
-> 📝 Edit App.jsx to enable the UI button for withdrawals
+> 📝 Edit App.jsx to enable the UI button for withdrawals.
 
 #### 🥅 Goals:
 
-- [ ] Recover funds on-chain for services rendered! After the guru submits a voucher to chain, you should be able to see the wallet's ETH balance increase.
+- [ ] Recover funds on-chain for services rendered! After the Guru submits a voucher to chain, you should be able to see the wallet's ETH balance increase.
 
 #### ⚔️ Side Quest:
 
 - [ ] `withdrawEarnings` is a function that only the service provider would be interested in calling. Should it be marked `onlyOwner`? (the `onlyOwner` modifier makes a function accessible only to the contract owner - anyone else who tries to call it will be immediately rejected).
 
-### Checkpoint 6: Challenge & Close the channel
+### Checkpoint 6: Challenge & Close the Channel
 
 So far so good:
 
-- rubes can connect to the Guru via an on-chain deposit
-- the pair can then transact off-chain with high throughput
-- the Guru can recover earnings with their received vouchers
+- Rubes can connect to the Guru via an on-chain deposit.
+- The pair can then transact off-chain with high throughput.
+- The Guru can recover earnings with their received vouchers.
 
-But what if a rube is unimpressed with the service, and wishes to close a channel and recover whatever funds remain? What if the guru is a no-show after the initial channel funding deposit?
+But what if a rube is unimpressed with the service and wishes to close a channel to recover whatever funds remain? What if the guru is a no-show after the initial channel funding deposit?
 
-A payment channel is a cryptoeconomic protocol - care needs to be taken so that everyone's financial interests are protected. We'll implement a two step **challenge** and **close** mechanism that allows rubes to recover unspent funds, while keeping the guru's earnings safe.
+A payment channel is a cryptoeconomic protocol - care needs to be taken so that everyone's financial interests are protected. We'll implement a two step **challenge** and **close** mechanism that allows rubes to recover unspent funds, while keeping the Guru's earnings safe.
 
-> 📝 Edit Streamer.sol to create a public `challengeChannel()` function
+> 📝 Edit Streamer.sol to create a public `challengeChannel()` function.
 
-> 📝 Edit App.jsx to enable the challenge and closure buttons for service clients
+> 📝 Edit App.jsx to enable the challenge and closure buttons for service clients(rubes).
 
 The `challengeChannel()` function should:
 
-- check in the `balances` map that a channel is already open in the name of `msg.sender`
-- declare this channel to be closing by setting `canCloseAt[msg.sender]` to `block.timestamp + 30 seconds`
-- emit a `Challenged` event with the sender's address
+- Check in the `balances` map that a channel is already open in the name of `msg.sender`
+- Declare this channel to be closing by setting `canCloseAt[msg.sender]` to `block.timestamp + 30 seconds`
+- Emit a `Challenged` event with the sender's address.
 
 The emitted event gives notice to the Guru that the channel will soon be emptied, so they should apply whatever vouchers they have before the timeout period ends.
 
-> 📝 Edit Streamer.sol to create a public `defundChannel()` function
+> 📝 Edit Streamer.sol to create a public `defundChannel()` function.
 
 The `defundChannel()` function should:
 
-- check that `msg.sender` has a closed channel, by ensuring a non-zero `canCloseAt[msg.sender]` is lower than the current timestamp
-- transfer `balances[msg.sender]` to the sender
-- emit a `Closed` event
+- Check that `msg.sender` has a closed channel, by ensuring a non-zero `canCloseAt[msg.sender]` is before the current timestamp.
+- Transfer `balances[msg.sender]` to the sender.
+- Emit a `Closed` event.
 
 #### 🥅 Goals:
 
-- [ ] Launch a challenge as a channel client. The guru's UI should show an alert via their `Cash out latest voucher` button.
-- [ ] Recover the guru's best voucher before the channel closes.
+- [ ] Launch a challenge as a channel client. The Guru's UI should show an alert via their `Cash out latest voucher` button.
+- [ ] Recover the Guru's best voucher before the channel closes.
 - [ ] Close the channel and recover rube funds.
 
 #### ⚔️ Side Quests:
