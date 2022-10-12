@@ -19,7 +19,7 @@
 
 ---
 
-### Checkpoint 0: 📦 install 📚
+### Checkpoint 0: 📦 Install 📚
 
 Want a fresh cloud environment? Click this to open a gitpod workspace, then skip to Checkpoint 1 after the tasks are complete.
 
