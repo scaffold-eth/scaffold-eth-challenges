@@ -109,7 +109,7 @@ Rubes seeking wisdom will use a **payable** `fundChannel()` function, which will
 #### 🥅 Goals:
 
 - [ ] Does opening a channel (from Rube's tab, you may need some funds from the faucet) cause a `Recieved Wisdom` box to appear?
-- [ ] Do opened channels appear on the guru's UI as well?
+- [ ] Do opened channels appear on the Guru's UI as well?
 - [ ] Using the _Debug Contracts_ tab, does a repeated call to `fundChannel` fail?
 
 ---
@@ -120,7 +120,7 @@ Now that the channel is funded, and all participants have observed the funding v
 
 Functions of note:
 
-- `provideService`: The guru sends wisdom over the wire to the client.
+- `provideService`: The Guru sends wisdom over the wire to the client.
 - `reimburseService`: The rube creates a voucher for the recieved service, signs it, and returns it.
 - `processVoucher`: The service provider recieves and stores vouchers.
 
@@ -173,7 +173,7 @@ So far so good:
 - The pair can then transact off-chain with high throughput.
 - The Guru can recover earnings with their received vouchers.
 
-But what if a rube is unimpressed with the service and wishes to close a channel to recover whatever funds remain? What if the guru is a no-show after the initial channel funding deposit?
+But what if a rube is unimpressed with the service and wishes to close a channel to recover whatever funds remain? What if the Guru is a no-show after the initial channel funding deposit?
 
 A payment channel is a cryptoeconomic protocol - care needs to be taken so that everyone's financial interests are protected. We'll implement a two step **challenge** and **close** mechanism that allows rubes to recover unspent funds, while keeping the Guru's earnings safe.
 
@@ -206,7 +206,7 @@ The `defundChannel()` function should:
 #### ⚔️ Side Quests:
 
 - [ ] Currently, the service provider has to manually submit their vouchers after a challenge is registered on chain. Should their channel wallet do that automatically? Can you implement that in this application?
-- [ ] Suppose some rube enjoyed their first round of advice. Is it safe for them to open a new channel with `Streamer.sol`? (_Hint_: what data does the guru still hold?)
+- [ ] Suppose some rube enjoyed their first round of advice. Is it safe for them to open a new channel with `Streamer.sol`? (_Hint_: what data does the Guru still hold?)
 
 #### ⚠️ Test it!
 
