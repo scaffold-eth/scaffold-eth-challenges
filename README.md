@@ -223,8 +223,6 @@ The `defundChannel()` function should:
 
 ⛽️ You will need to send ETH to your **deployer address** with your wallet.
 
-> 📝 If you plan on submitting this challenge, be sure to set your `deadline` to at least `block.timestamp + 72 hours`
-
 > 🚀 Run `yarn deploy` to deploy your smart contract to a public network (selected in hardhat.config.js)
 
 ---
@@ -232,8 +230,6 @@ The `defundChannel()` function should:
 ### Checkpoint 6: 🎚 Frontend 🧘‍♀️
 
 > 📝 Edit the `targetNetwork` in `App.jsx` (in `packages/react-app/src`) to be the public network where you deployed your smart contract.
-
-> 💻 View your frontend at http://localhost:3000/
 
 📡 When you are ready to ship the frontend app...
 
@@ -244,8 +240,6 @@ The `defundChannel()` function should:
 > 😬 Windows users beware! You may have to change the surge code in `packages/react-app/package.json` to just `"surge": "surge ./build",`
 
 ⚙ If you get a permissions error `yarn surge` again until you get a unique URL, or customize it in the command line.
-
-> 📝 you will use this deploy URL to submit to [SpeedRunEthereum.com](https://speedrunethereum.com).
 
 🚔 Traffic to your url might break the [Infura](https://infura.io/) rate limit, edit your key: `constants.js` in `packages/ract-app/src`.
 
