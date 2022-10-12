@@ -19,7 +19,7 @@ contract Streamer is Ownable {
 
       complete this function so that it:
       - reverts if msg.sender already has a running channel (ie, if balances[msg.sender] != 0)
-      - updates the balances mapping with the eth recieved in the function call
+      - updates the balances mapping with the eth received in the function call
       - emits an Opened event
     */
     }
