@@ -32,14 +32,7 @@ describe(" 🕞 Statechannel Challenge: The Guru's Offering 👑", function () {
     console.log('\t',"💵 Balance",ethers.utils.formatEther(balance));
     expect(await network.provider.send("eth_getBalance", [streamerContract.address])).to.equal(ethers.utils.parseEther(b)); 
     return;
-    // return expect(
-    //  await network.provider.send("eth_getBalance", [streamerContract.address])
-    // ).to.equal(ethers.utils.parseEther(b));
   }
-
-  // async function checkBalance() {
-  //   return await network.provider.send("eth_getBalance", [streamerContract.address]);
-  // }
 
   /**
    * Creates a redeemable voucher for the given balance
@@ -193,6 +186,7 @@ describe(" 🕞 Statechannel Challenge: The Guru's Offering 👑", function () {
       const initBobBalance = ethers.BigNumber.from(
         await network.provider.send("eth_getBalance", [bob.address])
       );
+      console.log("initBobBalance",ethers.utils.formatEther(initBobBalance));
 
       console.log('\t', "🕐 Increasing time...");
       network.provider.send("evm_increaseTime", [3600]); // fast-forward one hour
@@ -211,10 +205,9 @@ describe(" 🕞 Statechannel Challenge: The Guru's Offering 👑", function () {
       );
 
       // check that bob's channel balance returned to bob's address
-      
-      // init + 1 is not exactly final because ether is spent as gas for executing the tx
-      const zeroPlusGasFee = initBobBalance.add(1).sub(finalBobBalance);
-      assert(zeroPlusGasFee.lt(ethers.utils.parseEther("0.000000000001")));
+      console.log('\t',"💵 Checking that final balance wen tup by ~1 eth.  Final balance", ethers.utils.formatEther(finalBobBalance));
+      const difference = finalBobBalance.sub(initBobBalance);
+      assert(difference.gt(ethers.utils.parseEther("0.99")));
     });
   });
 });
