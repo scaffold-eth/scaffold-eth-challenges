@@ -68,11 +68,11 @@ describe(" 🕞 Statechannel Challenge: The Guru's Offering 👑", function () {
     it("Should deploy the contract", async function () {
       const streamerFct = await ethers.getContractFactory(contractArtifact);
       streamerContract = await streamerFct.deploy();
-      console.log('\t', "✈ Contract deployed",streamerContract.address);
+      console.log('\t', "🛫 Contract deployed",streamerContract.address);
     });
 
     it("Should allow channel funding & emit Opened event", async function () {
-      console.log('\t', "💸 Funding channel...");
+      console.log('\t', "💸 Funding first channel...");
       const fundingTx = await streamerContract.fundChannel({
         value: ethers.utils.parseEther("1"),
       });
@@ -106,23 +106,23 @@ describe(" 🕞 Statechannel Challenge: The Guru's Offering 👑", function () {
         })
       ).to.emit(streamerContract, "Opened");
 
-      console.log('\t',"💵 Expecting balance to equal 3...");
+      console.log('\t',"💵 Expecting contract balance to equal 3...");
       await assertBalance("3"); // running total
     });
 
-    it("Should allows legitimate withdrawals", async function () {
+    it("Should allow legitimate withdrawals", async function () {
       const [, alice] = await ethers.getSigners();
 
       const updatedBalance = ethers.utils.parseEther("0.5"); // cut channel balance from 1 -> 0.5
       console.log('\t', "📩 Creating voucher with price of 0.5 eth...");
       const voucher = await createVoucher(updatedBalance, alice);
 
-      console.log('\t', "🔼 Expecting withdrawEarnings to emit...");
+      console.log('\t', "🔼 Expecting to withdraw funds and emit Withdrawn...");
       await expect(streamerContract.withdrawEarnings(voucher)).to.emit(
         streamerContract,
         "Withdrawn"
       );
-      console.log('\t',"💵 Expecting balance to equal 2.5...");
+      console.log('\t',"💵 Expecting contract balance to equal 2.5...");
       await assertBalance("2.5"); // 3 - 0.5 = 2.5
     });
 
@@ -130,12 +130,12 @@ describe(" 🕞 Statechannel Challenge: The Guru's Offering 👑", function () {
       const [, alice] = await ethers.getSigners();
 
       const updatedBalance = ethers.utils.parseEther("0.5"); // equal to the current balance, should fail
-      console.log('\t', "📩 Creating voucher for 0.5 eth...");
+      console.log('\t', "📩 Creating voucher...");
       const voucher = await createVoucher(updatedBalance, alice);
 
       console.log('\t', "🛑 Attempting a redundant withdraw...");
       await expect(streamerContract.withdrawEarnings(voucher)).to.be.reverted;
-      console.log('\t',"💵 Expecting balance to equal 2.5...");
+      console.log('\t',"💵 Expecting contract balance to equal 2.5...");
       await assertBalance("2.5"); // contract total unchanged because withdrawal fails
     });
 
@@ -143,12 +143,12 @@ describe(" 🕞 Statechannel Challenge: The Guru's Offering 👑", function () {
       const [, , , carol] = await ethers.getSigners(); // carol has no open channel
 
       const updatedBalance = ethers.utils.parseEther("0.5");
-      console.log('\t', "📩 Creating voucher with price of 0.5 eth...");
+      console.log('\t', "📩 Creating voucher...");
       const voucher = await createVoucher(updatedBalance, carol);
 
       console.log('\t', "🛑 Attempting an illegitimate withdraw...");
       await expect(streamerContract.withdrawEarnings(voucher)).to.be.reverted;
-      console.log('\t',"💵 Expecting balance to equal 2.5...");
+      console.log('\t',"💵 Expecting contract balance to equal 2.5...");
       await assertBalance("2.5"); // contract total unchanged because carol has no channel
     });
 
@@ -157,7 +157,7 @@ describe(" 🕞 Statechannel Challenge: The Guru's Offering 👑", function () {
 
       console.log('\t', "🛑 Attempting illegitimate defundChannel...");
       await expect(streamerContract.connect(bob).defundChannel()).to.be.reverted;
-      console.log('\t',"💵 Expecting balance to equal 2.5...");
+      console.log('\t',"💵 Expecting contract balance to equal 2.5...");
       await assertBalance("2.5"); // contract total unchanged because defund fails
     });
 
@@ -167,7 +167,7 @@ describe(" 🕞 Statechannel Challenge: The Guru's Offering 👑", function () {
         streamerContract,
         "Challenged"
       );
-      console.log('\t',"💵 Expecting balance to equal 2.5...");
+      console.log('\t',"💵 Expecting contract balance to equal 2.5...");
       await assertBalance("2.5"); // contract total unchanged because challenge does not move funds
     });
 
@@ -176,7 +176,7 @@ describe(" 🕞 Statechannel Challenge: The Guru's Offering 👑", function () {
 
       console.log('\t',"🛑 Attempting illegitimate defundChannel...");
       await expect(streamerContract.connect(bob).defundChannel()).to.be.reverted;
-      console.log('\t',"💵 Expecting balance to equal 2.5...");
+      console.log('\t',"💵 Expecting contract balance to equal 2.5...");
       await assertBalance("2.5"); // contract total unchanged becaues defund fails
     });
 
@@ -186,8 +186,7 @@ describe(" 🕞 Statechannel Challenge: The Guru's Offering 👑", function () {
       const initBobBalance = ethers.BigNumber.from(
         await network.provider.send("eth_getBalance", [bob.address])
       );
-      console.log("initBobBalance",ethers.utils.formatEther(initBobBalance));
-
+      console.log('\t', "💰 Initial user balance:",ethers.utils.formatEther(initBobBalance));
       console.log('\t', "🕐 Increasing time...");
       network.provider.send("evm_increaseTime", [3600]); // fast-forward one hour
       network.provider.send("evm_mine");
@@ -197,16 +196,17 @@ describe(" 🕞 Statechannel Challenge: The Guru's Offering 👑", function () {
         streamerContract,
         "Closed"
       );
-      console.log('\t',"💵 Expecting balance to equal 1.5...");
+      console.log('\t',"💵 Expecting contract balance to equal 1.5...");
       await assertBalance("1.5"); // 2.5-1 = 1.5 (bob defunded his unused channel)
 
       const finalBobBalance = ethers.BigNumber.from(
         await network.provider.send("eth_getBalance", [bob.address])
       );
 
+      console.log('\t',"💰 User's final balance:", ethers.utils.formatEther(finalBobBalance));
       // check that bob's channel balance returned to bob's address
-      console.log('\t',"💵 Checking that final balance wen tup by ~1 eth.  Final balance", ethers.utils.formatEther(finalBobBalance));
       const difference = finalBobBalance.sub(initBobBalance);
+      console.log('\t',"💵 Checking that final balance went up by ~1 eth. Increase", ethers.utils.formatEther(difference));
       assert(difference.gt(ethers.utils.parseEther("0.99")));
     });
   });
