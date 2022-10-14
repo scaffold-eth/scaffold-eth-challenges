@@ -15,13 +15,13 @@ contract Streamer is Ownable {
 
     function fundChannel() public payable {
         /*
-      Checkpoint 3: fund a channel
+        Checkpoint 3: fund a channel
 
-      complete this function so that it:
-      - reverts if msg.sender already has a running channel (ie, if balances[msg.sender] != 0)
-      - updates the balances mapping with the eth received in the function call
-      - emits an Opened event
-    */
+        complete this function so that it:
+        - reverts if msg.sender already has a running channel (ie, if balances[msg.sender] != 0)
+        - updates the balances mapping with the eth received in the function call
+        - emits an Opened event
+        */
     }
 
     function timeLeft(address channel) public view returns (uint256) {
@@ -50,15 +50,15 @@ contract Streamer is Ownable {
         bytes32 prefixedHashed = keccak256(prefixed);
 
         /*
-      Checkpoint 5: Recover earnings
+        Checkpoint 5: Recover earnings
 
-      The service provider would like to cash out their hard earned ether.
-          - use ecrecover on prefixedHashed and the supplied signature
-          - require that the recovered signer has a running channel with balances[signer] > v.updatedBalance
-          - calculate the payment when reducing balances[signer] to v.updatedBalance
-          - adjust the channel balance, and pay the contract owner. (Get the owner address withthe `owner()` function)
-          - emit the Withdrawn event
-      */
+        The service provider would like to cash out their hard earned ether.
+            - use ecrecover on prefixedHashed and the supplied signature
+            - require that the recovered signer has a running channel with balances[signer] > v.updatedBalance
+            - calculate the payment when reducing balances[signer] to v.updatedBalance
+            - adjust the channel balance, and pay the contract owner. (Get the owner address withthe `owner()` function)
+            - emit the Withdrawn event
+        */
     }
 
     /*
