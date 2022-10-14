@@ -36,7 +36,7 @@ const { ethers } = require("ethers");
     Welcome to 🏗 scaffold-eth !
 
     Code:
-    https://github.com/austintgriffith/scaffold-eth
+    https://github.com/scaffold-eth/scaffold-eth
 
     Support:
     https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA
@@ -300,10 +300,9 @@ function App(props) {
   /*
     The off-chain app:
     ==================
-    - the provider sends wisdom through the channel, the client
-      returns signed vouchers which the provider can redeem at their convenience
-    - Client pays per character. This type of transaction throughput is 
-    infeasible on L1 because of:
+    - The provider sends wisdom through the channel, the client returns signed 
+        vouchers which the provider can redeem at their convenience
+    - The client pays per character. This type of transaction throughput is infeasible on L1 because of:
       - gas costs per transaction dwarfing the cost of each transaction
       - block-time constraints preventing real-time p2p payments
   */
@@ -313,10 +312,9 @@ function App(props) {
     - clients participate in a single channel - the client-streamer channel.    
   */
 
-  /**
-   * the channel used to communicate application state
-   * and payment updates off chain.
-   */
+  /*
+    The channel used to communicate application state and payment updates off chain.
+  */
   const channel = getUserChannel();
 
   /**
@@ -331,9 +329,9 @@ function App(props) {
     return window.userChannel;
   }
 
-  /**
-   * this is what you're paying for. It'd better be good.
-   */
+
+  
+  //This is the wisdome the client is paying for. It'd better be good.
   let recievedWisdom = "";
 
   /**
@@ -392,10 +390,10 @@ function App(props) {
     const hashed = ethers.utils.keccak256(packed);
     const arrayified = ethers.utils.arrayify(hashed);
 
-    // why not just sign the updatedBalance string directly?
+    // Why not just sign the updatedBalance string directly?
     //
     // Two considerations:
-    // 1) this signature is going to verified both off-chain (by the service provider)
+    // 1) This signature is going to verified both off-chain (by the service provider)
     //    and on-chain (by the Streamer contract). These are distinct runtime environments, so
     //    care needs to be taken that signatures are applied to specific data encodings.
     //
@@ -403,7 +401,7 @@ function App(props) {
     //
     //    see: https://blog.ricmoo.com/verifying-messages-in-solidity-50a94f82b2ca for some
     //         more on EVM verification of messages signed off-chain
-    // 2) because of (1), it's useful to apply signatures to the hash of any given message
+    // 2) Because of (1), it's useful to apply signatures to the hash of any given message
     //    rather than to arbitrary messages themselves. This way the encoding strategy for
     //    the fixed-length hash can be reused for any message format.
 
@@ -419,17 +417,16 @@ function App(props) {
     Streamer perspective:
     - streamer has a channel per client
     - streamer types advice into each client's text-box, and can monitor
-    */
+  */
 
-  /**
-   * an {address: BroadcastChannel} map. One channel for each subscribed channel.
-   */
+  /*
+    an {address: BroadcastChannel} map. One channel for each subscribed channel.
+  */
   const channels = {};
 
-  /**
-   * an {address: Voucher} that stores the highest paying voucher for each
-   * client.
-   */
+  /*
+    an {address: Voucher} that stores the highest paying voucher for each client.
+  */
 
   /**
    * @returns { {[x: string]: {updatedBalance: ethers.BigNumber, signature: string}} }
@@ -469,15 +466,15 @@ function App(props) {
       // a string representation of the BigNumber for transit over the network
       const updatedBalance = ethers.BigNumber.from(voucher.data.updatedBalance);
 
-      /**
-       * Checkpoint 4:
+      /*
+       *  Checkpoint 4:
        *
        *  currently, this function recieves and stores vouchers uncritically.
        *
        *  recreate the packed, hashed, and arrayified message from reimburseService (above),
        *  and then use ethers.utils.verifyMessage() to confirm that voucher signer was
        *  `clientAddress`. (If it wasn't, log some error message and return).
-       */
+      */
 
       const existingVoucher = vouchers()[clientAddress];
 
