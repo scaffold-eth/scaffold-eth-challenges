@@ -114,7 +114,7 @@ describe(" 🕞 Statechannel Challenge: The Guru's Offering 👑", function () {
       const [, alice] = await ethers.getSigners();
 
       const updatedBalance = ethers.utils.parseEther("0.5"); // cut channel balance from 1 -> 0.5
-      console.log('\t', "📩 Creating voucher with price of 0.5 eth...");
+      console.log('\t', "📩 Creating voucher...");
       const voucher = await createVoucher(updatedBalance, alice);
 
       console.log('\t', "🔼 Expecting to withdraw funds and emit Withdrawn...");
