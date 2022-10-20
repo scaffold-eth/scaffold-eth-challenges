@@ -9,7 +9,7 @@ tasks:
     command: yarn chain
     openMode: split-right
   - name: Deployment
-    init: gp await-port 8545
+    init: gp ports await 8545
     command: yarn deploy
     openMode: split-right
 ports:
