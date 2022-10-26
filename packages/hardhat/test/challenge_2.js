@@ -62,7 +62,7 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
     );
   });
 
-  describe("💵 buyTokens()", function () {
+  describe(" 💵 buyTokens()", function () {
     it("Should let us buy tokens and our balance should go up...", async function () {
       const [ owner ] = await ethers.getSigners();
       console.log('\t'," 🧑 Tester Address: ",owner.address)
@@ -74,7 +74,7 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
       const buyTokensResult = await vendor.buyTokens({value: ethers.utils.parseEther("0.001")});
       console.log('\t'," 🏷  buyTokens Result: ",buyTokensResult.hash)
 
-      console.log('\t'," ⏳  Waiting for confirmation...")
+      console.log('\t'," ⏳ Waiting for confirmation...")
       const txResult =  await buyTokensResult.wait()
       expect(txResult.status).to.equal(1);
 
@@ -86,7 +86,7 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
   })
 
 
-  describe("💵 sellTokens()", function () {
+  describe(" 💵 sellTokens()", function () {
     it("Should let us sell tokens and we should get the appropriate amount eth back...", async function () {
       const [ owner ] = await ethers.getSigners();
 
@@ -100,7 +100,7 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
       const approveTokensResult = await yourToken.approve(vendor.address, ethers.utils.parseEther("0.1"));
       console.log('\t'," 🏷  approveTokens Result: ",approveTokensResult.hash)
 
-      console.log('\t'," ⏳  Waiting for confirmation...")
+      console.log('\t'," ⏳ Waiting for confirmation...")
       const atxResult =  await approveTokensResult.wait()
       expect(atxResult.status).to.equal(1, "Error when expecting the transaction result to equal 1");
 
@@ -108,7 +108,7 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
       const sellTokensResult = await vendor.sellTokens(ethers.utils.parseEther("0.1"));
       console.log('\t'," 🏷  sellTokens Result: ",sellTokensResult.hash)
 
-      console.log('\t'," ⏳  Waiting for confirmation...")
+      console.log('\t'," ⏳ Waiting for confirmation...")
       const txResult =  await sellTokensResult.wait()
       expect(txResult.status).to.equal(1, "Error when expecting the transaction status to equal 1");
 
@@ -120,11 +120,10 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
       console.log('\t'," 🔎 New ETH balance: ", ethers.utils.formatEther(newETHBalance))
       const ethChange = newETHBalance.sub(startingETHBalance).toNumber()
       expect(ethChange).to.greaterThan(100000000000000, "Error when expecting the ether returned to the user by the sellTokens function to be correct");
-
     });
   })
 
-  describe("💵 withdraw()", function () {
+  describe(" 💵 withdraw()", function () {
     it("Should let the owner (and nobody else) withdraw the eth from the contract...", async function () {
       const [ owner, nonOwner ] = await ethers.getSigners();
 
@@ -132,7 +131,7 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
       const buyTokensResult = await vendor.connect(nonOwner).buyTokens({value: ethers.utils.parseEther("0.1")});
       console.log('\t'," 🏷  buyTokens Result: ",buyTokensResult.hash)
 
-      console.log('\t'," ⏳  Waiting for confirmation...")
+      console.log('\t'," ⏳ Waiting for confirmation...")
       const buyTxResult =  await buyTokensResult.wait()
       expect(buyTxResult.status).to.equal(1, "Error when expecting the transaction result to be 1");
 
@@ -143,8 +142,8 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
       const startingNonOwnerETHBalance = await ethers.provider.getBalance(nonOwner.address)
       console.log('\t'," ⚖  Starting non-owner ETH balance: ",ethers.utils.formatEther(startingNonOwnerETHBalance))
 
-      await expect(vendor.connect(nonOwner).withdraw()).to.be.revertedWith("Ownable: caller is not the owner");
-      console.log('\t'," 🏷  withdraw failed with correct error");
+      await expect(vendor.connect(nonOwner).withdraw()).to.be.reverted;
+      console.log('\t'," 🏷  withdraw reverted as non-owner");
 
       const newNonOwnerETHBalance = await ethers.provider.getBalance(nonOwner.address)
       console.log('\t'," 🔎 New non-owner ETH balance: ", ethers.utils.formatEther(newNonOwnerETHBalance))
@@ -156,7 +155,7 @@ describe("🚩 Challenge 2: 🏵 Token Vendor 🤖", function () {
       const withdrawResult = await vendor.withdraw();
       console.log('\t'," 🏷  withdraw Result: ",withdrawResult.hash);
 
-      console.log('\t'," ⏳  Waiting for confirmation...")
+      console.log('\t'," ⏳ Waiting for confirmation...")
       const withdrawTxResult =  await withdrawResult.wait()
       expect(withdrawTxResult.status).to.equal(1, "Error when expecting the withdraw transaction to equal 1");
 
