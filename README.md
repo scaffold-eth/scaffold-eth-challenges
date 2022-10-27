@@ -18,7 +18,7 @@ Want a fresh cloud environment? Click this to open a gitpod workspace, then skip
 
 Required: 
 * [Git](https://git-scm.com/downloads)
-* [Node](https://nodejs.org/dist/latest-v16.x/)  (🧨 Use Node v16 or a previous version as v17 may cause errors 🧨)
+* [Node](https://nodejs.org/dist/latest-v16.x/)  (🧨 Currently use Node v16 as v17 & v18 are unstable 🧨)
 * [Yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable)
 
 (⚠️ Don't install the linux package `yarn` make sure you install yarn with `npm i -g yarn` or even `sudo npm i -g yarn`!)
@@ -184,7 +184,9 @@ Update the `api-key` in `packages/hardhat/package.json` file. You can get your k
 
 ![Screen Shot 2021-11-30 at 10 21 01 AM](https://user-images.githubusercontent.com/9419140/144075208-c50b70aa-345f-4e36-81d6-becaa5f74857.png)
 
-> Now you are ready to run the `yarn verify --network your_network` command to verify your contracts on etherscan 🛰
+Now you are ready to run the `yarn verify --network your_network` command to verify your contracts on etherscan 🛰
+
+> It is okay if it says your contract is already verified.  Copy the address of YourCollectable.sol and search it on goerli Etherscan to find the correct URL you need to submit this challenge.
 
 ---
 
@@ -199,16 +201,14 @@ Update the `api-key` in `packages/hardhat/package.json` file. You can get your k
 # ⚔️ Side Quests
 
 ## 🐟 Open Sea
-> Add your contract to OpenSea
-> 1. hover over your profile photo in the top right and navigate to `Collections` or go to `https://opensea.io/collections`
-> ![my_collections](https://user-images.githubusercontent.com/46639943/150223014-92a2e32d-d2a2-4fd4-ac3b-bd2d0fcb5840.png)
-> 2. click the vertical elipsis and select `Import an existing smart contract`
-> ![import_contract](https://user-images.githubusercontent.com/46639943/150225448-815a17c1-4ea6-4663-8aff-8f757bebbb54.png)
-> 3. select `Live on a testnet`
-> ![live_on_testnet](https://user-images.githubusercontent.com/46639943/150229334-038100bb-22e0-4240-a293-c2b88adc1219.png)
-> 4. be sure you're on the same network you deployed to and enter your contract address!
-> ![contract_address](https://user-images.githubusercontent.com/46639943/150229361-e50e8c57-3918-450f-8bee-29cf42d65b52.png)
 
+> 🐃 Want to see your new NFTs on Opensea?  Head to [Testnets Opensea](https://testnets.opensea.io/)
+
+> 🎫 Make sure you have minted some NFTs on your Surge page, then connect to Opensea using that same wallet.
+
+![nft14](https://user-images.githubusercontent.com/12072395/188957491-bb5eeaf9-5b3c-4667-9d75-9f88bc7acc5d.PNG)
+
+> You can see your collection of shiny new NFTs on a testnet!
 
 (It can take a while before they show up, but here is an example:)
 https://testnets.opensea.io/assets/0xc2839329166d3d004aaedb94dde4173651babccf/1

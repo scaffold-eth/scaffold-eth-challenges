@@ -26,8 +26,8 @@ import { INFURA_ID, NETWORK, NETWORKS } from "./constants";
 import { Transactor } from "./helpers";
 import { useContractConfig } from "./hooks";
 
-const projectId = "2DDHiA47zFkJXtnxzl2jFkyuaoq";
-const projectSecret = "96a91eeafc0a390ab66e6a87f61152aa";;
+const projectId = "2GajDLTC6y04qsYsoDRq9nGmWwK";
+const projectSecret = "48c62c6b3f82d2ecfa2cbe4c90f97037";
 const projectIdAndSecret = `${projectId}:${projectSecret}`;
 
 const { BufferList } = require("bl");
