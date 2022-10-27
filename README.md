@@ -21,7 +21,6 @@ We will:
 - ⏱ Create a Challenge mechanism with a timeout, so that **rubes** are protected from a **Guru** who goes offline while funds are locked on-chain (either by accident, or as a theft attempt).
 - ⁉ Consider some security / usability holes in the current design.
 
-// todo
 > 💬 Meet other builders working on this challenge and get help in the [State Channel Telegram](https://t.me/+k0eUYngV2H0zYWUx)!
 
 ---
