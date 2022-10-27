@@ -22,7 +22,7 @@ We will:
 - ⁉ Consider some security / usability holes in the current design.
 
 // todo
-> 💬 Meet other builders working on this challenge and get help in the [Challenge 9 telegram](#)!
+> 💬 Meet other builders working on this challenge and get help in the [State Channel Telegram](https://t.me/+k0eUYngV2H0zYWUx)!
 
 ---
 
