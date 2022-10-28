@@ -52,7 +52,7 @@ https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-4-dex
 
 ---
 
-## 📺 A State Channel Application Challenge
+## 📺 State Channel Application Challenge
 
 🛣️ The Ethereum blockchain has great decentralization & security properties but these properties come at a price: transaction throughput is low, and transactions can be expensive. This makes many traditional web applications infeasible on a blockchain... or does it? State channels look to solve these problems by allowing participants to securely transact off-chain while keeping interaction with Ethereum Mainnet at a minimum.
 
