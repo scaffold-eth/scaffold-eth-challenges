@@ -4,6 +4,7 @@ pragma solidity >=0.8.0 <0.9.0;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "hardhat/console.sol";
 
 /**
  * @title DEX Template
@@ -18,27 +19,30 @@ contract DEX {
     using SafeMath for uint256; //outlines use of SafeMath for uint256 variables
     IERC20 token; //instantiates the imported contract
 
+    uint256 public totalLiquidity;
+    mapping(address => uint256) public liquidity;
+
     /* ========== EVENTS ========== */
 
     /**
      * @notice Emitted when ethToToken() swap transacted
      */
-    event EthToTokenSwap();
+    event EthToTokenSwap(address indexed account, string _message, uint256 etherInput, uint256 tokenOutput);
 
     /**
      * @notice Emitted when tokenToEth() swap transacted
      */
-    event TokenToEthSwap();
+    event TokenToEthSwap(address indexed account, string _message, uint256 etherOutput, uint256 tokenInput);
 
     /**
      * @notice Emitted when liquidity provided to DEX and mints LPTs.
      */
-    event LiquidityProvided();
+    event LiquidityProvided(address indexed account, uint256 liquidityMinted, uint256 ethInput, uint256 tokenInput);
 
     /**
      * @notice Emitted when liquidity removed from DEX and decreases LPT count within DEX.
      */
-    event LiquidityRemoved();
+    event LiquidityRemoved(address indexed account, uint256 amount, uint256 ethWithdrawn, uint256 tokenWithdrawn);
 
     /* ========== CONSTRUCTOR ========== */
 
@@ -54,7 +58,16 @@ contract DEX {
      * @return totalLiquidity is the number of LPTs minting as a result of deposits made to DEX contract
      * NOTE: since ratio is 1:1, this is fine to initialize the totalLiquidity (wrt to balloons) as equal to eth balance of contract.
      */
-    function init(uint256 tokens) public payable returns (uint256) {}
+    function init(uint256 tokens) public payable returns (uint256) {
+        require(totalLiquidity == 0, "Dex is already initialized!");
+        totalLiquidity = address(this).balance;
+        liquidity[msg.sender]=tokens;
+        console.log("Attempting transferfrom");
+        console.log("msg.sender: ",msg.sender);
+        require(token.transferFrom(msg.sender, address(this), tokens), "Failed transfer from");
+        console.log("Succeeded transferfrom");
+        return totalLiquidity;
+    }
 
     /**
      * @notice returns yOutput, or yDelta for xInput (or xDelta)
@@ -64,7 +77,12 @@ contract DEX {
         uint256 xInput,
         uint256 xReserves,
         uint256 yReserves
-    ) public view returns (uint256 yOutput) {}
+    ) public pure returns (uint256 yOutput) {
+        uint256 xInputWithFee = xInput.mul(997).div(1000);
+        uint256 numerator = yReserves.mul(xInputWithFee);
+        uint256 denominator = (xReserves.add(xInputWithFee));
+        return (numerator / denominator);
+    }
 
     /**
      * @notice returns liquidity for a user. Note this is not needed typically due to the `liquidity()` mapping variable being public and having a getter as a result. This is left though as it is used within the front end code (App.jsx).
@@ -76,12 +94,26 @@ contract DEX {
     /**
      * @notice sends Ether to DEX in exchange for $BAL
      */
-    function ethToToken() public payable returns (uint256 tokenOutput) {}
+    function ethToToken() public payable returns (uint256 tokenOutput) {
+        require(msg.value > 0,"Cannot swap 0 ether");
+        tokenOutput = price(msg.value,address(this).balance.sub(msg.value), token.balanceOf(address(this)));
+        require(token.transfer(msg.sender, tokenOutput),"ethToToken reverted swap.");
+        emit EthToTokenSwap(msg.sender, "ethToToken",msg.value,tokenOutput);
+        return tokenOutput;
+    }
 
     /**
      * @notice sends $BAL tokens to DEX in exchange for Ether
      */
-    function tokenToEth(uint256 tokenInput) public returns (uint256 ethOutput) {}
+    function tokenToEth(uint256 tokenInput) public returns (uint256 ethOutput) {
+        require(tokenInput > 0,"Cannot swap 0 token");
+        ethOutput = price(tokenInput, token.balanceOf(address(this)), address(this).balance);
+        require(token.transferFrom(msg.sender, address(this), tokenInput),"Token transferFrom failed");
+        (bool success,) = msg.sender.call{value: ethOutput }("");
+        require(success,"Failed to transfer ether");
+        emit TokenToEthSwap(msg.sender, "Balloons to ETH", ethOutput, tokenInput);
+        return ethOutput;
+    }
 
     /**
      * @notice allows deposits of $BAL and $ETH to liquidity pool
@@ -89,11 +121,40 @@ contract DEX {
      * NOTE: user has to make sure to give DEX approval to spend their tokens on their behalf by calling approve function prior to this function call.
      * NOTE: Equal parts of both assets will be removed from the user's wallet with respect to the price outlined by the AMM.
      */
-    function deposit() public payable returns (uint256 tokensDeposited) {}
+    function deposit() public payable returns (uint256 tokensDeposited) {
+        uint256 ethReserve = address(this).balance.sub(msg.value);
+        uint256 tokenReserve = token.balanceOf(address(this));
+        uint256 tokenDeposit;
+
+        tokenDeposit = (msg.value.mul(tokenReserve) / ethReserve).add(1);
+        uint256 liquidityMinted = msg.value.mul(totalLiquidity) / ethReserve;
+        liquidity[msg.sender] = liquidity[msg.sender].add(liquidityMinted);
+        totalLiquidity = totalLiquidity.add(liquidityMinted);
+
+        require(token.transferFrom(msg.sender, address(this), tokenDeposit));
+        emit LiquidityProvided(msg.sender, liquidityMinted, msg.value, tokenDeposit);
+        return tokenDeposit;
+    }
 
     /**
      * @notice allows withdrawal of $BAL and $ETH from liquidity pool
      * NOTE: with this current code, the msg caller could end up getting very little back if the liquidity is super low in the pool. I guess they could see that with the UI.
      */
-    function withdraw(uint256 amount) public returns (uint256 eth_amount, uint256 token_amount) {}
+    function withdraw(uint256 amount) public returns (uint256 eth_amount, uint256 token_amount) {
+        require(liquidity[msg.sender] >= amount, "withdraw: sender does not have enough liquidity to withdraw.");
+        uint256 ethReserve = address(this).balance;
+        uint256 tokenReserve = token.balanceOf(address(this));
+        uint256 ethWithdrawn;
+
+        ethWithdrawn = amount.mul(ethReserve) / totalLiquidity;
+
+        uint256 tokenAmount = amount.mul(tokenReserve) / totalLiquidity;
+        liquidity[msg.sender] = liquidity[msg.sender].sub(amount);
+        totalLiquidity = totalLiquidity.sub(amount);
+        (bool sent, ) = payable(msg.sender).call{ value: ethWithdrawn }("");
+        require(sent, "withdraw(): revert in transferring eth to you!");
+        require(token.transfer(msg.sender, tokenAmount));
+        emit LiquidityRemoved(msg.sender, amount, ethWithdrawn, tokenAmount);
+        return (ethWithdrawn, tokenAmount);
+    }
 }

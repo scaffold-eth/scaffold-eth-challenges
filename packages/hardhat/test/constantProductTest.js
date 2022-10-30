@@ -96,6 +96,8 @@ describe("🚩 Challenge 3: ⚖️ 🪙 Simple DEX", function () {
           }
           const ethSent_1 =  getEthAmount(tx1_receipt);
           const ethSent_2 =  getEthAmount(tx2_receipt);
+          console.log("ethsent1:",ethers.utils.formatEther( ethSent_1 ));
+          console.log("ethsent2:",ethers.utils.formatEther( ethSent_2 ));
           expect(ethSent_2).below(ethSent_1);
         });
       });
