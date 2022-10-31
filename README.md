@@ -48,7 +48,8 @@ https://buidlguidl.com/
 
 💵 Build an exchange that swaps ETH to tokens and tokens to ETH. 💰 This is possible because the smart contract holds reserves of both assets and has a price function based on the ratio of the reserves. Liquidity providers are issued a token that represents their share of the reserves and fees...
 
-DEX Telegram Channel: https://t.me/+_NeUIJ664Tc1MzIx 
+DEX Telegram Channel: https://t.me/+_NeUIJ664Tc1MzIx
+
 https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-4-dex
 
 ---
@@ -58,6 +59,7 @@ https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-4-dex
 🛣️ The Ethereum blockchain has great decentralization & security properties but these properties come at a price: transaction throughput is low, and transactions can be expensive. This makes many traditional web applications infeasible on a blockchain... or does it? State channels look to solve these problems by allowing participants to securely transact off-chain while keeping interaction with Ethereum Mainnet at a minimum.
 
 State Channels Telegram Channel: https://t.me/+k0eUYngV2H0zYWUx
+
 https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-9-state-channels
 
 ---
@@ -67,6 +69,7 @@ https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-9-state-c
 👩‍👩‍👧‍👧 Using a smart contract as a wallet we can secure assets by requiring multiple accounts to "vote" on transactions. The contract will keep track of transactions in an array of structs and owners will confirm or reject each one. Any transaction with enough confirmations can "execute".
 
 Multisig Telegram Channel: https://t.me/+mkNNF_yHsK8yMTcx
+
 https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-5-multi-sig
 
 ---
@@ -76,6 +79,7 @@ https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-5-multi-s
 🧙 Tinker around with cutting edge smart contracts that render SVGs in Solidity. 🧫 We quickly discovered that the render function needs to be public... 🤔 This allows NFTs that own other NFTs to render their stash. Just wait until you see an Optimistic Loogie and a Fancy Loogie swimming around in the same Loogie Tank!
 
 SVG NFT Telegram Channel: https://t.me/+J9PRea84c1U0Mzkx
+
 https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-6-svg-nft
 
 ---
