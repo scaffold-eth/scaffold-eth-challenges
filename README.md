@@ -276,8 +276,11 @@ Let’s create two new functions that let us deposit and withdraw liquidity. How
         uint256 ethReserve = address(this).balance.sub(msg.value);
         uint256 tokenReserve = token.balanceOf(address(this));
         uint256 tokenDeposit;
-
+        
         tokenDeposit = (msg.value.mul(tokenReserve) / ethReserve).add(1);
+        // 💡 Discussion on adding 1 wei at end of calculation   ^
+        // -> https://t.me/c/1655715571/106
+        
         uint256 liquidityMinted = msg.value.mul(totalLiquidity) / ethReserve;
         liquidity[msg.sender] = liquidity[msg.sender].add(liquidityMinted);
         totalLiquidity = totalLiquidity.add(liquidityMinted);
@@ -306,7 +309,6 @@ Let’s create two new functions that let us deposit and withdraw liquidity. How
     }
 
 ```
-
  </details>
 
 Remember that you will need to call `approve()` from the `Balloons.sol` contract approving the DEX to handle a specific number of your $BAL tokens. To keep things simple, you can just do that when interacting with the UI or debug tab with your contract.
