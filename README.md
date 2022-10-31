@@ -36,11 +36,43 @@ https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-3-dice-ga
 
 ---
 
-## 📺 State Channel Application Challenge 🚩
+## 🎉 Checkpoint: Eligible to join 🏰️ BuidlGuidl
+
+The BuidlGuidl is a curated group of Ethereum builders creating products, prototypes, and tutorials to enrich the web3 ecosystem. A place to show off your builds and meet other builders. Start crafting your Web3 portfolio by submitting your DEX, Multisig or SVG NFT build.
+
+https://buidlguidl.com/
+
+---
+
+## ⚖️ Build a DEX Challenge
+
+💵 Build an exchange that swaps ETH to tokens and tokens to ETH. 💰 This is possible because the smart contract holds reserves of both assets and has a price function based on the ratio of the reserves. Liquidity providers are issued a token that represents their share of the reserves and fees...
+
+https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-4-dex
+
+---
+
+## 📺 State Channel Application Challenge
 
 🛣️ The Ethereum blockchain has great decentralization & security properties but these properties come at a price: transaction throughput is low, and transactions can be expensive. This makes many traditional web applications infeasible on a blockchain... or does it? State channels look to solve these problems by allowing participants to securely transact off-chain while keeping interaction with Ethereum Mainnet at a minimum.
 
 https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-9-state-channels
+
+---
+
+## 👛 Multisig Wallet Challenge
+
+👩‍👩‍👧‍👧 Using a smart contract as a wallet we can secure assets by requiring multiple accounts to "vote" on transactions. The contract will keep track of transactions in an array of structs and owners will confirm or reject each one. Any transaction with enough confirmations can "execute".
+
+https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-5-multi-sig
+
+---
+
+## 🎁 SVG NFT 🎫 Building Cohort Challenge
+
+🧙 Tinker around with cutting edge smart contracts that render SVGs in Solidity. 🧫 We quickly discovered that the render function needs to be public... 🤔 This allows NFTs that own other NFTs to render their stash. Just wait until you see an Optimistic Loogie and a Fancy Loogie swimming around in the same Loogie Tank!
+
+https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-6-svg-nft
 
 ---
 
