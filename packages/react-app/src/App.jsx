@@ -59,7 +59,7 @@ const { ethers } = require("ethers");
 */
 
 /// 📡 What chain are your contracts deployed to?
-const initialNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+const initialNetwork = NETWORKS.goerli; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
 const DEBUG = true;
@@ -319,11 +319,12 @@ function App(props) {
               signer={userSigner}
               price={price}
             />
+            
           ) : (
             ""
           )}
           {/* TODO: The DEX.jsx file actually logs a bunch of the results so we think that instead of creating completely new event components (or whatever), we would figure out how to work with the txs that are happening as a result of EthersJS calling the respective functions in DEX.jsx. 😵 Lines 321-335 are an example of attempting to place emitted events on the front-page UI. It is not working though for now! */}
-          {/* <div style={{ width: 500, margin: "auto", marginTop: 64 }}>
+           <div style={{ width: 500, margin: "auto", marginTop: 64 }}>
             <div>👀 DEX Events:</div>
             <List
               dataSource={EthToTokenSwapEvents}
@@ -337,7 +338,9 @@ function App(props) {
                 );
               }}
             />
-          </div> */}
+          </div> 
+          
+           
         </Route>
         <Route path="/Events">
           <Events
@@ -375,8 +378,16 @@ function App(props) {
             mainnetProvider={mainnetProvider}
             startBlock={1}
           />
+          <Events
+            contracts={readContracts}
+            contractName="Ballons"
+            eventName="approve"
+            localProvider={localProvider}
+            mainnetProvider={mainnetProvider}
+            startBlock={1}
+          />
         </Route>
-        }
+        
         <Route exact path="/debug">
           {/*
                 🎛 this scaffolding is full of commonly used components
