@@ -319,7 +319,7 @@ describe("Challenge 4: ⚖️ DEX Challenge 🚩", function () {
       });
       
       it("Should revert if sender does not have enough liqudity", async function () {
-        console.log('\t', " ✋ Expecting withdraw to revert when there is not enouhg liquidity...");
+        console.log('\t', " ✋ Expecting withdraw to revert when there is not enough liquidity...");
         await expect(dexContract.withdraw(ethers.utils.parseEther("100"))).to.be.reverted;
       });
 
