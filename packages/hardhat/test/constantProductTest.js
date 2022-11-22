@@ -12,7 +12,7 @@ const { parseEther } = require("ethers/lib/utils");
  * @dev TODO: Write edge cases; putting in zero as inputs, or whatever.
  */
 
-describe("🚩 Challenge 4: ⚖️ Simple DEX", function () {
+describe("Challenge 4: ⚖️ DEX Challenge 🚩", function () {
   this.timeout(45000);
 
   let dexContract;
@@ -86,7 +86,6 @@ describe("🚩 Challenge 4: ⚖️ Simple DEX", function () {
       // https://etherscan.io/address/0x7a250d5630b4cf539739df2c5dacb4c659f2488d#readContract 
       // in Uniswap the fee is build in getAmountOut() function
       it ("Should calculate the price correctly", async function () {
-        console.log('\t', " 💵 Checking the price function returns the correct values...");
         let xInput = ethers.utils.parseEther("1");
         let xReserves = ethers.utils.parseEther("5");
         let yReserves = ethers.utils.parseEther("5");
@@ -110,7 +109,7 @@ describe("🚩 Challenge 4: ⚖️ Simple DEX", function () {
         console.log('\t', " 💵 Dex contract's initial Eth balance:", formatEther(dex_eth_start));
         console.log('\t', " 📞 Calling ethToToken with a value of 1 Eth...");
         const tx1 = await dexContract.ethToToken({value: ethers.utils.parseEther("1")});
-        console.log('\t', " ✋ Should revert before initalization...");
+    
         expect(tx1, "ethToToken should revert before initalization").not.to.be.reverted;
 
         console.log('\t', " 🔰 Initializing...");
@@ -128,7 +127,6 @@ describe("🚩 Challenge 4: ⚖️ Simple DEX", function () {
       });
 
       it("Should revert if 0 ETH sent", async function () {
-        console.log('\t', " ✋ Expecting ethToToken to revert when 0 value is sent...");        
         await expect(
           dexContract.ethToToken(
               {value: ethers.utils.parseEther("0"),}
@@ -156,8 +154,7 @@ describe("🚩 Challenge 4: ⚖️ Simple DEX", function () {
       });
 
       it ("Should emit an event when ethToToken() called", async function () {
-        console.log('\t', " 🔼 Expecting ethToTokens to emit the EthToTokenSwap event...");
-        await expect(dexContract.ethToToken({value: ethers.utils.parseEther("1")})).to.emit(dexContract, "EthToTokenSwap");
+        await expect(dexContract.ethToToken({value: ethers.utils.parseEther("1")}),"Make sure you're emitting the EthToTokenSwap event correctly").to.emit(dexContract, "EthToTokenSwap");
       });
 
       it ("Should transfer tokens to purchaser after trade", async function () {
@@ -204,13 +201,11 @@ describe("🚩 Challenge 4: ⚖️ Simple DEX", function () {
       });
 
       it("Should revert if 0 tokens sent to the DEX", async function () {
-        console.log('\t', " ✋ Expecting tokenToEth to revert when 0 value is sent...");
         await expect(dexContract.tokenToEth(ethers.utils.parseEther("0"))).to.be.reverted;
       });
 
       it("Should emit event TokenToEthSwap when tokenToEth() called", async function () {
-        console.log('\t', " 🔼 Expecting tokensToEth to emit the TokenToEthSwap event...");
-        await expect(dexContract.tokenToEth(ethers.utils.parseEther("1"))).to.emit(dexContract, "TokenToEthSwap");
+        await expect(dexContract.tokenToEth(ethers.utils.parseEther("1")), "Make sure you're emitting the TokenToEthSwap event correctly").to.emit(dexContract, "TokenToEthSwap");
       }); 
 
       it("Should send less eth after the first trade (tokenToEth() called)", async function () {
@@ -275,16 +270,7 @@ describe("🚩 Challenge 4: ⚖️ Simple DEX", function () {
       });
 
       it("Should revert if 0 ETH deposited", async function () {
-        console.log('\t', " ✋ Expecting deposit to revert when 0 value is sent...");
-        await expect(
-          dexContract.deposit(
-            (ethers.utils.parseEther("0"),
-              {
-                value: ethers.utils.parseEther("0"),
-              }
-            )
-          )
-        ).to.be.reverted;
+        await expect(dexContract.deposit((ethers.utils.parseEther("0"),{value: ethers.utils.parseEther("0")})), "Should revert if 0 value is sent").to.be.reverted;
       });
     });
     // pool should have 5:5 ETH:$BAL ratio
@@ -336,9 +322,8 @@ describe("🚩 Challenge 4: ⚖️ Simple DEX", function () {
       });
 
       it("Should emit event LiquidityWithdrawn when withdraw() called", async function () {
-      console.log('\t', " 🔼 Expecting the withdraw function to emit correctly..."); 
         await expect(dexContract.withdraw(ethers.utils.parseEther("1.5")), 
-          "Make sure you emit the LiquidityRemoved event in the correct order ").
+          "Make sure you emit the LiquidityRemoved event correctly").
           to.emit(dexContract, "LiquidityRemoved").
             withArgs(
               deployer.address, 
