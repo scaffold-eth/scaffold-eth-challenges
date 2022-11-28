@@ -46,15 +46,15 @@ yarn install
 
 ```bash
 
-yarn start
+yarn chain
 
 ```
 
 > in a second terminal window:
 
 ```bash
-cd scaffold-eth
-yarn chain
+cd challenge-5-multisig
+yarn start
 
 ```
 
