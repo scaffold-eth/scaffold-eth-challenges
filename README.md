@@ -1,6 +1,6 @@
 # 🏗 scaffold-eth | 🏰 BuidlGuidl
 
-## 🚩 Challenge 4 - Multisig 👛
+## 🚩 Challenge 5 - Multisig 👛
 
 ## 👇🏼 Quick Break-Down 👛
 
@@ -31,11 +31,11 @@ At a high-level, the contract core functions are carried out as follows:
 required: [Node](https://nodejs.org/dist/latest-v12.x/) plus [Yarn](https://classic.yarnpkg.com/en/docs/install/) and [Git](https://git-scm.com/downloads)
 
 ```bash
-git clone https://github.com/scaffold-eth/scaffold-eth-examples challenge-4-multisig
+git clone https://github.com/scaffold-eth/scaffold-eth-examples challenge-5-multisig
 
-cd challenge-4-multisig
+cd challenge-5-multisig
 
-git checkout challenge-4-multisig
+git checkout challenge-5-multisig
 ```
 
 ```bash
