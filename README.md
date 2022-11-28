@@ -1,6 +1,6 @@
 # 🏗 scaffold-eth | 🏰 BuidlGuidl
 
-## 🚩 Challenge-3-multi-sig 👛
+## 🚩 Challenge 4 - Multisig 👛
 
 ## 👇🏼 Quick Break-Down 👛
 
@@ -31,11 +31,11 @@ At a high-level, the contract core functions are carried out as follows:
 required: [Node](https://nodejs.org/dist/latest-v12.x/) plus [Yarn](https://classic.yarnpkg.com/en/docs/install/) and [Git](https://git-scm.com/downloads)
 
 ```bash
-git clone https://github.com/scaffold-eth/scaffold-eth-examples meta-multi-sig
+git clone https://github.com/scaffold-eth/scaffold-eth-examples challenge-4-multisig
 
-cd meta-multi-sig
+cd challenge-4-multisig
 
-git checkout meta-multi-sig
+git checkout challenge-4-multisig
 ```
 
 ```bash
@@ -58,7 +58,7 @@ yarn chain
 
 ```
 
-🔏 Edit your smart contract `MetaMultiSigWallet.sol` in `packages/hardhat/contracts`
+🔏 Edit your smart contract `MultiSigWallet.sol` in `packages/hardhat/contracts`
 
 📝 Edit your frontend `App.jsx` in `packages/react-app/src`
 
