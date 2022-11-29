@@ -104,7 +104,7 @@ describe("Challenge 4: ⚖️ DEX Challenge 🚩", function () {
         let xReserves = ethers.utils.parseEther("5");
         let yReserves = ethers.utils.parseEther("5");
         let yOutput = await dexContract.price(xInput, xReserves, yReserves);
-        expect(yOutput.toString(), "Check your price function's calculations.  Don't forget the 3% fee for liquidity providers").to.equal("831248957812239453");
+        expect(yOutput.toString(), "Check your price function's calculations.  Don't forget the 3% fee for liquidity providers, and the function should be view or pure.").to.equal("831248957812239453");
         xInput = ethers.utils.parseEther("1");
         xReserves = ethers.utils.parseEther("10");
         yReserves = ethers.utils.parseEther("15");
