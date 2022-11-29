@@ -4,7 +4,7 @@
 
 This challenge will help you build/understand a simple decentralized exchange, with one token-pair (ERC20 BALLOONS ($BAL) and ETH). This repo is an updated version of the [original tutorial](https://medium.com/@austin_48503/%EF%B8%8F-minimum-viable-exchange-d84f30bd0c90) and challenge repos before it. Please read the intro for a background on what we are building first!
 
-**There is a `DEXTemplate.sol` file for your use if you want (rename it to `DEX.sol`). As well, this repo has solutions (👮🏻 try not to peak!) in it (in root directory, there's a solutions sub-directory) for now, but the challenge is to write the smart contracts yourself of course!**
+**There is a `DEXTemplate.sol` file for your use if you want (rename it to `DEX.sol`). As well, this repo has solutions (👮🏻 try not to peek!) in it (in root directory, there's a solutions sub-directory) for now, but the challenge is to write the smart contracts yourself of course!**
 
 > ❗️ NOTE: functions outlined within the `DEXTemplate.sol` are what works with the front end of this branch/repo. Also return variable names may need to be specified exactly as outlined within the `Solutions/DEX.sol` file. If you are confused, see solutions folder in this repo and/or cross reference with front-end code.
 
@@ -276,11 +276,11 @@ Let’s create two new functions that let us deposit and withdraw liquidity. How
         uint256 ethReserve = address(this).balance.sub(msg.value);
         uint256 tokenReserve = token.balanceOf(address(this));
         uint256 tokenDeposit;
-        
+
         tokenDeposit = (msg.value.mul(tokenReserve) / ethReserve).add(1);
         // 💡 Discussion on adding 1 wei at end of calculation   ^
         // -> https://t.me/c/1655715571/106
-        
+
         uint256 liquidityMinted = msg.value.mul(totalLiquidity) / ethReserve;
         liquidity[msg.sender] = liquidity[msg.sender].add(liquidityMinted);
         totalLiquidity = totalLiquidity.add(liquidityMinted);
@@ -309,6 +309,7 @@ Let’s create two new functions that let us deposit and withdraw liquidity. How
     }
 
 ```
+
  </details>
 
 Remember that you will need to call `approve()` from the `Balloons.sol` contract approving the DEX to handle a specific number of your $BAL tokens. To keep things simple, you can just do that when interacting with the UI or debug tab with your contract.
@@ -338,7 +339,7 @@ Now, a user can just enter the amount of ETH or tokens they want to swap and the
 
 ---
 
-> ❗ ❗  Note that the testing file is a work in progress, so \packages\hardhat-ts\test\challenge-4.ts is incomplete.  You can run `yarn test` if you like, but may have some failed tests, even with working code.
+> ❗ ❗ Note that the testing file is a work in progress, so \packages\hardhat-ts\test\challenge-4.ts is incomplete. You can run `yarn test` if you like, but may have some failed tests, even with working code.
 
 ---
 
