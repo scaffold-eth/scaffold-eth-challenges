@@ -39,7 +39,7 @@ describe("Challenge 4: ⚖️ DEX Challenge 🚩", function () {
   async function deployNewInstance() {
     before('Deploying fresh contracts', async function () {
       console.log('\t', " 🛫 Deploying new contracts...");
-    
+
       const BalloonsContract = await ethers.getContractFactory("Balloons");
       balloonsContract = await BalloonsContract.deploy();
 
@@ -74,7 +74,7 @@ describe("Challenge 4: ⚖️ DEX Challenge 🚩", function () {
         const BalloonsContract = await ethers.getContractFactory("Balloons");
         balloonsContract = await BalloonsContract.deploy();
 
-        const DexContract = await ethers.getContractFactory("DEX");
+        const DexContract = await ethers.getContractFactory(contractArtifact);
         dexContract = await DexContract.deploy(balloonsContract.address);
 
         await balloonsContract.approve(dexContract.address, ethers.utils.parseEther("100"));
@@ -97,7 +97,7 @@ describe("Challenge 4: ⚖️ DEX Challenge 🚩", function () {
   // ----------------- START OF CHECKPOINT 3 -----------------
   describe ("Checkpoint 3: Price", async () => {
     describe ("price()", async () => {
-      // https://etherscan.io/address/0x7a250d5630b4cf539739df2c5dacb4c659f2488d#readContract 
+      // https://etherscan.io/address/0x7a250d5630b4cf539739df2c5dacb4c659f2488d#readContract
       // in Uniswap the fee is build in getAmountOut() function
       it ("Should calculate the price correctly", async function () {
         let xInput = ethers.utils.parseEther("1");
@@ -123,7 +123,7 @@ describe("Challenge 4: ⚖️ DEX Challenge 🚩", function () {
         console.log('\t', " 💵 Dex contract's initial Eth balance:", formatEther(dex_eth_start));
         console.log('\t', " 📞 Calling ethToToken with a value of 1 Eth...");
         const tx1 = await dexContract.ethToToken({value: ethers.utils.parseEther("1")});
-    
+
         expect(tx1, "ethToToken should revert before initalization").not.to.be.reverted;
 
         console.log('\t', " 🔰 Initializing...");
@@ -207,14 +207,14 @@ describe("Challenge 4: ⚖️ DEX Challenge 🚩", function () {
         console.log('\t', " 💵 Final Ballons $BAL balance:", formatEther(balloons_bal_end));
         const dex_eth_end = await ethers.provider.getBalance(dexContract.address);
         console.log('\t', " 💵 Final DEX Eth balance:", formatEther(dex_eth_end));
-        
+
         await expect(tx1).not.to.be.revertedWith("Contract not initialized");
         // Checks that the balance of the DEX contract has decreased by 1 $BAL
         console.log('\t', " 🎈 Expecting the $BAL balance of the Ballon contract to have increased by 1...");
         expect(await balloonsContract.balanceOf(dexContract.address)).to.equal(balloons_bal_start.add(ethers.utils.parseEther("1")));
         // Checks that the balance of the DEX contract has increased
         console.log('\t', " ⚖️ Expecting the balance of the Dex contract to have decreased...");
-        expect(await ethers.provider.getBalance(dexContract.address)).to.lessThan(dex_eth_start); 
+        expect(await ethers.provider.getBalance(dexContract.address)).to.lessThan(dex_eth_start);
       });
 
       it("Should revert if 0 tokens sent to the DEX", async function () {
@@ -223,7 +223,7 @@ describe("Challenge 4: ⚖️ DEX Challenge 🚩", function () {
 
       it("Should emit event TokenToEthSwap when tokenToEth() called", async function () {
         await expect(dexContract.tokenToEth(ethers.utils.parseEther("1")), "Make sure you're emitting the TokenToEthSwap event correctly").to.emit(dexContract, "TokenToEthSwap");
-      }); 
+      });
 
       it("Should send less eth after the first trade (tokenToEth() called)", async function () {
 
@@ -265,7 +265,7 @@ describe("Challenge 4: ⚖️ DEX Challenge 🚩", function () {
         expect(user2liquidity).to.equal("0");
         console.log('\t', " 🔼 Expecting the deposit function to emit correctly...");
         await expect(
-          dexContract.connect(user2).deposit(( 
+          dexContract.connect(user2).deposit((
             ethers.utils.parseEther("5"),
             { value: ethers.utils.parseEther("5"), }
           )),
@@ -317,7 +317,7 @@ describe("Challenge 4: ⚖️ DEX Challenge 🚩", function () {
         console.log('\t', " 🔽 Expecting the $BAL withdrawn emit to be 1...");
         expect(token_out, "tokenAmount incorrect in emit").to.be.equal(ethers.utils.parseEther("1"));
       });
-      
+
       it("Should revert if sender does not have enough liqudity", async function () {
         console.log('\t', " ✋ Expecting withdraw to revert when there is not enough liquidity...");
         await expect(dexContract.withdraw(ethers.utils.parseEther("100"))).to.be.reverted;
@@ -339,13 +339,13 @@ describe("Challenge 4: ⚖️ DEX Challenge 🚩", function () {
       });
 
       it("Should emit event LiquidityWithdrawn when withdraw() called", async function () {
-        await expect(dexContract.withdraw(ethers.utils.parseEther("1.5")), 
+        await expect(dexContract.withdraw(ethers.utils.parseEther("1.5")),
           "Make sure you emit the LiquidityRemoved event correctly").
           to.emit(dexContract, "LiquidityRemoved").
             withArgs(
-              deployer.address, 
-              ethers.utils.parseEther("1.5"), 
-              ethers.utils.parseEther("1.5"), 
+              deployer.address,
+              ethers.utils.parseEther("1.5"),
+              ethers.utils.parseEther("1.5"),
               ethers.utils.parseEther("1.5")
             );
       });
