@@ -12,11 +12,11 @@ required: [Node](https://nodejs.org/dist/latest-v12.x/) plus [Yarn](https://clas
 
 
 ```bash
-git clone https://github.com/scaffold-eth/scaffold-eth-examples meta-multi-sig
+git clone https://github.com/scaffold-eth/scaffold-eth-challenges challenge-5-multisig
 
-cd meta-multi-sig
+cd challenge-5-multisig
 
-git checkout meta-multi-sig
+git checkout challenge-5-multisig
 ```
 
 ```bash
