@@ -145,7 +145,7 @@ Let’s start with the formula `x * y = k` where `x` and `y` are the reserves:
 
 The `k` is called an invariant because it doesn’t change during trades. (The `k` only changes as liquidity is added.) If we plot this formula, we’ll get a curve that looks something like:
 
-![image](https://user-images.githubusercontent.com/12072395/205336153-5dd1a778-c465-42f5-ae3a-daf87615e74c.png)
+![image](https://user-images.githubusercontent.com/12072395/205342819-0779bde4-05cc-44cd-83bc-6bfff2001b99.png)
 
 > 💡 We are just swapping one asset for another, the “price” is basically how much of the resulting output asset you will get if you put in a certain amount of the input asset.
 
@@ -182,12 +182,12 @@ yarn run deploy
 
 Let’s say we have 1 million ETH and 1 million tokens, if we put this into our price formula and ask it the price of 1000 ETH it will be an almost 1:1 ratio:
 
-![image](https://user-images.githubusercontent.com/12072395/205336587-73d511a7-4960-4eea-9f08-08afde042806.png)
+![image](https://user-images.githubusercontent.com/12072395/205342200-a97af0d8-3366-494b-8b4d-5215de61eb69.png)
 
 If we put in 1000 ETH we will receive 996 tokens. If we’re paying a 0.3% fee it should be 997 if everything was perfect. BUT, there is a tiny bit of slippage as our contract moves away from the original ratio. Let’s dig in more to really understand what is going on here.
 Let’s say there is 5 million ETH and only 1 million tokens. Then, we want to put 1000 tokens in. That means we should receive about 5000 ETH:
 
-![image](https://user-images.githubusercontent.com/12072395/205336754-80d2f285-cf37-413a-a15c-9f266aa98428.png)
+![image](https://user-images.githubusercontent.com/12072395/205341997-7b284786-8f4a-4dde-85e3-eb5bdfc955ce.png)
 
 Finally, let’s say the ratio is the same but we want to swap 100,000 tokens instead of just 1000. We’ll notice that the amount of slippage is much bigger. Instead of 498,000 back we will only get 453,305 because we are making such a big dent in the reserves.
 
