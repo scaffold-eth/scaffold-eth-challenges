@@ -145,7 +145,7 @@ Let’s start with the formula `x * y = k` where `x` and `y` are the reserves:
 
 The `k` is called an invariant because it doesn’t change during trades. (The `k` only changes as liquidity is added.) If we plot this formula, we’ll get a curve that looks something like:
 
-![image](https://user-images.githubusercontent.com/12072395/205342819-0779bde4-05cc-44cd-83bc-6bfff2001b99.png)
+![image](https://user-images.githubusercontent.com/12072395/205343533-7e3a2cfe-8329-42af-a35d-6352a12bf61e.png)
 
 > 💡 We are just swapping one asset for another, the “price” is basically how much of the resulting output asset you will get if you put in a certain amount of the input asset.
 
