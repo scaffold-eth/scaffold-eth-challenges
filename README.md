@@ -50,9 +50,7 @@ Navigate to the Debug Contracts tab and you should see two smart contracts displ
 
 > **⭐️ Also note that there is no curve until you uncomment the specific lines of code at the end of `00_deploy_your_contract.js`**.
 
-<p align="center">
-  <img src="images/StartingUIImage.png" width = "800" />
-</p>
+![image](https://user-images.githubusercontent.com/12072395/205333949-131a8fa6-37da-4c90-ba88-28d0c2c6237a.png)
 
 > 🎉 You've made it this far in Scaffold-Eth Challenges 👏🏼 . As things get more complex, it might be good to review the design requirements of the challenge first! Check out the empty DEXTemplate.sol file to see aspects of each function. If you can explain how each function will work with one another, that's great! 😎
 
@@ -147,9 +145,7 @@ Let’s start with the formula `x * y = k` where `x` and `y` are the reserves:
 
 The `k` is called an invariant because it doesn’t change during trades. (The `k` only changes as liquidity is added.) If we plot this formula, we’ll get a curve that looks something like:
 
-<p align="center">
-  <img src="images/yxk.png" width = "300" />
-</p>
+![image](https://user-images.githubusercontent.com/12072395/205334404-9e21725f-b874-4cac-8563-bdf4425d1c3c.png)
 
 > 💡 We are just swapping one asset for another, the “price” is basically how much of the resulting output asset you will get if you put in a certain amount of the input asset.
 
@@ -186,22 +182,16 @@ yarn run deploy
 
 Let’s say we have 1 million ETH and 1 million tokens, if we put this into our price formula and ask it the price of 1000 ETH it will be an almost 1:1 ratio:
 
-<p align="center">
-  <img src="images/1.png" width = "300" />
-</p>
+![image](https://user-images.githubusercontent.com/12072395/205334459-ce7f91bd-89c7-4ce4-8baa-17d30153efa2.png)
 
 If we put in 1000 ETH we will receive 996 tokens. If we’re paying a 0.3% fee it should be 997 if everything was perfect. BUT, there is a tiny bit of slippage as our contract moves away from the original ratio. Let’s dig in more to really understand what is going on here.
 Let’s say there is 5 million ETH and only 1 million tokens. Then, we want to put 1000 tokens in. That means we should receive about 5000 ETH:
 
-<p align="center">
-  <img src="images/2.png" width = "300" />
-</p>
+![image](https://user-images.githubusercontent.com/12072395/205334501-c5bd5821-657c-4245-be20-3ac96efaef18.png)
 
 Finally, let’s say the ratio is the same but we want to swap 100,000 tokens instead of just 1000. We’ll notice that the amount of slippage is much bigger. Instead of 498,000 back we will only get 453,305 because we are making such a big dent in the reserves.
 
-<p align="center">
-  <img src="images/3.png" width = "300" />
-</p>
+![image](https://user-images.githubusercontent.com/12072395/205334527-a787d53e-4c7a-4207-aea7-cc9a7e6778d5.png)
 
 ❗️ The contract automatically adjusts the price as the ratio of reserves shifts away from the equilibrium. It’s called an 🤖 _Automated Market Maker (AMM)._
 
@@ -327,9 +317,7 @@ Remember that you will need to call `approve()` from the `Balloons.sol` contract
 
 Cool beans! Your front-end should be showing something like this now!
 
-<p align="center">
-  <img src="images/ui-screenshot-final.png" width = "700" />
-</p>
+![image](https://user-images.githubusercontent.com/12072395/205334649-faca4ada-e3a4-4fbe-8c14-65d707535f7b.png)
 
 Now, a user can just enter the amount of ETH or tokens they want to swap and the chart will display how the price is calculated. The user can also visualize how larger swaps result in more slippage and less output asset.
 
