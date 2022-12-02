@@ -191,7 +191,7 @@ Let’s say there is 5 million ETH and only 1 million tokens. Then, we want to p
 
 Finally, let’s say the ratio is the same but we want to swap 100,000 tokens instead of just 1000. We’ll notice that the amount of slippage is much bigger. Instead of 498,000 back we will only get 453,305 because we are making such a big dent in the reserves.
 
-![image](https://user-images.githubusercontent.com/12072395/205336865-4d217235-0552-44e7-a4a1-980e60ca1bcf.png)
+![image](https://user-images.githubusercontent.com/12072395/205341547-c38ec805-74fc-4925-8f7e-48fcef1065d7.png)
 
 ❗️ The contract automatically adjusts the price as the ratio of reserves shifts away from the equilibrium. It’s called an 🤖 _Automated Market Maker (AMM)._
 
