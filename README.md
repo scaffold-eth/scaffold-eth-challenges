@@ -396,7 +396,7 @@ To start the project, clone the repo to your local machine using the following C
 
 > NOTE: If you need to download the latest version of foundry, just run `foundryup`
 
-3. Build the project: `forge build`
+3. Build the project: `forge build` - similar to `yarn compile`, essentially checking that the code compiles.
 
 **Unit Tests to Autograde 🧪**
 
@@ -408,4 +408,4 @@ Next, run the following CLI command: `source .env`
 
 Before testing, make sure you have completed `DEX.sol` and `Balloons.sol` files within the subdirectory under the path: `./packages/hardhat/contracts/`. Temporarily, we can check challenger's submissions by taking their etherscan submissions and hard copying the code into this subdirectory, then running forge tests against them to assess completion.
 
-CLI command: forge test --fork-url https://mainnet.infura.io/v3/$INFURA_KEY
+CLI command: `forge test --fork-url https://mainnet.infura.io/v3/$INFURA_KEY`

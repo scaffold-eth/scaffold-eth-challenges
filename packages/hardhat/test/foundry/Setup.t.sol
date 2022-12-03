@@ -3,7 +3,7 @@ pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import { DEX } from "../../contracts/DEX.sol";
+import { DEX } from "../../contracts/ADDRESS_VAR.sol"; // TODO - see github issue trying to put env vars into a foundry test dynamically
 import { Balloons } from "../../contracts/Balloons.sol";
 
 abstract contract Setup is Test {
@@ -27,8 +27,6 @@ abstract contract Setup is Test {
     uint256 public constant ethInput = 10 ** 18;
     uint256 public constant balloonsInput = 10 ** 18;
     uint256 public constant withdrawAmount = balloonsInput / 2;
-
-
 
     uint256 public constant PRICE_PRECISION = 10 ** 18;
 
