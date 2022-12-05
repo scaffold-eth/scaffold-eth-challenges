@@ -474,7 +474,7 @@ function App(props) {
     });
   };
 
-    /*
+  /*
   const riggedRoll = async () => {
     tx(writeContracts.RiggedRoll.riggedRoll({ gasLimit: 500000 }), update => {
       console.log("TX UPDATE", update);
