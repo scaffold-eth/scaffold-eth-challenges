@@ -76,7 +76,7 @@ describe(" 🕞 Statechannel Challenge: The Guru's Offering 👑", function () {
       const fundingTx = await streamerContract.fundChannel({
         value: ethers.utils.parseEther("1"),
       });
-      console.log('\t',"⏫ Checking emit");
+      console.log('\t',"⏫  Checking emit");
       await expect(fundingTx).to.emit(streamerContract, "Opened");
     });
 
