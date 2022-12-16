@@ -263,6 +263,7 @@ Let’s create two new functions that let us deposit and withdraw liquidity. How
 
 ```
     function deposit() public payable returns (uint256 tokensDeposited) {
+        require(msg.value > 0, "Must send value when depositing");
         uint256 ethReserve = address(this).balance.sub(msg.value);
         uint256 tokenReserve = token.balanceOf(address(this));
         uint256 tokenDeposit;
