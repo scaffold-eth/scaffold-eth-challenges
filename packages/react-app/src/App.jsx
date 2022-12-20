@@ -76,6 +76,7 @@ const localProvider = new StaticJsonRpcProvider(localProviderUrlFromEnv);
 const blockExplorer = targetNetwork.blockExplorer;
 
 function App(props) {
+  const location = useLocation();
   const mainnetProvider = scaffoldEthProvider && scaffoldEthProvider._network ? scaffoldEthProvider : mainnetInfura;
 
   const [injectedProvider, setInjectedProvider] = useState();
@@ -278,7 +279,7 @@ function App(props) {
       {/* ✏️ Edit the header and change the title to your project name */}
       <Header />
       {networkDisplay}
-      <Menu style={{ textAlign: "center" }} selectedKeys={[location?.pathname]} mode="horizontal">
+      <Menu style={{ textAlign: "center" }} selectedKeys={[location.pathname]} mode="horizontal">
         <Menu.Item key="/">
           <Link to="/">MultiSig</Link>
         </Menu.Item>
