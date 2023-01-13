@@ -7,4 +7,7 @@ cache_path  = 'forge-cache'
 remappings = [
     "@openzeppelin=lib/openzeppelin-contracts/"
 ]
+
+[fmt]
+line_length = 100
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config

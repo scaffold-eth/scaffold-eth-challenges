@@ -7,11 +7,10 @@ import "./Setup.t.sol";
 /// @title DEX Grading Tests
 /// @author stevepham.eth and jaxcoder.eth
 /// @notice Test file acts as grader for challenger's submission. Therefore, it is different than normal unit tests seen in protocol development, in that it actually is just testing other people's code against a solution code file.
-/// @dev Due to nature of this grading test, helpers are pulled directly from solutions file.
-contract DEXTest is Setup {    
-    
+/// @dev Helpers are pulled directly from solutions file since this is purely a *grading* test for education purposes.
+contract DEXTest is Setup {
     /// EVENTs:
-    
+
     /// @notice Emitted when ethToToken() swap transacted
     event EthToTokenSwap(address swapper, string txDetails, uint256 ethInput, uint256 tokenOutput);
 
@@ -19,7 +18,9 @@ contract DEXTest is Setup {
     event TokenToEthSwap(address swapper, string txDetails, uint256 tokensInput, uint256 ethOutput);
 
     ///@notice Emitted when liquidity provided to DEX and mints LPTs.
-    event LiquidityProvided(address liquidityProvider, uint256 tokensInput, uint256 ethInput, uint256 liquidityMinted);
+    event LiquidityProvided(
+        address liquidityProvider, uint256 tokensInput, uint256 ethInput, uint256 liquidityMinted
+    );
 
     /// @notice Emitted when liquidity removed from DEX and decreases LPT count within DEX.
     event LiquidityRemoved(
@@ -28,8 +29,6 @@ contract DEXTest is Setup {
         uint256 ethOutput,
         uint256 liquidityWithdrawn
     );
-
-    /// Main DEX Functional Tests
 
     /// DEXConstructor() tests
 
@@ -40,15 +39,16 @@ contract DEXTest is Setup {
 
     /// init() tests
 
+    // TODO - check that local unit tests actually copy the mainnet fork, pretty sure it does, but if it doesn't, that is why my unit tests are failing when running `forge test`
     function testInit() public {
         vm.startPrank(owner);
         uint256 oldBalance = balloons.balanceOf(owner);
         uint256 userOldETHBalance = owner.balance;
-        dex.init{value: initETHBalance}(initBalloonBalance); 
+        dex.init{value: initETHBalance}(initBalloonBalance);
         assertEq(dex.totalLiquidity(), initBalloonBalance);
         assertEq(dex.liquidity(owner), initBalloonBalance);
         assertEq(balloons.balanceOf(owner), oldBalance - initBalloonBalance);
-        assertEq(dex.getBalance(), initETHBalance); 
+        assertEq(dex.getBalance(), initETHBalance);
         vm.stopPrank();
     }
 
@@ -61,8 +61,7 @@ contract DEXTest is Setup {
     }
 
     // TODO: remove reversion statement from challenge actually because ERC20 has a revert already if transferFrom() fails. See my TODO in DEX.sol
-    function testCannotInitNoTokenTransfer() public {
-    }
+    function testCannotInitNoTokenTransfer() public {}
 
     /// price() tests
 
@@ -73,33 +72,39 @@ contract DEXTest is Setup {
         vm.startPrank(owner);
         // check that price makes sense after init()
         uint256 expectedPrice1 = price(ethInput, dex.getBalance(), balloons.balanceOf(address(dex)));
-        uint256 actualPrice1 = dex.price(ethInput, dex.getBalance(), balloons.balanceOf(address(dex)));
+        uint256 actualPrice1 =
+            dex.price(ethInput, dex.getBalance(), balloons.balanceOf(address(dex)));
         assertEq(expectedPrice1, actualPrice1);
 
         // test price after a swap of ETH
         dex.ethToToken{value: ethInput}();
         uint256 expectedPrice2 = price(ethInput, dex.getBalance(), balloons.balanceOf(address(dex)));
-        uint256 actualPrice2 = dex.price(ethInput, dex.getBalance(), balloons.balanceOf(address(dex)));        
+        uint256 actualPrice2 =
+            dex.price(ethInput, dex.getBalance(), balloons.balanceOf(address(dex)));
         assertEq(expectedPrice2, actualPrice2);
 
-        dex.tokenToEth(balloonsInput);
-        
-        // test price after a swap of balloons
-        dex.ethToToken{value: ethInput}();
-        uint256 expectedPrice3 = price(ethInput, dex.getBalance(), balloons.balanceOf(address(dex)));
-        uint256 actualPrice3 = dex.price(ethInput, dex.getBalance(), balloons.balanceOf(address(dex)));       
+        dex.tokenToEth(2 * balloonsInput);
+
+        // TODO - test price after a swap of balloons
+        // dex.ethToToken{value: ethInput}();
+        uint256 expectedPrice3 =
+            price(2 * balloonsInput, dex.getBalance(), balloons.balanceOf(address(dex)));
+        uint256 actualPrice3 =
+            dex.price(2 * balloonsInput, dex.getBalance(), balloons.balanceOf(address(dex)));
         assertEq(expectedPrice3, actualPrice3);
 
         // test price() after a deposit()
         dex.deposit{value: ethInput}();
         uint256 expectedPrice4 = price(ethInput, dex.getBalance(), balloons.balanceOf(address(dex)));
-        uint256 actualPrice4 = dex.price(ethInput, dex.getBalance(), balloons.balanceOf(address(dex)));       
+        uint256 actualPrice4 =
+            dex.price(ethInput, dex.getBalance(), balloons.balanceOf(address(dex)));
         assertEq(expectedPrice4, actualPrice4);
 
         // test price() after a withdraw()
         dex.withdraw(balloonsInput);
         uint256 expectedPrice5 = price(ethInput, dex.getBalance(), balloons.balanceOf(address(dex)));
-        uint256 actualPrice5 = dex.price(ethInput, dex.getBalance(), balloons.balanceOf(address(dex)));       
+        uint256 actualPrice5 =
+            dex.price(ethInput, dex.getBalance(), balloons.balanceOf(address(dex)));
         assertEq(expectedPrice5, actualPrice5);
 
         vm.stopPrank();
@@ -113,12 +118,12 @@ contract DEXTest is Setup {
         assertEq(dex.liquidity(owner), dex.getLiquidity(owner));
     }
 
-    /// ethToTokan() tests
+    /// ethToToken() tests
 
     /// @notice test ethToToken() functionality
     function testEthToToken() public {
         _init(); // 5 balloons, and 5 ETH in pool.
-        
+
         // basic manual calc that should be in challenger contract of expected tokenOut
         uint256 oldETHBal = owner.balance;
         uint256 oldBalloonBal = balloons.balanceOf(owner);
@@ -126,7 +131,7 @@ contract DEXTest is Setup {
         uint256 oldDexEthBal = dex.getBalance();
         uint256 token_reserve = balloons.balanceOf(address(dex));
         uint256 tokenOutput = price(ethInput, oldDexEthBal, token_reserve);
-        
+
         vm.startPrank(owner);
         vm.expectEmit(false, false, false, false); // TODO: update with (true, true, true, true), once you know what tokenOut 100% is including any small decimal discrepancies.
         emit EthToTokenSwap(owner, "Eth to Balloons", ethInput, tokenOutput);
@@ -136,7 +141,9 @@ contract DEXTest is Setup {
         assertApproxEqAbs(balloons.balanceOf(owner), oldBalloonBal + tokenOutput, 150 * 10 ** 15); // TODO: a bit hacky, but I think the balloon balance is just off with slippage calc? Not sure.
         assertEq(owner.balance, oldETHBal - ethInput);
         assertEq(dex.getBalance(), oldDexEthBal + ethInput);
-        assertApproxEqAbs(balloons.balanceOf(address(dex)), oldDexBalloon - tokenOutput, 150 * 10 ** 15);
+        assertApproxEqAbs(
+            balloons.balanceOf(address(dex)), oldDexBalloon - tokenOutput, 150 * 10 ** 15
+        );
 
         vm.stopPrank();
     }
@@ -150,11 +157,10 @@ contract DEXTest is Setup {
 
     /// tokenToETH() tests
 
-
     /// @notice test tokenToEth() functionality
     function testTokenToEth() public {
         _init(); // 5 balloons, and 5 ETH in pool.
-        
+
         // basic manual calc of expected tokenOut
         uint256 calcEthOut; // TODO: get some help on this, cause you code late at night lol and are too tired to think on this.
         uint256 oldUserETHBal = owner.balance;
@@ -185,7 +191,7 @@ contract DEXTest is Setup {
         dex.tokenToEth(0);
     }
 
-/// deposit() tests
+    /// deposit() tests
 
     /// @notice test deposit() of assets for liquidity representation in DEX (records of LPs)
     function testDeposit() public {
@@ -240,7 +246,7 @@ contract DEXTest is Setup {
         uint256 expectedOwnerEth = owner.balance + ethWithdrawn;
 
         vm.startPrank(owner);
-        
+
         vm.expectEmit(false, false, false, false);
         emit LiquidityRemoved(owner, withdrawAmount, ethWithdrawn, tokenAmount);
         dex.withdraw(withdrawAmount);
@@ -265,25 +271,24 @@ contract DEXTest is Setup {
         _init();
         assertEq(dex.getBalance(), initETHBalance);
     }
-    
+
     /// helpers
 
     /// @notice initializes dex with 5 ETHER and 5 $BAL
     function _init() private {
         vm.prank(owner);
-        dex.init{value: initETHBalance}(initBalloonBalance); 
+        dex.init{value: initETHBalance}(initBalloonBalance);
     }
 
     /// @notice solution to the price function that we are using to assess challenger's code
-    function price(
-        uint256 xInput,
-        uint256 xReserves,
-        uint256 yReserves
-    ) private view returns (uint256 yOutput) {
+    function price(uint256 xInput, uint256 xReserves, uint256 yReserves)
+        private
+        view
+        returns (uint256 yOutput)
+    {
         uint256 xInputWithFee = xInput * 997;
         uint256 numerator = xInputWithFee * yReserves;
         uint256 denominator = (xReserves * 1000) + xInputWithFee;
         return (numerator / denominator);
     }
-    
 }

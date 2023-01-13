@@ -7,6 +7,10 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
  * @title DEX
  * @author stevepham.eth and m00npapi.eth
  * @notice this is a single token pair reserves DEX, ref: "Scaffold-ETH Challenge 4" as per https://speedrunethereum.com/, README.md and full branch (front-end) made with lots of inspiration from pre-existing example repos in scaffold-eth organization.
+ *
+ *  1. Address as env var - address.sol pulled from etherscan
+ *  2. Import that into the contracts folder
+ *  3. Run the test against that contract without renaming the contract
  */
 contract DEX {
     /* ========== GLOBAL VARIABLES ========== */
@@ -31,7 +35,9 @@ contract DEX {
     /**
      * @notice Emitted when liquidity provided to DEX and mints LPTs.
      */
-    event LiquidityProvided(address liquidityProvider, uint256 tokensInput, uint256 ethInput, uint256 liquidityMinted);
+    event LiquidityProvided(
+        address liquidityProvider, uint256 tokensInput, uint256 ethInput, uint256 liquidityMinted
+    );
 
     /**
      * @notice Emitted when liquidity removed from DEX and decreases LPT count within DEX.
@@ -62,7 +68,10 @@ contract DEX {
         require(totalLiquidity == 0, "DEX: init - already has liquidity");
         totalLiquidity = address(this).balance;
         liquidity[msg.sender] = totalLiquidity;
-        require(token.transferFrom(msg.sender, address(this), tokens), "DEX: init - transfer did not transact"); // TODO: remove this from challenge because ERC20 has a revert already if transferFrom() fails.
+        require(
+            token.transferFrom(msg.sender, address(this), tokens),
+            "DEX: init - transfer did not transact"
+        ); // TODO: remove this from challenge because ERC20 has a revert already if transferFrom() fails.
         return totalLiquidity;
     }
 
@@ -72,11 +81,11 @@ contract DEX {
      * @param xReserves amount of ETH reserves before price check
      * @param yReserves amount of BAL reserves before price check
      */
-    function price(
-        uint256 xInput,
-        uint256 xReserves,
-        uint256 yReserves
-    ) public view returns (uint256 yOutput) {
+    function price(uint256 xInput, uint256 xReserves, uint256 yReserves)
+        public
+        view
+        returns (uint256 yOutput)
+    {
         uint256 xInputWithFee = xInput * 997;
         uint256 numerator = xInputWithFee * yReserves;
         uint256 denominator = (xReserves * 1000) + xInputWithFee;
@@ -111,8 +120,11 @@ contract DEX {
         require(tokenInput > 0, "cannot swap 0 tokens");
         uint256 token_reserve = token.balanceOf(address(this));
         uint256 ethOutput = price(tokenInput, token_reserve, address(this).balance);
-        require(token.transferFrom(msg.sender, address(this), tokenInput), "tokenToEth(): reverted swap."); // TODO: I believe the reversion statement isn't even needed.
-        (bool sent, ) = msg.sender.call{ value: ethOutput }("");
+        require(
+            token.transferFrom(msg.sender, address(this), tokenInput),
+            "tokenToEth(): reverted swap."
+        ); // TODO: I believe the reversion statement isn't even needed.
+        (bool sent,) = msg.sender.call{value: ethOutput}("");
         require(sent, "tokenToEth: revert in transferring eth to you!");
         emit TokenToEthSwap(msg.sender, "Balloons to ETH", ethOutput, tokenInput);
         return ethOutput;
@@ -145,7 +157,10 @@ contract DEX {
      * NOTE: with this current code, the msg caller could end up getting very little back if the liquidity is super low in the pool. I guess they could see that with the UI.
      */
     function withdraw(uint256 amount) public returns (uint256 eth_amount, uint256 token_amount) {
-        require(liquidity[msg.sender] >= amount, "withdraw: sender does not have enough liquidity to withdraw.");
+        require(
+            liquidity[msg.sender] >= amount,
+            "withdraw: sender does not have enough liquidity to withdraw."
+        );
         uint256 ethReserve = address(this).balance;
         uint256 tokenReserve = token.balanceOf(address(this));
         uint256 ethWithdrawn;
@@ -155,7 +170,7 @@ contract DEX {
         uint256 tokenAmount = amount * tokenReserve / totalLiquidity;
         liquidity[msg.sender] = liquidity[msg.sender] - amount;
         totalLiquidity = totalLiquidity - amount;
-        (bool sent, ) = payable(msg.sender).call{ value: ethWithdrawn }("");
+        (bool sent,) = payable(msg.sender).call{value: ethWithdrawn}("");
         require(token.transfer(msg.sender, tokenAmount));
         emit LiquidityRemoved(msg.sender, amount, ethWithdrawn, tokenAmount);
         return (ethWithdrawn, tokenAmount);
