@@ -18,7 +18,7 @@ Want a fresh cloud environment? Click this to open a gitpod workspace, then skip
 
 Required: 
 * [Git](https://git-scm.com/downloads)
-* [Node](https://nodejs.org/dist/latest-v16.x/)  (🧨 Currently use Node v16 as v17 & v18 are unstable 🧨)
+* [Node](https://nodejs.org/en/download/) (Use Version 18 LTS)
 * [Yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable)
 
 (⚠️ Don't install the linux package `yarn` make sure you install yarn with `npm i -g yarn` or even `sudo npm i -g yarn`!)
