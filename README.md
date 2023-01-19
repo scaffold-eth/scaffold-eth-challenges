@@ -32,13 +32,17 @@ _One thing to note is that Foundry can be used in a more 'minimal' smart contrac
 
    > NOTE: If you have not installed the submodules, probably because you ran `git clone <repo link>` instead of the CLI command in step 1, you may run into errors when running `forge build` since it is looking for the dependencies for the project. `git submodule update --init --recursive` can be used if you clone the repo without installing the submodules.
 
-2. Navigate to `./packages/hardhat` from the root of your local copy of the `challenge-4-dex` branch. Install forge on your machine if you do not have it already: `forge install`
+2. Navigate to `./packages/hardhat` from the root of your local copy of the `challenge-4-dex` branch. 
+
+> Here you should see the main foundry directories: `lib/`, `test/`, `script/`. Normally there is a `src/` directory for `smart contracts` but the scaffold-eth setup with hardhat requires a bit of tweaking from the default Foundry setup. See the foundry docs to see what typical directory setup comes when setting up a project with foundry. The `test/` directory here has a `foundry` subdirectory containing the test files for the `DEX.sol` smart contracts. Check them out! 
+
+3. Next, install forge on your machine if you do not have it already: `forge install`
 
 > NOTE: If you need to download the latest version of foundry, just run `foundryup`
 
-3. Build the project: `forge build` - similar to `yarn compile`, essentially checking that the code compiles.
+4. Build the project: `forge build` - similar to `yarn compile`, essentially checking that the code compiles.
 
-4. Run unit tests using foundry: `forge test` and you will see the results! You can use this against your own custom DEX code and start to play around with how to write tests. This shows how it can be used to make more robust smart contract code, let alone just your DEX contract. 
+5. Run unit tests using foundry: `forge test` and you will see the results! You can use this against your own custom DEX code and start to play around with how to write tests. This shows how it can be used to make more robust smart contract code, let alone just your DEX contract. 
 
 🎉🙌🏼 That's it! You've ran your first foundry project using the DEX challenge. Nice job! This was just a preview though and the test code and setup was basically already done for you. **👨🏻‍💻 Now check out the foundry docs and community even more and try writing foundry test code for your other projects!**
 
