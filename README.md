@@ -384,8 +384,15 @@ Post your solution on your [BuidlGuidl.com](https://buidlguidl.com) profile and 
 
 ---
 
-### Foundry Testing 😎 (BUIDL GUIDL Admin Notes - Challengers can ignore this unless you want to play with Foundry)
+### Foundry Testing 😎 - An Intro to an Awesome Toolchain
 
+Foundry is a smart contract development toolchain that has become very popular among many protocols today. They boast faster fuzzing tests, and other 'cleaner' flows of smart contract development compared to other alternatives. That said, it is not the be-all-end-all solution to smart contract development, and other setups and tools are definitely noteable.
+
+This branch is just another starting point for you to learn a new aspect of smart contract development! Please feel free to follow the instructions below, as the branch should be set to go to showcase running unit tests against the dex smart contract code you just finished writing. 💅🏼
+
+> _For more information, we highly recommend checking out their docs, they are SO well written, and these other resources_ <!-- Put link to pattrick collins video on foundry, foundry docs, foundry TG chat-->
+
+#### Set Up for DEX Unit Tests Using Foundry
 To start the project, clone the repo to your local machine using the following CLI command:
 
 1. Clone the repo onto your local machine and install the submodules: `git clone --recursive <repo link>`
@@ -398,14 +405,6 @@ To start the project, clone the repo to your local machine using the following C
 
 3. Build the project: `forge build` - similar to `yarn compile`, essentially checking that the code compiles.
 
-**Unit Tests to Autograde 🧪**
+4. Run unit tests using foundry: `forge test` and you will see the results! You can use this against your own custom DEX code and start to play around with how the test writing works and how it can be used to make more and more robust smart contract code, let alone your DEX more robust. 
 
-To run unit tests against a non-persistent local mainnet fork, first make sure you have a .env file set up at the root (follow .env.example format) and populate the INFURA_KEY variable like so:
-
-INFURA_KEY="<INSERT_INFURA_API_KEY_HERE>"
-
-Next, run the following CLI command: `source .env`
-
-Before testing, make sure you have completed `DEX.sol` and `Balloons.sol` files within the subdirectory under the path: `./packages/hardhat/contracts/`. Temporarily, we can check challenger's submissions by taking their etherscan submissions and hard copying the code into this subdirectory, then running forge tests against them to assess completion.
-
-CLI command: `forge test --fork-url https://mainnet.infura.io/v3/$INFURA_KEY`
+That's it! You've ran your first foundry project using the DEX challenge. Nice job! Now check out the foundry docs and community even more and try writing foundry test code for your other projects!
