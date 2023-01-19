@@ -1,5 +1,52 @@
 # 🏗 scaffold-eth | 🏰 BuidlGuidl
 
+## 🚩 **BONUS for Challenge 4: Minimum Viable Exchange - Foundry Testing**
+
+This branch is just another starting point for you to learn a new aspect of smart contract development, using Foundry in unit testing! 
+
+> 🚨 It's recommended that you have actually completed the DEX challenge before trying to play around with foundry to test the DEX.sol code.
+### 🧪 **Foundry Testing for the DEX Challenge: 😎 An Intro to an Awesome Toolchain**
+
+Foundry is a smart contract development toolchain that has become very popular among protocols today. Foundry has faster fuzzing tests, and other 'cleaner' flows  for smart contract development vs other alternatives. That said, it is not the be-all-end-all solution to smart contract development, and other setups and tools can be more suitable depending on the situation. 
+
+Please feel free to follow the instructions below. It will walk you through running unit tests against the dex smart contract code you just finished writing. 💅🏼 Treat this as a preview to how foundry works in your workflow. It's important to write smart contract code that has been rigorously tested before pushing it out to production.
+
+> BONUS on the BONUS: try writing some foundry tests against your DEX. Can you make even more robust tests? If so, open up a PR to this branch and help us improve this!
+---
+**👨🏻‍🏫 Resources**
+
+_Before we start, for more information, we highly recommend checking out their docs, they are SO well written, and these other resources:_ 
+
+1. [Foundry docs](https://book.getfoundry.sh/)
+
+2. [Intro to Foundry video  by Patrick Collins](https://youtu.be/fNMfMxGxeag)
+
+3. [Foundry telegram group chat](https://t.me/foundry_support)
+
+---
+## **🚶🏻‍♂️✨Walking Through DEX Unit Tests Using Foundry 🥷**
+
+_One thing to note is that Foundry can be used in a more 'minimal' smart contract development workflow. As seen in repos like (Maple Finances](https://github.com/maple-labs/maple-core), there is no `package.json` or use of NPM. Foundry uses `git submodules` for dependencies!_
+
+1. Clone the repo onto your local machine and install the submodules: `git clone --recursive <repo link>`
+
+   > NOTE: If you have not installed the submodules, probably because you ran `git clone <repo link>` instead of the CLI command in step 1, you may run into errors when running `forge build` since it is looking for the dependencies for the project. `git submodule update --init --recursive` can be used if you clone the repo without installing the submodules.
+
+2. Navigate to `./packages/hardhat` from the root of your local copy of the `challenge-4-dex` branch. Install forge on your machine if you do not have it already: `forge install`
+
+> NOTE: If you need to download the latest version of foundry, just run `foundryup`
+
+3. Build the project: `forge build` - similar to `yarn compile`, essentially checking that the code compiles.
+
+4. Run unit tests using foundry: `forge test` and you will see the results! You can use this against your own custom DEX code and start to play around with how to write tests. This shows how it can be used to make more robust smart contract code, let alone just your DEX contract. 
+
+🎉🙌🏼 That's it! You've ran your first foundry project using the DEX challenge. Nice job! This was just a preview though and the test code and setup was basically already done for you. **👨🏻‍💻 Now check out the foundry docs and community even more and try writing foundry test code for your other projects!**
+
+Below is the original README for the DEX challenge for reference.
+
+
+<details markdown='1'><summary>👩🏽‍🏫 Original README for DEX Challenge </summary>
+
 ## 🚩 **Challenge 4: Minimum Viable Exchange**
 
 This challenge will help you build/understand a simple decentralized exchange, with one token-pair (ERC20 BALLOONS ($BAL) and ETH). This repo is an updated version of the [original tutorial](https://medium.com/@austin_48503/%EF%B8%8F-minimum-viable-exchange-d84f30bd0c90) and challenge repos before it. Please read the intro for a background on what we are building first!
@@ -382,29 +429,4 @@ Post your solution on your [BuidlGuidl.com](https://buidlguidl.com) profile and 
 
 > 💬 Problems, questions, comments on the stack? Post them to the [🏗 scaffold-eth developers chat](https://t.me/joinchat/F7nCRK3kI93PoCOk)
 
----
-
-### Foundry Testing 😎 - An Intro to an Awesome Toolchain
-
-Foundry is a smart contract development toolchain that has become very popular among many protocols today. They boast faster fuzzing tests, and other 'cleaner' flows of smart contract development compared to other alternatives. That said, it is not the be-all-end-all solution to smart contract development, and other setups and tools are definitely noteable.
-
-This branch is just another starting point for you to learn a new aspect of smart contract development! Please feel free to follow the instructions below, as the branch should be set to go to showcase running unit tests against the dex smart contract code you just finished writing. 💅🏼
-
-> _For more information, we highly recommend checking out their docs, they are SO well written, and these other resources_ <!-- Put link to pattrick collins video on foundry, foundry docs, foundry TG chat-->
-
-#### Set Up for DEX Unit Tests Using Foundry
-To start the project, clone the repo to your local machine using the following CLI command:
-
-1. Clone the repo onto your local machine and install the submodules: `git clone --recursive <repo link>`
-
-   > NOTE: If you have not installed the submodules, probably because you ran `git clone <repo link>` instead of the CLI command in step 1, you may run into errors when running `forge build` since it is looking for the dependencies for the project. `git submodule update --init --recursive` can be used if you clone the repo without installing the submodules.
-
-2. Navigate to `./packages/hardhat` from the root of your local copy of the `challenge-4-dex` branch. Install forge on your machine if you do not have it already: `forge install`
-
-> NOTE: If you need to download the latest version of foundry, just run `foundryup`
-
-3. Build the project: `forge build` - similar to `yarn compile`, essentially checking that the code compiles.
-
-4. Run unit tests using foundry: `forge test` and you will see the results! You can use this against your own custom DEX code and start to play around with how the test writing works and how it can be used to make more and more robust smart contract code, let alone your DEX more robust. 
-
-That's it! You've ran your first foundry project using the DEX challenge. Nice job! Now check out the foundry docs and community even more and try writing foundry test code for your other projects!
+</details>
