@@ -11,6 +11,7 @@ const axios = require("axios");
 
 export default function CreateTransaction({
   poolServerUrl,
+  blockExplorer,
   contractName,
   address,
   setRoute,
@@ -19,14 +20,16 @@ export default function CreateTransaction({
   localProvider,
   yourLocalBalance,
   price,
+  admin,
   tx,
+  nonce,
   readContracts,
   writeContracts,
 }) {
   const history = useHistory();
 
   // keep track of a variable from the contract in the local React state:
-  const nonce = useContractReader(readContracts, contractName, "nonce");
+  // const nonce = useContractReader(readContracts, contractName, "nonce");
   const calldataInputRef = useRef("0x");
 
   console.log("🤗 nonce:", nonce);
@@ -36,38 +39,78 @@ export default function CreateTransaction({
   const [customNonce, setCustomNonce] = useState();
   const [to, setTo] = useLocalStorage("to");
   const [amount, setAmount] = useLocalStorage("amount", "0");
+  const [sigs, setSigs] = useLocalStorage("signatures", "1")
   const [data, setData] = useLocalStorage("data", "0x");
   const [isCreateTxnEnabled, setCreateTxnEnabled] = useState(true);
   const [decodedDataState, setDecodedData] = useState();
   const [methodName, setMethodName] = useState();
   const [selectDisabled, setSelectDisabled] = useState(false);
+  const [result, setResult] = useState("");
+  const [error, setError] = useState("");
   let decodedData = "";
+  let decodedDataObject = "";
 
-  const [result, setResult] = useState();
+  // these are the methodNames for the function calls that only the Admin can create!
+  const adminPrivs = [
+    "addSigner",
+    "addWriter",
+    "removeSigner",
+    "removeWriter",
+    "openStream"
+  ];
+
+  const errorAdmin = "ERROR: NOT ADMIN";
+  const errorWriter = "ERROR: NOT WRITER";
+
+  function resetError() {
+    setTimeout(() => {
+      setError("");
+    }, 2000)
+  };
 
   const inputStyle = {
     padding: 10,
   };
-  let decodedDataObject = "";
+
   useEffect(() => {
     const inputTimer = setTimeout(async () => {
       console.log("EFFECT RUNNING");
       try {
-        // if(methodName == "transferFunds"){
+        // if (methodName == "updateSignaturesRequired") {
         //   console.log("Send transaction selected")
-        //   console.log("🔥🔥🔥🔥🔥🔥",amount)
-        //     const calldata = readContracts[contractName].interface.encodeFunctionData("transferFunds",[to,parseEther("" + parseFloat(amount).toFixed(12))])
-        //     setData(calldata);
+        //   console.log("🔥🔥🔥🔥🔥🔥", sigs)
+        //   const calldata = readContracts[contractName].interface.encodeFunctionData("updateSignaturesRequired", sigs);
+        //   setData(calldata);
         // }
         // decodedDataObject = readContracts ? await readContracts[contractName].interface.parseTransaction({ data }) : "";
         // console.log("decodedDataObject", decodedDataObject);
         // setCreateTxnEnabled(true);
-        if(decodedDataObject.signature === "addSigner(address,uint256)"){
-          setMethodName("addSigner")
-          setSelectDisabled(true)
-        } else if (decodedDataObject.signature === "removeSigner(address,uint256)"){
-          setMethodName("removeSigner")
-          setSelectDisabled(true)
+        if (data != "0x") {
+          decodedDataObject = readContracts ? await readContracts[contractName].interface.parseTransaction({ data }) : "";
+          console.log("decodedDataObject", decodedDataObject);
+          if (decodedDataObject.signature === "addSigner(address,uint256)") {
+            setMethodName("addSigner")
+            setSelectDisabled(true)
+          } else if (decodedDataObject.signature === "removeSigner(address,uint256)") {
+            setMethodName("removeSigner")
+            setSelectDisabled(true)
+          } else if (decodedDataObject.signature === "addWriter(address,uint256)") {
+            setMethodName("addWriter")
+            setSelectDisabled(true)
+          } else if (decodedDataObject.signature === "removeWriter(address,uint256)") {
+            setMethodName("removeWriter")
+            setSelectDisabled(true)
+          } else if (decodedDataObject.signature === "openStream(address,uint256,uint256)") {
+            setMethodName("openStream")
+            setSelectDisabled(true)
+          } else if (decodedDataObject.signature === "closeStream(address)") {
+            setMethodName("closeStream")
+            setSelectDisabled(true)
+          }
+          // } else if (decodedDataObject.signature === "updateSignaturesRequired(uint256)") {
+          //   setMethodName("updateSignaturesRequired")
+          //   setSelectDisabled(true)
+          // }
         }
         decodedData = (
           <div>
@@ -99,7 +142,7 @@ export default function CreateTransaction({
                 if (element.type === "uint256") {
                   return (
                     <p style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "left" }}>
-                  {element.name === "value" ? <><b>{element.name} : </b> <Balance fontSize={16} balance={decodedDataObject.args[index]} dollarMultiplier={price} /> </> : <><b>{element.name} : </b> {decodedDataObject.args[index] && decodedDataObject.args[index].toNumber()}</>}
+                      {element.name === "value" ? <><b>{element.name} : </b> <Balance fontSize={16} balance={decodedDataObject.args[index]} dollarMultiplier={price} /> </> : <><b>{element.name} : </b> {decodedDataObject.args[index] && decodedDataObject.args[index].toNumber()}</>}
                     </p>
                   );
                 }
@@ -110,12 +153,14 @@ export default function CreateTransaction({
         setCreateTxnEnabled(true);
         setResult();
 
-      } catch (error) {
 
-        console.log("mistake: ",error);
-        if(data!== "0x") setResult("ERROR: Invalid calldata");
+      } catch (_error) {
+
+        console.log("mistake: ", _error);
+        if (data !== "0x") setError("ERROR: Invalid calldata");
         setCreateTxnEnabled(false);
       }
+
     }, 500);
     return () => {
       clearTimeout(inputTimer);
@@ -124,26 +169,29 @@ export default function CreateTransaction({
 
   let resultDisplay;
   if (result) {
-    if (result.indexOf("ERROR") >= 0) {
-      resultDisplay = <div style={{ margin: 16, padding: 8, color: "red" }}>{result}</div>;
-    } else {
-      resultDisplay = (
-        <div style={{ margin: 16, padding: 8 }}>
-          <Blockie size={4} scale={8} address={result} /> Tx {result.substr(0, 6)} Created!
-          <div style={{ margin: 8, padding: 4 }}>
-            <Spin />
-          </div>
+    resultDisplay = (
+      <div style={{ margin: 16, padding: 8 }}>
+        <Blockie size={4} scale={8} address={result} /> Tx {result.substr(0, 6)} Created!
+        <div style={{ margin: 8, padding: 4 }}>
+          <Spin />
         </div>
-      );
-    }
+      </div>
+    );
   }
+
 
   return (
     <div>
+      <h2 style={{ marginTop: 32 }}>Administrator:  {admin ? <Address
+        address={admin}
+        ensProvider={mainnetProvider}
+        blockExplorer={blockExplorer}
+        fontSize={32}
+      /> : <Spin></Spin>}</h2>
       {/*
         ⚙️ Here is an example UI that displays and sets the purpose in your smart contract:
       */}
-      <div style={{ border: "1px solid #cccccc", padding: 16, width: 400, margin: "auto", marginTop: 64 }}>
+      <div style={{ border: "1px solid #cccccc", padding: 16, width: 400, margin: "auto", marginTop: 32 }}>
         <div style={{ margin: 8 }}>
           <div style={inputStyle}>
             <Input
@@ -154,13 +202,18 @@ export default function CreateTransaction({
               onChange={setCustomNonce}
             />
           </div>
-                  <div style={{margin:8,padding:8}}>
-          <Select value={methodName} disabled={selectDisabled} style={{ width: "100%" }} onChange={ setMethodName }>
-            //<Option key="transferFunds">transferFunds()</Option>
-            <Option disabled={true} key="addSigner">addSigner()</Option>
-            <Option disabled={true} key="removeSigner">removeSigner()</Option>
-          </Select>
-        </div>
+          <div style={{ margin: 8, padding: 8 }}>
+            <Select value={methodName} disabled={selectDisabled} style={{ width: "100%" }} onChange={setMethodName}>
+              <Option key="transferFunds">transferFunds()</Option>
+              {/* <Option disabled={true} key="updateSignaturesRequired">updateSignaturesRequired()</Option> */}
+              <Option disabled={true} key="addSigner">addSigner()</Option>
+              <Option disabled={true} key="removeSigner">removeSigner()</Option>
+              <Option disabled={true} key="addWriter">addWriter()</Option>
+              <Option disabled={true} key="removeWriter">removeWriter()</Option>
+              <Option disabled={true} key="openStream">openStream()</Option>
+              <Option disabled={true} key="closeStream">closeStream()</Option>
+            </Select>
+          </div>
           <div style={inputStyle}>
             <AddressInput
               autoFocus
@@ -176,6 +229,7 @@ export default function CreateTransaction({
           </div>}
           <div style={inputStyle}>
             <Input
+              disabled
               placeholder="calldata"
               value={data}
               onChange={e => {
@@ -185,6 +239,8 @@ export default function CreateTransaction({
             />
             {decodedDataState}
           </div>
+
+          <div style={{ color: "red" }}>{error}</div>
 
           <Button
             style={{ marginTop: 32 }}
@@ -205,6 +261,7 @@ export default function CreateTransaction({
                 parseEther("" + parseFloat(amount).toFixed(12)),
                 data,
               );
+
               console.log("newHash", newHash);
 
               const signature = await userProvider.send("personal_sign", [newHash, address]);
@@ -213,46 +270,81 @@ export default function CreateTransaction({
               const recover = await readContracts[contractName].recover(newHash, signature);
               console.log("recover", recover);
 
-              const isOwner = await readContracts[contractName].isOwner(recover);
-              console.log("isOwner", isOwner);
+              const isWriter = await readContracts[contractName].isWriter(recover);
+              console.log("isWriter", isWriter);
 
-              if (isOwner) {
-                const res = await axios.post(poolServerUrl, {
-                  chainId: localProvider._network.chainId,
-                  address: readContracts[contractName].address,
-                  nonce: nonce.toNumber(),
-                  to,
-                  amount,
-                  data,
-                  hash: newHash,
-                  signatures: [signature],
-                  signers: [recover],
-                });
-                // IF SIG IS VALUE ETC END TO SERVER AND SERVER VERIFIES SIG IS RIGHT AND IS SIGNER BEFORE ADDING TY
+              if (isWriter) {
+                if (adminPrivs.includes(methodName) && recover == admin) {
+                  const res = await axios.post(poolServerUrl, {
+                    chainId: localProvider._network.chainId,
+                    address: readContracts[contractName].address,
+                    nonce: nonce.toNumber(),
+                    to,
+                    amount,
+                    data,
+                    hash: newHash,
+                    signatures: [signature],
+                    signers: [recover],
+                  });
+                  // IF SIG IS VALUE ETC END TO SERVER AND SERVER VERIFIES SIG IS RIGHT AND IS SIGNER BEFORE ADDING TY
 
-                console.log("RESULT", res.data);
+                  console.log("RESULT", res.data);
 
-                setTimeout(() => {
-                  history.push("/pool");
-                }, 2777);
+                  setTimeout(() => {
+                    history.push("/pool");
+                  }, 2777);
 
-                setResult(res.data.hash);
-                setTo();
-                setAmount("0");
-                setData("0x");
-              } else {
-                console.log("ERROR, NOT OWNER.");
-                setResult("ERROR, NOT OWNER.");
+                  setResult(res.data.hash);
+                  setTo();
+                  setAmount("0");
+                  setData("0x");
+                }
+                else if (adminPrivs.includes(methodName)) {
+                  setError(errorAdmin);
+                  console.log(errorAdmin);
+                  resetError();
+                }
+                else {
+                  const res = await axios.post(poolServerUrl, {
+                    chainId: localProvider._network.chainId,
+                    address: readContracts[contractName].address,
+                    nonce: nonce.toNumber(),
+                    to,
+                    amount,
+                    data,
+                    hash: newHash,
+                    signatures: [signature],
+                    signers: [recover],
+                  });
+                  // IF SIG IS VALUE ETC END TO SERVER AND SERVER VERIFIES SIG IS RIGHT AND IS SIGNER BEFORE ADDING TY
+
+                  console.log("RESULT", res.data);
+
+                  setTimeout(() => {
+                    history.push("/pool");
+                  }, 2777);
+
+                  setResult(res.data.hash);
+                  setTo();
+                  setAmount("0");
+                  setData("0x");
+                }
+              }
+              else {
+                setError(errorWriter);
+                console.log(errorWriter);
+                resetError();
               }
             }}
           >
             Create
           </Button>
         </div>
-
-        {resultDisplay}
+        <div>
+          {resultDisplay}
+        </div>
       </div>
-    </div>
+    </div >
   );
 }
 

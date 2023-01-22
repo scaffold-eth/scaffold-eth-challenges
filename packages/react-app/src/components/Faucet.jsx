@@ -58,7 +58,7 @@ export default function Faucet(props) {
               address = possibleAddress;
             }
             // eslint-disable-next-line no-empty
-          } catch (e) {}
+          } catch (e) { }
         }
         setAddress(address);
       }
@@ -86,7 +86,7 @@ export default function Faucet(props) {
               onClick={() => {
                 tx({
                   to: address,
-                  value: parseEther("0.01"),
+                  value: parseEther("0.1"),
                 });
                 setAddress("");
               }}

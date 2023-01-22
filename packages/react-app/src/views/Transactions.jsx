@@ -21,12 +21,16 @@ export default function Transactions({
   localProvider,
   yourLocalBalance,
   price,
+  admin,
   tx,
   readContracts,
   writeContracts,
   blockExplorer,
 }) {
+
   const [transactions, setTransactions] = useState();
+  const [result, setResult] = useState("");
+
   usePoller(() => {
     const getTransactions = async () => {
       if (true) console.log("🛰 Requesting Transaction List");
@@ -35,7 +39,7 @@ export default function Transactions({
       );
       const newTransactions = [];
       for (const i in res.data) {
-        // console.log("look through signatures of ",res.data[i])
+        console.log("look through signatures of ", res.data[i])
         const thisNonce = ethers.BigNumber.from(res.data[i].nonce);
         if (thisNonce && nonce && thisNonce.gte(nonce)) {
           const validSignatures = [];
@@ -48,12 +52,13 @@ export default function Transactions({
             }
           }
           const update = { ...res.data[i], validSignatures };
-          // console.log("update",update)
+          console.log("update", update)
           newTransactions.push(update);
         }
       }
       setTransactions(newTransactions);
-      console.log("Loaded",newTransactions.length)
+      console.log("Loaded", newTransactions.length)
+      setResult("");
     };
     if (readContracts) getTransactions();
   }, 3777);
@@ -93,24 +98,28 @@ export default function Transactions({
     return <Spin />;
   }
 
-  console.log("transactions",transactions)
+  console.log("transactions", transactions)
+
 
   return (
     <div style={{ maxWidth: 750, margin: "auto", marginTop: 32, marginBottom: 32 }}>
+      <h2 style={{ marginTop: 32 }}>Administrator:  {admin ? <Address address={admin} ensProvider={mainnetProvider} blockExplorer={blockExplorer} fontSize={24} /> : <Spin></Spin>}</h2>
       <h1>
         <b style={{ padding: 16 }}>#{nonce ? nonce.toNumber() : <Spin />}</b>
       </h1>
-
       <List
         bordered
         dataSource={transactions}
         renderItem={item => {
           console.log("ITE88888M", item);
-
+          //console.log("DATA", item.data);
+          const idx = transactions.indexOf(item);
+          //console.log("INDEX", idx);
           const hasSigned = item.signers.indexOf(address) >= 0;
           const hasEnoughSignatures = item.signatures.length <= signaturesRequired.toNumber();
 
           return (
+
             <TransactionListItem item={item} mainnetProvider={mainnetProvider} blockExplorer={blockExplorer} price={price} readContracts={readContracts} contractName={contractName}>
               <span>
                 {item.signatures.length}/{signaturesRequired.toNumber()} {hasSigned ? "✅" : ""}
@@ -157,7 +166,7 @@ export default function Transactions({
               <Button
 
                 key={item.hash}
-                
+
                 onClick={async () => {
                   const newHash = await readContracts[contractName].getTransactionHash(
                     item.nonce,
@@ -184,10 +193,46 @@ export default function Transactions({
               >
                 Exec
               </Button>
-          </TransactionListItem>
+              <Button
+
+                onClick={async () => {
+
+                  const newHash = await readContracts[contractName].getTransactionHash(
+                    item.nonce,
+                    item.to,
+                    parseEther("" + parseFloat(item.amount).toFixed(12)),
+                    item.data,
+                  );
+                  console.log("newHash", newHash);
+
+                  const signature = await userProvider.send("personal_sign", [newHash, address]);
+                  console.log("signature", signature);
+
+                  const recover = await readContracts[contractName].recover(newHash, signature);
+                  console.log("recover--->", recover);
+
+                  if (recover == admin) {
+                    await writeContracts[contractName].inNonce();
+                    setTimeout(() => { setTransactions(); }, 500);
+                    setResult("VETOED")
+                  } else {
+                    console.log("RESULT BEFORE:", result);
+                    console.log("ERROR, NOT ADMIN.");
+                    setResult("ERROR, NOT ADMIN.");
+                    console.log("RESULT SET:", result);
+                  }
+                }}
+                type="secondary"
+              >
+                Veto
+              </Button>
+            </TransactionListItem>
           );
         }}
       />
+      <div>
+        {result}
+      </div>
     </div>
   );
 }

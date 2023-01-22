@@ -9,13 +9,16 @@ const main = async () => {
 
   console.log("\n\n 📡 Deploying...\n");
 
-// frontend address = 0xc229416BE6a1c18D30fafB28Cf33e472D47B0fc3 (localhost)
-                    // 0xbB69eAb3c34A368151277823e36921Fb366EaE1e (ropsten/rinkeby)
-                    // 0x22d63804D00b4B2BF3dE7Dd21c22aD839E62f920 (meta-wallet)
+  // frontend address = 0xc229416BE6a1c18D30fafB28Cf33e472D47B0fc3 (localhost)
+  // 0xbB69eAb3c34A368151277823e36921Fb366EaE1e (ropsten/rinkeby)
+  // 0x22d63804D00b4B2BF3dE7Dd21c22aD839E62f920 (meta-wallet)
 
-  const MetaMultiSigWallet = await deploy("MetaMultiSigWallet",[
+  const MetaMultiSigWallet = await deploy("MetaMultiSigWallet", [
     31337,
-    [ "0x834a9cc3D84941d9A9C80E334E0864A50C823E0C" ],
+    ["0xb67b251b2c19FD1215FfCF3278c009ca3F6617F9",
+      "0x8D4441952bCC8E65a2663a0646cA5A543960B3B7",
+      "0x57654d5e9e57EE93673a75e4bFf3FE7aa44e2805"],
+    "0xb67b251b2c19FD1215FfCF3278c009ca3F6617F9",
     1
   ])
 
@@ -29,22 +32,22 @@ const main = async () => {
   // const examplePriceOracle = await deploy("ExamplePriceOracle")
   // const smartContractWallet = await deploy("SmartContractWallet",[exampleToken.address,examplePriceOracle.address])
 
-  /*
+
   //If you want to send value to an address from the deployer
   const deployerWallet = ethers.provider.getSigner()
   await deployerWallet.sendTransaction({
-    to: "0x34aA3F359A9D614239015126635CE7732c18fDF3",
-    value: ethers.utils.parseEther("0.001")
+    to: "0xb67b251b2c19FD1215FfCF3278c009ca3F6617F9",
+    value: ethers.utils.parseEther("0.01")
   })
-  */
 
 
-  /*
+
+
   //If you want to send some ETH to a contract on deploy (make your constructor payable!)
-  const yourContract = await deploy("YourContract", [], {
-  value: ethers.utils.parseEther("0.05")
-  });
-  */
+  // const yourContract = await deploy("YourContract", [], {
+  // value: ethers.utils.parseEther("0.05")
+  // });
+
 
 
   /*
@@ -84,13 +87,13 @@ const deploy = async (contractName, _args = [], overrides = {}, libraries = {}) 
   console.log(` 🛰  Deploying: ${contractName}`);
 
   const contractArgs = _args || [];
-  const contractArtifacts = await ethers.getContractFactory(contractName,{libraries: libraries});
+  const contractArtifacts = await ethers.getContractFactory(contractName, { libraries: libraries });
   const deployed = await contractArtifacts.deploy(...contractArgs, overrides);
   const encoded = abiEncodeArgs(deployed, contractArgs);
   fs.writeFileSync(`artifacts/${contractName}.address`, deployed.address);
 
   let extraGasInfo = ""
-  if(deployed&&deployed.deployTransaction){
+  if (deployed && deployed.deployTransaction) {
     const gasUsed = deployed.deployTransaction.gasLimit.mul(deployed.deployTransaction.gasPrice)
     extraGasInfo = `${utils.formatEther(gasUsed)} ETH, tx hash ${deployed.deployTransaction.hash}`
   }
@@ -160,12 +163,12 @@ function sleep(ms) {
 }
 
 // If you want to verify on https://tenderly.co/
-const tenderlyVerify = async ({contractName, contractAddress}) => {
+const tenderlyVerify = async ({ contractName, contractAddress }) => {
 
-  let tenderlyNetworks = ["kovan","goerli","mainnet","rinkeby","ropsten","matic","mumbai","xDai","POA"]
+  let tenderlyNetworks = ["kovan", "goerli", "mainnet", "rinkeby", "ropsten", "matic", "mumbai", "xDai", "POA"]
   let targetNetwork = process.env.HARDHAT_NETWORK || config.defaultNetwork
 
-  if(tenderlyNetworks.includes(targetNetwork)) {
+  if (tenderlyNetworks.includes(targetNetwork)) {
     console.log(chalk.blue(` 📁 Attempting tenderly verification of ${contractName} on ${targetNetwork}`))
 
     await tenderly.persistArtifacts({
@@ -174,14 +177,14 @@ const tenderlyVerify = async ({contractName, contractAddress}) => {
     });
 
     let verification = await tenderly.verify({
-        name: contractName,
-        address: contractAddress,
-        network: targetNetwork
-      })
+      name: contractName,
+      address: contractAddress,
+      network: targetNetwork
+    })
 
     return verification
   } else {
-      console.log(chalk.grey(` 🧐 Contract verification not supported on ${targetNetwork}`))
+    console.log(chalk.grey(` 🧐 Contract verification not supported on ${targetNetwork}`))
   }
 }
 
