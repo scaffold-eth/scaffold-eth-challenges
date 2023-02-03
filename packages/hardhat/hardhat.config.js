@@ -261,16 +261,6 @@ module.exports = {
     // your api key here.
     apiKey: "PSW8C433Q667DVEX5BCRMGNAH9FSGFZ7Q8",
   },
-  customChains: [
-    {
-      network: "sepolia",
-      chainId: 11155111,
-      urls: {
-        apiURL: "https://api-sepolia.etherscan.io/api",
-        browserURL: "https://sepolia.etherscan.io",
-      },
-    },
-  ],
 };
 
 const DEBUG = false;
