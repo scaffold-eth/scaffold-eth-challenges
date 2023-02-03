@@ -89,6 +89,13 @@ module.exports = {
         mnemonic: mnemonic(),
       },
     },
+    sepolia: {
+      url: "https://sepolia.infura.io/v3/ec6a8acd1d354717acec099ad46a0bab", // <---- YOUR INFURA ID! (or it won't work)
+      //      url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXXXX/eth/sepolia", // <---- YOUR MORALIS ID! (not limited to infura)
+      accounts: {
+        mnemonic: mnemonic(),
+      },
+    },
     xdai: {
       url: "https://rpc.xdaichain.com/",
       gasPrice: 1000000000,
@@ -110,7 +117,6 @@ module.exports = {
         mnemonic: mnemonic(),
       },
     },
-
     matic: {
       url: "https://rpc-mainnet.maticvigil.com/",
       gasPrice: 1000000000,
@@ -255,6 +261,16 @@ module.exports = {
     // your api key here.
     apiKey: "PSW8C433Q667DVEX5BCRMGNAH9FSGFZ7Q8",
   },
+  customChains: [
+    {
+      network: "sepolia",
+      chainId: 11155111,
+      urls: {
+        apiURL: "https://api-sepolia.etherscan.io/api",
+        browserURL: "https://sepolia.etherscan.io",
+      },
+    },
+  ],
 };
 
 const DEBUG = false;
