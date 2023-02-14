@@ -1,14 +1,67 @@
 # 🏗 scaffold-eth | 🏰 BuidlGuidl
 
+## 🚩 **BONUS for Challenge 4: Minimum Viable Exchange - Foundry Testing**
+
+This branch is just another starting point for you to learn a new aspect of smart contract development, using Foundry in unit testing! 
+
+> 🚨 It's recommended that you have actually completed the DEX challenge before trying to play around with foundry to test the DEX.sol code.
+### 🧪 **Foundry Testing for the DEX Challenge: 😎 An Intro to an Awesome Toolchain**
+
+Foundry is a smart contract development toolchain that has become very popular among protocols today. Foundry has faster fuzzing tests, and other 'cleaner' flows  for smart contract development vs other alternatives. That said, it is not the be-all-end-all solution to smart contract development, and other setups and tools can be more suitable depending on the situation. 
+
+Please feel free to follow the instructions below. It will walk you through running unit tests against the dex smart contract code you just finished writing. 💅🏼 Treat this as a preview to how foundry works in your workflow. It's important to write smart contract code that has been rigorously tested before pushing it out to production.
+
+> BONUS on the BONUS: try writing some foundry tests against your DEX. Can you make even more robust tests? If so, open up a PR to this branch and help us improve this!
+---
+**👨🏻‍🏫 Resources**
+
+_Before we start, for more information, we highly recommend checking out their docs, they are SO well written, and these other resources:_ 
+
+1. [Foundry docs](https://book.getfoundry.sh/)
+
+2. [Intro to Foundry video  by Patrick Collins](https://youtu.be/fNMfMxGxeag)
+
+3. [Foundry telegram group chat](https://t.me/foundry_support)
+
+---
+## **🚶🏻‍♂️✨Walking Through DEX Unit Tests Using Foundry 🥷**
+
+_One thing to note is that Foundry can be used in a more 'minimal' smart contract development workflow. As seen in repos like (Maple Finances](https://github.com/maple-labs/maple-core), there is no `package.json` or use of NPM. Foundry uses `git submodules` for dependencies!_
+
+1. Clone the repo onto your local machine and install the submodules: `git clone --recursive <repo link>`
+
+   > NOTE: If you have not installed the submodules, probably because you ran `git clone <repo link>` instead of the CLI command in step 1, you may run into errors when running `forge build` since it is looking for the dependencies for the project. `git submodule update --init --recursive` can be used if you clone the repo without installing the submodules.
+
+2. Navigate to `./packages/hardhat` from the root of your local copy of the `challenge-4-dex` branch. 
+
+> Here you should see the main foundry directories: `lib/`, `test/`, `script/`. Normally there is a `src/` directory for `smart contracts` but the scaffold-eth setup with hardhat requires a bit of tweaking from the default Foundry setup. See the foundry docs to see what typical directory setup comes when setting up a project with foundry. The `test/` directory here has a `foundry` subdirectory containing the test files for the `DEX.sol` smart contracts. Check them out! 
+
+3. Next, install forge on your machine if you do not have it already: `forge install`
+
+> NOTE: If you need to download the latest version of foundry, just run `foundryup`
+
+4. Build the project: `forge build` - similar to `yarn compile`, essentially checking that the code compiles.
+
+5. Run unit tests using foundry: `forge test` and you will see the results! You can use this against your own custom DEX code and start to play around with how to write tests. This shows how it can be used to make more robust smart contract code, let alone just your DEX contract. 
+
+🎉🙌🏼 That's it! You've ran your first foundry project using the DEX challenge. Nice job! This was just a preview though and the test code and setup was basically already done for you. **👨🏻‍💻 Now check out the foundry docs and community even more and try writing foundry test code for your other projects!**
+
+Below is the original README for the DEX challenge for reference.
+
+
+<details markdown='1'><summary>👩🏽‍🏫 Original README for DEX Challenge </summary>
+
 ## 🚩 **Challenge 4: Minimum Viable Exchange**
 
 This challenge will help you build/understand a simple decentralized exchange, with one token-pair (ERC20 BALLOONS ($BAL) and ETH). This repo is an updated version of the [original tutorial](https://medium.com/@austin_48503/%EF%B8%8F-minimum-viable-exchange-d84f30bd0c90) and challenge repos before it. Please read the intro for a background on what we are building first!
 
-**Start by editing the `packages/hardhat/contracts/DEX.sol` contract. This repo also has solutions (👮🏻 try not to peek!) in the Solutions folder, but the challenge is to write the smart contracts yourself of course!**
+**There is a `DEXTemplate.sol` file for your use if you want (rename it to `DEX.sol`). As well, this repo has solutions (👮🏻 try not to peak!) in it (in root directory, there's a solutions sub-directory) for now, but the challenge is to write the smart contracts yourself of course!**
 
-> ❗️ NOTE: functions outlined within the `packages/hardhat/contracts/DEX.sol` contract are what works with the front end of this branch/repo. Also return variable names may need to be specified exactly as outlined within the `Solutions/DEX.sol` file. If you are confused, see solutions folder in this repo and/or cross reference with front-end code.
+> ❗️ NOTE: functions outlined within the `DEXTemplate.sol` are what works with the front end of this branch/repo. Also return variable names may need to be specified exactly as outlined within the `Solutions/DEX.sol` file. If you are confused, see solutions folder in this repo and/or cross reference with front-end code.
 
 There is also a 🎥 [Youtube video](https://www.youtube.com/watch?v=eP5w6Ger1EQ&t=364s&ab_channel=SimplyExplained) that may help you understand the concepts covered within this challenge too:
+
+This branch was heavily based off of this [archived feature branch](https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-5-dex).
 
 > 💬 Meet other builders in the [Challenge 4 Telegram!](https://t.me/+_NeUIJ664Tc1MzIx)
 
@@ -50,7 +103,9 @@ Navigate to the Debug Contracts tab and you should see two smart contracts displ
 
 > **⭐️ Also note that there is no curve until you uncomment the specific lines of code at the end of `00_deploy_your_contract.js`**.
 
-![image](https://user-images.githubusercontent.com/12072395/205333949-131a8fa6-37da-4c90-ba88-28d0c2c6237a.png)
+<p align="center">
+  <img src="images/StartingUIImage.png" width = "800" />
+</p>
 
 > 🎉 You've made it this far in Scaffold-Eth Challenges 👏🏼 . As things get more complex, it might be good to review the design requirements of the challenge first! Check out the empty DEXTemplate.sol file to see aspects of each function. If you can explain how each function will work with one another, that's great! 😎
 
@@ -145,7 +200,9 @@ Let’s start with the formula `x * y = k` where `x` and `y` are the reserves:
 
 The `k` is called an invariant because it doesn’t change during trades. (The `k` only changes as liquidity is added.) If we plot this formula, we’ll get a curve that looks something like:
 
-![image](https://user-images.githubusercontent.com/12072395/205343533-7e3a2cfe-8329-42af-a35d-6352a12bf61e.png)
+<p align="center">
+  <img src="images/yxk.png" width = "300" />
+</p>
 
 > 💡 We are just swapping one asset for another, the “price” is basically how much of the resulting output asset you will get if you put in a certain amount of the input asset.
 
@@ -182,16 +239,22 @@ yarn run deploy
 
 Let’s say we have 1 million ETH and 1 million tokens, if we put this into our price formula and ask it the price of 1000 ETH it will be an almost 1:1 ratio:
 
-![image](https://user-images.githubusercontent.com/12072395/205342200-a97af0d8-3366-494b-8b4d-5215de61eb69.png)
+<p align="center">
+  <img src="images/1.png" width = "300" />
+</p>
 
 If we put in 1000 ETH we will receive 996 tokens. If we’re paying a 0.3% fee it should be 997 if everything was perfect. BUT, there is a tiny bit of slippage as our contract moves away from the original ratio. Let’s dig in more to really understand what is going on here.
 Let’s say there is 5 million ETH and only 1 million tokens. Then, we want to put 1000 tokens in. That means we should receive about 5000 ETH:
 
-![image](https://user-images.githubusercontent.com/12072395/205341997-7b284786-8f4a-4dde-85e3-eb5bdfc955ce.png)
+<p align="center">
+  <img src="images/2.png" width = "300" />
+</p>
 
 Finally, let’s say the ratio is the same but we want to swap 100,000 tokens instead of just 1000. We’ll notice that the amount of slippage is much bigger. Instead of 498,000 back we will only get 453,305 because we are making such a big dent in the reserves.
 
-![image](https://user-images.githubusercontent.com/12072395/205341547-c38ec805-74fc-4925-8f7e-48fcef1065d7.png)
+<p align="center">
+  <img src="images/3.png" width = "300" />
+</p>
 
 ❗️ The contract automatically adjusts the price as the ratio of reserves shifts away from the equilibrium. It’s called an 🤖 _Automated Market Maker (AMM)._
 
@@ -263,15 +326,11 @@ Let’s create two new functions that let us deposit and withdraw liquidity. How
 
 ```
     function deposit() public payable returns (uint256 tokensDeposited) {
-        require(msg.value > 0, "Must send value when depositing");
         uint256 ethReserve = address(this).balance.sub(msg.value);
         uint256 tokenReserve = token.balanceOf(address(this));
         uint256 tokenDeposit;
 
         tokenDeposit = (msg.value.mul(tokenReserve) / ethReserve).add(1);
-        // 💡 Discussion on adding 1 wei at end of calculation   ^
-        // -> https://t.me/c/1655715571/106
-
         uint256 liquidityMinted = msg.value.mul(totalLiquidity) / ethReserve;
         liquidity[msg.sender] = liquidity[msg.sender].add(liquidityMinted);
         totalLiquidity = totalLiquidity.add(liquidityMinted);
@@ -318,17 +377,15 @@ Remember that you will need to call `approve()` from the `Balloons.sol` contract
 
 Cool beans! Your front-end should be showing something like this now!
 
-![image](https://user-images.githubusercontent.com/12072395/205334649-faca4ada-e3a4-4fbe-8c14-65d707535f7b.png)
+<p align="center">
+  <img src="images/ui-screenshot-final.png" width = "700" />
+</p>
 
 Now, a user can just enter the amount of ETH or tokens they want to swap and the chart will display how the price is calculated. The user can also visualize how larger swaps result in more slippage and less output asset.
 
 ### 🥅 Extra Challenge:
 
 - [ ] `approve()` event emission: can you implement this into the event tabs so that it is clear when `approve()` from the `Balloons.sol` contract has been executed?
-
----
-
-> ❗ ❗ Note that the testing file is a work in progress, so \packages\hardhat-ts\test\challenge-4.ts is incomplete. You can run `yarn test` if you like, but may have some failed tests, even with working code.
 
 ---
 
@@ -375,3 +432,5 @@ Update the api-key in packages/hardhat/package.json file. You can get your key [
 Post your solution on your [BuidlGuidl.com](https://buidlguidl.com) profile and also in the [Challenge 4 Telegram!](https://t.me/+_NeUIJ664Tc1MzIx)
 
 > 💬 Problems, questions, comments on the stack? Post them to the [🏗 scaffold-eth developers chat](https://t.me/joinchat/F7nCRK3kI93PoCOk)
+
+</details>
