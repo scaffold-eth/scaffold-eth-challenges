@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers",
-    "@nomiclabs/hardhat-etherscan": "^2.1.7",
+    "@nomiclabs/hardhat-etherscan": "^3.1.5",
     "@openzeppelin/contracts": "^4.4.2",
     "@tenderly/hardhat-tenderly": "^1.0.10",
     "chai": "^4.2.0",
@@ -22,7 +22,7 @@
     "dotenv": "^8.2.0",
     "ethers": "^5.4.4",
     "hardhat": "~2.10.0",
-    "hardhat-deploy": "^0.9.0",
+    "hardhat-deploy": "^0.11.23",
     "hardhat-gas-reporter": "^1.0.4",
     "node-watch": "^0.7.0",
     "qrcode-terminal": "^0.12.0",
