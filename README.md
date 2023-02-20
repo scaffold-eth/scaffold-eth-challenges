@@ -110,9 +110,9 @@ yarn deploy
 
 🛰 Ready to deploy to a public testnet?!?
 
-> Change the `defaultNetwork` in `packages/hardhat/hardhat.config.js` to `goerli`
+> Change the `defaultNetwork` in `packages/hardhat/hardhat.config.js` to `sepolia`
 
-![networkSelect](https://user-images.githubusercontent.com/12072395/187536000-52a97be7-719e-4e3f-93cf-948abed2c489.PNG)
+![Challenge-0-sepolia](https://user-images.githubusercontent.com/12072395/220195061-b9f726d2-3feb-46eb-9c6f-19c84299c0ec.PNG)
 
 🔐 Generate a **deployer address** with `yarn generate`
 
@@ -122,7 +122,7 @@ yarn deploy
 
 ![nft8](https://user-images.githubusercontent.com/526558/124387068-8004ff80-dcb3-11eb-9d0f-43fba2b3b791.png)
 
-⛽️ Use a faucet like [faucet.paradigm.xyz](https://faucet.paradigm.xyz/) or [goerlifaucet.com](https://goerlifaucet.com/) to fund your **deployer address**.
+⛽️ Use a faucet like [allthatnode.com/faucet/ethereum.dsrv](https://www.allthatnode.com/faucet/ethereum.dsrv) or [web.getlaika.app/faucets](https://web.getlaika.app/faucets) to fund your **deployer address**.
 
 > ⚔️ **Side Quest:** Keep a 🧑‍🎤 [punkwallet.io](https://punkwallet.io/) on your phone's home screen and keep it loaded with testnet eth. 🧙‍♂️ You'll look like a wizard when you can fund your **deployer address** from your phone in seconds. 
 
@@ -132,21 +132,21 @@ yarn deploy
 yarn deploy
 ```
 
-> 💬 Hint: You can set the `defaultNetwork` in `hardhat.config.js` to `goerli` OR you can `yarn deploy --network goerli`. 
+> 💬 Hint: You can set the `defaultNetwork` in `hardhat.config.js` to `sepolia` OR you can `yarn deploy --network sepolia`. 
 
 ---
 
 # Checkpoint 4: 🚢 Ship it! 🚁
 
-> ✏️ Edit your frontend `App.jsx` in `packages/react-app/src` to change the `targetNetwork` to `NETWORKS.goerli`:
+> ✏️ Edit your frontend `App.jsx` in `packages/react-app/src` to change the `targetNetwork` to `NETWORKS.sepolia`:
 
-![image](https://user-images.githubusercontent.com/12072395/187535786-25837212-0c49-4403-b9e6-e8a3255bcd16.PNG)
+![Challenge-0-sepolia-app](https://user-images.githubusercontent.com/12072395/220204549-02b86b70-284e-4d46-a867-e9e3366cd9ea.PNG)
 
 You should see the correct network in the frontend (http://localhost:3000):
 
-![nft10](https://user-images.githubusercontent.com/12072395/187537642-11a60aae-2b1d-4c8f-a3fa-65e4ce36830e.PNG)
+![challenge-0-sepolia-wallet](https://user-images.githubusercontent.com/12072395/220204591-805e38ca-be8f-4534-b05d-a0ec7a2c7949.PNG)
 
-> 🦊 At this moment, you will need to connect the dapp to a browser wallet where you have some ether available to mint tokens. Again, you can use a faucet like [faucet.paradigm.xyz]. Keep in mind that the address you generated in the previous step to deploy the contract will likely be different from the one you have configured in your wallet.
+> 🦊 At this moment, you will need to connect the dapp to a browser wallet where you have some ether available to mint tokens. Again, you can use a faucet like [https://www.allthatnode.com/faucet/ethereum.dsrv]. Keep in mind that the address you generated in the previous step to deploy the contract will likely be different from the one you have configured in your wallet.
 
 🎫 Ready to mint a batch of NFTs for reals?  Use the `MINT NFT` button.
 
@@ -186,7 +186,7 @@ Update the `api-key` in `packages/hardhat/package.json` file. You can get your k
 
 Now you are ready to run the `yarn verify --network your_network` command to verify your contracts on etherscan 🛰
 
-> It is okay if it says your contract is already verified.  Copy the address of YourCollectable.sol and search it on goerli Etherscan to find the correct URL you need to submit this challenge.
+> It is okay if it says your contract is already verified.  Copy the address of YourCollectable.sol and search it on sepolia Etherscan to find the correct URL you need to submit this challenge.
 
 ---
 
