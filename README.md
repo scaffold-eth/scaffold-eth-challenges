@@ -112,7 +112,7 @@ You have beaten the game, but where is your money?  Since the RiggedRoll contrac
 
 🔐 If you don't have one, run `yarn generate` to create a mnemonic and save it locally for deploying.
 
-🛰 Use a faucet like [faucet.paradigm.xyz](https://faucet.paradigm.xyz/) to fund your **deployer address** (run `yarn account` again to view balances)
+🛰 Use a faucet to fund your **deployer address** (run `yarn account` again to view balances)
 
 > ⚠️ Make sure you fund your account with enough Eth! .05 is required to initially fund the DiceGame contract and .01 more is required to fund the riggedRoll contract.  Plus a bit extra to pay the gas.
 
