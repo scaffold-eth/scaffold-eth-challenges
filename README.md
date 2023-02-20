@@ -186,7 +186,7 @@ await vendor.transferOwnership("**YOUR FRONTEND ADDRESS**");
 
 🔐 If you don't have one, run `yarn generate` to create a mnemonic and save it locally for deploying.
 
-🛰 Use a faucet like [faucet.paradigm.xyz](https://faucet.paradigm.xyz/) to fund your **deployer address** (run `yarn account` again to view balances)
+🛰 Use a faucet like [web.getlaika.app/faucets](https://web.getlaika.app/faucets) to fund your **deployer address** (run `yarn account` again to view balances)
 
 > 🚀 Run `yarn deploy` to deploy to your public network of choice (😅 wherever you can get ⛽️ gas)
 
