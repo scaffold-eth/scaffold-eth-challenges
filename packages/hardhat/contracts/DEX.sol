@@ -67,9 +67,10 @@ contract DEX {
     ) public view returns (uint256 yOutput) {}
 
     /**
-     * @notice returns liquidity for a user. Note this is not needed typically due to the `liquidity()` mapping variable being public and having a getter as a result. This is left though as it is used within the front end code (App.jsx).
-     * if you are using a mapping liquidity, then you can use `return liquidity[lp]` to get the liquidity for a user.
-     *
+     * @notice returns liquidity for a user.
+     * NOTE: this is not needed typically due to the `liquidity()` mapping variable being public and having a getter as a result. This is left though as it is used within the front end code (App.jsx).
+     * NOTE: if you are using a mapping liquidity, then you can use `return liquidity[lp]` to get the liquidity for a user.
+     * NOTE: if you will be submitting the challenge make sure to implement this function as it is used in the tests.
      */
     function getLiquidity(address lp) public view returns (uint256) {}
 
