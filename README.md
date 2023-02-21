@@ -127,6 +127,7 @@ Now when we `yarn deploy --reset` then our contract should be initialized as soo
 ### 🥅 Goals / Checks
 
 - [ ] 🎈 Under the debug tab, does your DEX show 5 ETH and 5 Balloons of liquidity?
+- [ ] ❗ If you are planning to submit the challenge make sure to implement the `getLiqudity` getter function.
 
 ---
 
