@@ -31,7 +31,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     from: deployer,
     args: [balloons.address],
     log: true,
-    waitConfirmations: 5,
+    //waitConfirmations: 5,
   });
 
   const dex = await ethers.getContract("DEX", deployer);
