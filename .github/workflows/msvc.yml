@@ -6,7 +6,7 @@
 # Find more information at:
 # https://github.com/microsoft/msvc-code-analysis-action
 
-name: Microsoft C++ Code Analysis
+ชื่อ: Microsoft C + + การวิเคราะห์รหัส
 
 on:
   push:
