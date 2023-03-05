@@ -214,7 +214,7 @@ The `defundChannel()` function should:
 
 ---
 
-### Checkpoint 5: 🚢 Ship it 🚁
+### Checkpoint 7: 🚢 Ship it 🚁
 
 📡 Edit the `defaultNetwork` to [your choice of public EVM networks](https://ethereum.org/en/developers/docs/networks/) in `packages/hardhat/hardhat.config.js`
 
@@ -228,7 +228,7 @@ The `defundChannel()` function should:
 
 ---
 
-### Checkpoint 6: 🎚 Frontend 🧘‍♀️
+### Checkpoint 8: 🎚 Frontend 🧘‍♀️
 
 > 📝 Edit the `targetNetwork` in `App.jsx` (in `packages/react-app/src`) to be the public network where you deployed your smart contract.
 
@@ -246,7 +246,7 @@ The `defundChannel()` function should:
 
 ---
 
-### Checkpoint 7: 📜 Contract Verification
+### Checkpoint 9: 📜 Contract Verification
 
 Update the api-key in packages/hardhat/package.json file. You can get your key [here](https://etherscan.io/myapikey).
 
