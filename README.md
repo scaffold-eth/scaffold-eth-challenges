@@ -44,7 +44,7 @@ Navigate to the Debug Contracts tab and you should see two smart contracts displ
 > 👩‍💻 Rerun `yarn deploy` whenever you want to deploy new contracts to the frontend (run `yarn deploy --reset` for a completely fresh deploy if you have made no contract changes).
 
 `Balloons.sol` is just an example ERC20 contract that mints 1000 $BAL to whatever address deploys it.
-`DEX.sol` is what we will build in this challenge and you can see it starts with a SafeMath library to help us prevent overflows and underflows and also tracks a token (ERC20 interface) that we set in the constructor (on deploy).
+`DEX.sol` is what we will build in this challenge and you can see it tracks a token (ERC20 interface) that we set in the constructor (on deploy). NOTE: since Solidity v0.8.0, SafeMath is no longer needed because the compiler prevents overflows and underflows.
 
 > Below is what your front-end will look like with no implementation code within your smart contracts yet. The buttons will likely break because there are no functions tied to them yet!
 
@@ -165,9 +165,9 @@ Now, try to edit your DEX.sol smart contract and bring in a price function!
         uint256 xReserves,
         uint256 yReserves
     ) public view returns (uint256 yOutput) {
-        uint256 xInputWithFee = xInput.mul(997);
-        uint256 numerator = xInputWithFee.mul(yReserves);
-        uint256 denominator = (xReserves.mul(1000)).add(xInputWithFee);
+        uint256 xInputWithFee = xInput * 997;
+        uint256 numerator = xInputWithFee * yReserves;
+        uint256 denominator = (xReserves * 1000) + xInputWithFee;
         return (numerator / denominator);
     }
 
@@ -219,7 +219,7 @@ Let’s edit the DEX.sol smart contract and add two new functions for swapping f
      */
     function ethToToken() public payable returns (uint256 tokenOutput) {
         require(msg.value > 0, "cannot swap 0 ETH");
-        uint256 ethReserve = address(this).balance.sub(msg.value);
+        uint256 ethReserve = address(this).balance - msg.value;
         uint256 token_reserve = token.balanceOf(address(this));
         uint256 tokenOutput = price(msg.value, ethReserve, token_reserve);
 
@@ -265,17 +265,17 @@ Let’s create two new functions that let us deposit and withdraw liquidity. How
 ```
     function deposit() public payable returns (uint256 tokensDeposited) {
         require(msg.value > 0, "Must send value when depositing");
-        uint256 ethReserve = address(this).balance.sub(msg.value);
+        uint256 ethReserve = address(this).balance - msg.value;
         uint256 tokenReserve = token.balanceOf(address(this));
         uint256 tokenDeposit;
 
-        tokenDeposit = (msg.value.mul(tokenReserve) / ethReserve).add(1);
+        tokenDeposit = (msg.value * tokenReserve / ethReserve) + 1;
         // 💡 Discussion on adding 1 wei at end of calculation   ^
         // -> https://t.me/c/1655715571/106
 
-        uint256 liquidityMinted = msg.value.mul(totalLiquidity) / ethReserve;
-        liquidity[msg.sender] = liquidity[msg.sender].add(liquidityMinted);
-        totalLiquidity = totalLiquidity.add(liquidityMinted);
+        uint256 liquidityMinted = msg.value * totalLiquidity / ethReserve;
+        liquidity[msg.sender] += liquidityMinted;
+        totalLiquidity += liquidityMinted;
 
         require(token.transferFrom(msg.sender, address(this), tokenDeposit));
         emit LiquidityProvided(msg.sender, liquidityMinted, msg.value, tokenDeposit);
@@ -288,11 +288,11 @@ Let’s create two new functions that let us deposit and withdraw liquidity. How
         uint256 tokenReserve = token.balanceOf(address(this));
         uint256 ethWithdrawn;
 
-        ethWithdrawn = amount.mul(ethReserve) / totalLiquidity;
+        ethWithdrawn = amount * ethReserve / totalLiquidity;
 
-        uint256 tokenAmount = amount.mul(tokenReserve) / totalLiquidity;
-        liquidity[msg.sender] = liquidity[msg.sender].sub(amount);
-        totalLiquidity = totalLiquidity.sub(amount);
+        uint256 tokenAmount = amount * tokenReserve / totalLiquidity;
+        liquidity[msg.sender] -= amount;
+        totalLiquidity -= amount;
         (bool sent, ) = payable(msg.sender).call{ value: ethWithdrawn }("");
         require(sent, "withdraw(): revert in transferring eth to you!");
         require(token.transfer(msg.sender, tokenAmount));
