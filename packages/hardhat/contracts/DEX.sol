@@ -3,7 +3,6 @@
 pragma solidity >=0.8.0 <0.9.0;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 /**
  * @title DEX Template
@@ -15,7 +14,6 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 contract DEX {
     /* ========== GLOBAL VARIABLES ========== */
 
-    using SafeMath for uint256; //outlines use of SafeMath for uint256 variables
     IERC20 token; //instantiates the imported contract
 
     /* ========== EVENTS ========== */
