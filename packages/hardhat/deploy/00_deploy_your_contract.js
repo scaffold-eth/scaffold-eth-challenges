@@ -2,32 +2,32 @@
 
 const { ethers } = require("hardhat");
 
-const localChainId = "31337";
-
-// const sleep = (ms) =>
-//   new Promise((r) =>
-//     setTimeout(() => {
-//       console.log(`waited for ${(ms / 1000).toFixed(3)} seconds`);
-//       r();
-//     }, ms)
-//   );
-
 module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
 
   await deploy("Balloons", {
-    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
-    // args: [ "Hello", ethers.utils.parseEther("1.5") ],
     log: true,
+    waitConfirmations: 5,
   });
 
   const balloons = await ethers.getContract("Balloons", deployer);
 
+  if (chainId !== "31337") {
+    try {
+      console.log(" 🎫 Verifing Contract on Etherscan... ");
+      await run("verify:verify", {
+        address: balloons.address,
+        contract: "contracts/Balloons.sol:Balloons",
+      });
+    } catch (e) {
+      console.log(" ⚠️ Failed to verify contract on Etherscan ");
+    }
+  }
+
   await deploy("DEX", {
-    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
     args: [balloons.address],
     log: true,
@@ -36,22 +36,29 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
 
   const dex = await ethers.getContract("DEX", deployer);
 
-  // paste in your front-end address here to get 10 balloons on deploy:
-  await balloons.transfer(
-    "0x08C01CEc8B8c793D768f502b604113074CE212aD",
-    "" + 10 * 10 ** 18
+  console.log(
+    "Approving DEX (" + dex.address + ") to take Balloons from main account..."
   );
+  await balloons.approve(dex.address, ethers.utils.parseEther("1"));
 
-  // // uncomment to init DEX on deploy:
-  // console.log(
-  //   "Approving DEX (" + dex.address + ") to take Balloons from main account..."
-  // );
-  // // If you are going to the testnet make sure your deployer account has enough ETH
-  // await balloons.approve(dex.address, ethers.utils.parseEther("100"));
-  // console.log("INIT exchange...");
-  // await dex.init(ethers.utils.parseEther("5"), {
-  //   value: ethers.utils.parseEther("5"),
-  //   gasLimit: 200000,
-  // });
+  console.log("INIT exchange...");
+  await dex.init(ethers.utils.parseEther("0.05"), {
+    value: ethers.utils.parseEther("0.05"),
+    gasLimit: 200000,
+  });
+
+  if (chainId !== "31337") {
+    try {
+      console.log(" 🎫 Verifing Contract on Etherscan... ");
+      await run("verify:verify", {
+        address: dex.address,
+        contract: "contracts/DEX.sol:DEX",
+        constructorArguments: [balloons.address],
+      });
+    } catch (e) {
+      console.log(" ⚠️ Failed to verify contract on Etherscan ");
+    }
+  }
 };
+
 module.exports.tags = ["Balloons", "DEX"];
