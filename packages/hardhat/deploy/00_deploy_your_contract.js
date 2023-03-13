@@ -7,11 +7,11 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
 
-  await deploy("Balloons", {
-    from: deployer,
-    log: true,
-    waitConfirmations: 5,
-  });
+  // await deploy("Balloons", {
+  //   from: deployer,
+  //   log: true,
+  //   waitConfirmations: 5,
+  // });
 
   const balloons = await ethers.getContract("Balloons", deployer);
 
