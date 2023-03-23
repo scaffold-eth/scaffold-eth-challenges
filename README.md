@@ -13,7 +13,7 @@
 
 > 🌟 The final deliverable is an app that lets users purchase your ERC20 token, transfer it, and sell it back to the vendor. Deploy your contracts on your public chain of choice and then `yarn build` and `yarn surge` your app to a public web server. Submit the url on [SpeedRunEthereum.com](https://speedrunethereum.com)!
 
-> 💬 Meet other builders working on this challenge and get help in the [Challenge 2 telegram](https://t.me/joinchat/IfARhZFc5bfPwpjq)!
+> 💬 Meet other builders working on this challenge and get help in the [Challenge 2 Telegram](https://t.me/joinchat/IfARhZFc5bfPwpjq) or the [Challenge 2 Discord](https://discord.com/channels/778001331091800065/859867436957171732)!
 
 🧫 Everything starts by ✏️ Editing `YourToken.sol` in `packages/hardhat/contracts`
 
