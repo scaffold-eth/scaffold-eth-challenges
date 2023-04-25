@@ -1,93 +1,188 @@
-# 🏗👷🏾 Scaffold-ETH Challenges
+## 🚩 Challenge 8: Diamond Challenge - Crowdfunding 💎
 
-> learn how to use 🏗 scaffold-eth to create decentralized applications on Ethereum. 🚀
+> 🎰 Smart contract development can get quite complex if you have a lot of contract logic to maintain. The Diamond standard (EIP-2535) makes it easy to modularize and efficiently upgrade and manage your smart contracts.
 
----
+> We believe that at some point Diamonds will be standarized and used in different kinds of applications i.e. Smart Contract Wallets ERC4337
 
-## 🚩 Challenge 0: 🎟 Simple NFT Example
+> Crowdfunding contracts have different features and there are many implementations out there, in this Challenge you will write your own Crowdfunding system using diamonds, you will run into some problems where diamonds and facets will become handy and hopefully you get a better understanding of how this standard works
 
-🎫 Create a simple NFT to learn basics of 🏗 scaffold-eth. You'll use 👷‍♀️ HardHat to compile and deploy smart contracts. Then, you'll use a template React app full of important Ethereum components and hooks. Finally, you'll deploy an NFT to a public network to share with friends! 🚀
+> We will start with a basic crowdfunding contract that allows users to contribute and the owner to claim the funds any time they want.
 
-https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-0-simple-nft
+> 😱 Seems like contributors will never be able to get their money back, your role is to fix this and set up some conditions and add some functionalities to your crowdfunding contract.
 
----
-
-## 🚩 Challenge 1: 🥩 Decentralized Staking App
-
-🦸 A superpower of Ethereum is allowing you, the builder, to create a simple set of rules that an adversarial group of players can use to work together. In this challenge, you create a decentralized application where users can coordinate a group funding effort. If the users cooperate, the money is collected in a second smart contract. If they defect, the worst that can happen is everyone gets their money back. The users only have to trust the code.
-
-https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-1-decentralized-staking
+> 💬 Meet other builders working on this challenge and get help in the [Challenge 8 telegram](add telegram here)!
 
 ---
 
-## 🚩 Challenge 2: 🏵 Token Vendor
+### Checkpoint -1 : 📦 install 📚
 
-🤖 Smart contracts are kind of like "always on" vending machines that anyone can access. Let's make a decentralized, digital currency. Then, let's build an unstoppable vending machine that will buy and sell the currency. We'll learn about the "approve" pattern for ERC20s and how contract to contract interactions work.
+Want a fresh cloud environment? Click this to open a gitpod workspace, then skip to Checkpoint 1 after the tasks are complete.
 
-https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-2-token-vendor
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-8-diamond-pattern)
 
----
-
-## 🚩 Challenge 3: 🎲 Dice Game
-
-🎰 Randomness is tricky on a public deterministic blockchain.  In this challenge you will explore creating random numbers using block hash and how that may be exploitable.  Attack the dice game with your own contract by predicting the randomness ahead of time to always roll a winner!
-
-https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-3-dice-game
-
----
-
-## 🎉 Checkpoint: Eligible to join 🏰️ BuidlGuidl
-
-The BuidlGuidl is a curated group of Ethereum builders creating products, prototypes, and tutorials to enrich the web3 ecosystem. A place to show off your builds and meet other builders. Start crafting your Web3 portfolio by submitting your DEX, Multisig or SVG NFT build.
-
-https://buidlguidl.com/
+```bash
+git clone https://github.com/scaffold-eth/scaffold-eth-challenges.git challenge-8-diamond-pattern
+cd challenge-8-diamond-pattern
+git checkout challenge-8-diamond-pattern
+yarn install
+```
 
 ---
 
-## ⚖️ Build a DEX Challenge
+### Checkpoint 0: 🔭 Environment 📺
 
-💵 Build an exchange that swaps ETH to tokens and tokens to ETH. 💰 This is possible because the smart contract holds reserves of both assets and has a price function based on the ratio of the reserves. Liquidity providers are issued a token that represents their share of the reserves and fees...
+You'll have three terminals up for:
 
-DEX Telegram Channel: https://t.me/+_NeUIJ664Tc1MzIx
+```bash
+yarn chain   (hardhat backend)
+yarn start   (react app frontend)
+yarn deploy  (to compile, deploy, and publish your contracts to the frontend)
+```
 
-https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-4-dex
+> 👀 Visit your frontend at http://localhost:3000
+
+> **IMPORTANT**👩‍💻 Rerun `yarn deploy --reset` whenever you want to deploy new contracts to the frontend.
+
+**NOTE**
+
+> This will setup a basic Crowdfunding Diamond that only allows users to `contribute` and the owner to `claim`.
+
+### **you can inspect your diamond by clicking on `debug diamond`, the list of facets added to it will be displayed in this way**
+
+![image](./assets/facets.png)
+
+### **you can see your diamond as a floating point on the right side or on the top**
+
+<img src="./assets/diamond.png"  width="300" height="200">
+
+## Checkpoint 1: 💸 Contribute some ETH
+
+🔍 Inspect the code in the `MainFacet` contract in `packages/hardhat/contracts/facets`
+
+🔍 Inspect the code in the `CrowdFundDiamondInit` contract in `packages/hardhat/contracts`
+
+💸 Grab some funds from the faucet and try sending some ETH to the crowdfunding
+
+<img src="./assets/faucet.png"  width="200" height="80">
+
+> Let's start by sending 1 ETH
+
+> > Can you guess why is this happening ?
+
+> > This wont work so your **TASK 1** is to change the minimum `contribution amount` in TODO: line inside `01_checkpoint.ts`.
+
+> After you are done with this part : run `yarn deploy --reset`
+
+> > you should be now able to `contribute` 1 ETH
+
+> As the owner you should be able to `claim()` all the funds added to this contract
+
+### 🥅 Goals
+
+- [x] Understand how the initalization of a diamond takes place.
+- [x] Get acquainted with the essential setup of Diamonds.
 
 ---
 
-## 📺 State Channel Application Challenge
+## Checkpoint 2: 🙏 Lets be fair to the contributors
 
-🛣️ The Ethereum blockchain has great decentralization & security properties but these properties come at a price: transaction throughput is low, and transactions can be expensive. This makes many traditional web applications infeasible on a blockchain... or does it? State channels look to solve these problems by allowing participants to securely transact off-chain while keeping interaction with Ethereum Mainnet at a minimum.
+Contributors have started to complain if they can actually take their money back from the Crowdfundr contract, the owner can take the money but the contributors' money is locked.
 
-State Channels Telegram Channel: https://t.me/+k0eUYngV2H0zYWUx
+🔍 Inspect the code in the `WithdrawFacet.sol` contract in `packages/hardhat/contracts/facets`, specially look at the function `refund()`
 
-https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-9-state-channels
+> Start by commenting out the `return` line in the code at `02_checkpoint.ts`, this will run the script contained in this file.
 
----
+🔍 Inspect the code in the `02_checkpoint.ts` inside `packages/hardhat/deploy`, specially understand how a facet is added to the Diamond
 
-## 👛 Multisig Wallet Challenge
+> At this point your contributors should be able to get the funds back by calling the `refund` function in `WithdrawFacet`
 
-👩‍👩‍👧‍👧 Using a smart contract as a wallet we can secure assets by requiring multiple accounts to "vote" on transactions. The contract will keep track of transactions in an array of structs and owners will confirm or reject each one. Any transaction with enough confirmations can "execute".
+> > Can you guess whats wrong here?
 
-Multisig Telegram Channel: https://t.me/+mkNNF_yHsK8yMTcx
+### ⚔️ Checkpoint 2 side quests
 
-https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-5-multi-sig
+In a crowdfunding contract, usually the contributors will be able to `refund()` their amount after the deadline has passed. So lets set a deadline and enforce it inside the function `refund()`
 
----
+- [x] call `setDeadline(VALUE)` at the bottom of `02_checkpoint.ts`, the value passed is in seconds, lets set it to 120 Seconds.
 
-## 🎁 SVG NFT 🎫 Building Cohort Challenge
+- [x] Uncomment the code that enforces deadline to be reached inside `refund()` in `WithdrawFacet.sol`.
 
-🧙 Tinker around with cutting edge smart contracts that render SVGs in Solidity. 🧫 We quickly discovered that the render function needs to be public... 🤔 This allows NFTs that own other NFTs to render their stash. Just wait until you see an Optimistic Loogie and a Fancy Loogie swimming around in the same Loogie Tank!
+- [x] Redeploy
 
-SVG NFT Telegram Channel: https://t.me/+J9PRea84c1U0Mzkx
-
-https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-6-svg-nft
+- [x] within 2 minute try contributing some ETH and call `refund` , see if `refund` function fails until the 2 minute has passed from deployment
 
 ---
 
-### 💬 Support Chat
+## Checkpoint 3: 💵 Claiming when goal amount has been reached
 
-Join the telegram [support chat 💬](https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA) to ask questions and find others building with 🏗 scaffold-eth!
+Ok, so at this point your contributors can `contribute` and `refund` their assets when the deadline has been reached. But there should be some rules for the owner, owner can only withdraw if the goal has been reached. Likewise, contributors only would be able to `refund` if the goal hasn't been reached
+
+🔍 Inspect the code in the `ConfigFacet.sol` contract in `packages/hardhat/contracts/facets`
+
+> Start by commenting out the `return` line in the code at `03_checkpoint.ts`, in the same way the facet was added in `02_checkpoint.ts`, try adding the last facet : `ConfigFacet`
+
+- [x] Inside `MainFacet.sol` enforce that deadline has been reached inside the `claim()` function
+
+- [x] Inside `WithdrawFacet.sol` enforce that goal has been reached inside the `refund()` function, likewise for `claim()` inside `MainFacet.sol`
+
+- [x] Inside `03_checkpoint.ts` , call target amount to set the value. Lets try 10 ETH.
+
+### 🥅 Goals
+
+- [✅] Test out the contract, do all your functions work as expected
+- [✅] Interact and play around with the facets, get acquainted with their functions
+
+### ⚔️ Side Quest
+
+- [✅] Check the tests
+
+### **Close the chain terminal and open 2 new ones**
+
+```bash
+yarn chain
+```
+
+```bash
+yarn hardhat:test
+```
+
+### Checkpoint 4: 💾 Deploy it! 🛰
+
+📡 Edit the `defaultNetwork` in `packages/hardhat/hardhat.config.js`, as well as `targetNetwork` in `packages/react-app/src/App.jsx`, to [your choice of public EVM networks](https://ethereum.org/en/developers/docs/networks/)
+
+👩‍🚀 You will want to run `yarn account` to see if you have a **deployer address**.
+
+🔐 If you don't have one, run `yarn generate` to create a mnemonic and save it locally for deploying.
+
+🛰 Use a faucet to fund your **deployer address** (run `yarn account` again to view balances)
+
+> ⚠️ Make sure you fund your account with enough Eth!
+
+🚀 Run `yarn deploy` to deploy to your public network of choice (😅 wherever you can get ⛽️ gas)
+
+🔬 Inspect the block explorer for the network you deployed to... make sure your contract is there.
 
 ---
 
-🙏 Please check out our [Gitcoin grant](https://gitcoin.co/grants/2851/scaffold-eth) too!
+### Checkpoint 6: 🚢 Ship it! 🚁
+
+📦 Run `yarn build` to package up your frontend.
+
+💽 Upload your app to surge with `yarn surge` (you could also `yarn s3` or maybe even `yarn ipfs`?)
+
+> 😬 Windows users beware! You may have to change the surge code in `packages/react-app/package.json` to just `"surge": "surge ./build",`
+
+⚙ If you get a permissions error `yarn surge` again until you get a unique URL, or customize it in the command line.
+
+🚔 Traffic to your url might break the [Infura](https://infura.io/) rate limit, edit your key: `constants.js` in `packages/react-app/src`
+
+---
+
+### Checkpoint 7: 📜 Contract Verification
+
+Update the `apikey` in `packages/hardhat/package.json`. You can get your key [here](https://etherscan.io/myapikey).
+
+> Now you are ready to run the `yarn verify --network your_network` command to verify your contracts on etherscan 🛰
+
+Copy the verified address for your CrowdfundrDiamond contract and enter that into the appropriate Etherscan testnet.
+
+---
