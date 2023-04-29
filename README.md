@@ -41,6 +41,7 @@ yarn deploy  (to compile, deploy, and publish your contracts to the frontend)
 
 > 👀 Visit your frontend at http://localhost:3000
 
+> Please have an updated version of node  >=18.0.0
 ## **IMPORTANT : Redeploy**👩‍💻 
 
 Rerun `yarn deploy --reset` whenever you want to deploy new contracts to the frontend.
@@ -84,8 +85,8 @@ Rerun `yarn deploy --reset` whenever you want to deploy new contracts to the fro
 
 ### 🥅 **Goals**
 
-- [x] Understand how the initalization of a diamond works
-- [x] Get acquainted with the essential setup of Diamonds.
+- [✅] Understand how the initalization of a diamond works
+- [✅] Get acquainted with the essential setup of Diamonds.
 
 ---
 
@@ -123,7 +124,7 @@ Ok, so at this point your contributors can `contribute` and `refund` their asset
 
 🔍 Inspect the code in the `ConfigFacet.sol` contract in `packages/hardhat/contracts/facets`
 
-> Start by commenting out the `return` line in the code at `03_checkpoint.ts`, in the same way the facet was added in `02_checkpoint.ts`, try adding the last facet : `ConfigFacet`
+- Start by commenting out the `return` line in the code at `03_checkpoint.ts`, in the same way the facet was added in `02_checkpoint.ts`, try adding the last facet : `ConfigFacet`
 
 - [x] Inside `MainFacet.sol` enforce that deadline has been reached inside the `claim()` function
 
@@ -136,7 +137,8 @@ Ok, so at this point your contributors can `contribute` and `refund` their asset
 - [✅] Test out the contract, do all your functions work as expected
 - [✅] Interact and play around with the facets, get acquainted with their functions
 
-### ⚔️ Side Quest
+---
+## ⚔️ Side Quest
 
 - [✅] Check the tests
 
@@ -150,43 +152,57 @@ yarn chain
 yarn hardhat:test
 ```
 
-### Checkpoint 4: 💾 Deploy it! 🛰
+## Checkpoint 4: 💾 Deploy it! 🛰
 
-📡 Edit the `defaultNetwork` in `packages/hardhat/hardhat.config.js`, as well as `targetNetwork` in `packages/react-app/src/App.jsx`, to [your choice of public EVM networks](https://ethereum.org/en/developers/docs/networks/)
+> 📡 Edit the `defaultNetwork` in `packages/hardhat/hardhat.config.js`, as well as `targetNetwork` in `packages/nextjs/scaffold.config.ts`, to [your choice of public EVM networks](https://ethereum.org/en/developers/docs/networks/)
 
-👩‍🚀 You will want to run `yarn account` to see if you have a **deployer address**.
+> 👩‍🚀 Create an `.env` file inside `packages/hardhat`
 
-🔐 If you don't have one, run `yarn generate` to create a mnemonic and save it locally for deploying.
+```bash
+cd packages/hardhat
+cp .env.example .env
+```
+> ✏️ Fill in the required fields in `.env` file inside
 
-🛰 Use a faucet to fund your **deployer address** (run `yarn account` again to view balances)
+```bash
+RPC= 
+// any rpc for the network you want to deploy to
 
-> ⚠️ Make sure you fund your account with enough Eth!
+DEPLOYER_PRIVATE_KEY= 
+// your TEST account private key, must have funds in the network you want to specify
 
-🚀 Run `yarn deploy` to deploy to your public network of choice (😅 wherever you can get ⛽️ gas)
+ETHERSCAN_API_KEY= 
+// a key that will allow you to verify your contracts
+```
+> 🤔 add the `RPC` to the corresponding network in hardhat.config.js
+```javascript
+    polygonMumbai: {
+      url: process.env.MUMBAI_RPC,
+      accounts: [deployerPrivateKey],
+    },
+```
+> 🚀 Run `yarn deploy` to deploy to your public network of choice (😅 wherever you can get ⛽️ gas)
 
 🔬 Inspect the block explorer for the network you deployed to... make sure your contract is there.
 
 ---
 
-### Checkpoint 6: 🚢 Ship it! 🚁
+## Checkpoint 6: 🚢 Ship it! 🚁
 
-📦 Run `yarn build` to package up your frontend.
+- 📦 Create a Vercel account if you dont have one
 
-💽 Upload your app to surge with `yarn surge` (you could also `yarn s3` or maybe even `yarn ipfs`?)
-
-> 😬 Windows users beware! You may have to change the surge code in `packages/react-app/package.json` to just `"surge": "surge ./build",`
-
-⚙ If you get a permissions error `yarn surge` again until you get a unique URL, or customize it in the command line.
-
-🚔 Traffic to your url might break the [Infura](https://infura.io/) rate limit, edit your key: `constants.js` in `packages/react-app/src`
-
+- 🙌🏾 Deploy your project using vercel , follow the instructions after the command
+```bash
+yarn vercel
+```
+- ䷄ Wait until your project is deployed and shill the link into the telegram chat
 ---
 
 ### Checkpoint 7: 📜 Contract Verification
 
-Update the `apikey` in `packages/hardhat/package.json`. You can get your key [here](https://etherscan.io/myapikey).
+- Update the `ETHERSCAN_API_KEY` in `.env`
 
-> Now you are ready to run the `yarn verify --network your_network` command to verify your contracts on etherscan 🛰
+- Now you are ready to run the `yarn verify --network your_network` command to verify your contracts on etherscan 🛰
 
 Copy the verified address for your CrowdfundrDiamond contract and enter that into the appropriate Etherscan testnet.
 
