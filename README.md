@@ -10,7 +10,7 @@
 
 > 😱 Seems like contributors will never be able to get their money back, your role is to fix this and set up some conditions and add some functionalities to your crowdfunding contract.
 
-> 💬 Meet other builders working on this challenge and get help in the [Challenge 8 telegram](add telegram here)!
+> 💬 Meet other builders working on this challenge and get help in the [Challenge 8 telegram](https://t.me/+HjB0rEJ_98oxYzIx)!
 
 ---
 
