@@ -42,6 +42,10 @@ yarn deploy  (to compile, deploy, and publish your contracts to the frontend)
 > 👀 Visit your frontend at http://localhost:3000
 
 > Please have an updated version of node  >=18.0.0
+```bash
+//check node version - make sure is at least 18.0.0
+node -v
+```
 ## **IMPORTANT : Redeploy**👩‍💻 
 
 Rerun `yarn deploy --reset` whenever you want to deploy new contracts to the frontend.
