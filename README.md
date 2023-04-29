@@ -210,9 +210,8 @@ yarn vercel
 
 Copy the verified address for your CrowdfundrDiamond contract and enter that into the appropriate Etherscan testnet.
 
+---
 ## Final Side Quest: 📕 Inspect / upload your Diamond & Facets
 
 - upload your Facet to [`facets.wiki`](https://facets.wiki/) so that others will be able to reuse it 
-- 
 
----
