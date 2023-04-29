@@ -82,7 +82,7 @@ We will start with a basic crowdfunding contract that allows users to contribute
 
 😱 Seems like contributors will never be able to get their money back, your role is to fix this and set up some conditions and add some functionalities to your crowdfunding contract.
 
-https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-5-multi-sig
+https://github.com/scaffold-eth/scaffold-eth-challenges/blob/diamond-challenge
 
 ---
 
