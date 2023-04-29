@@ -14,8 +14,6 @@ const Diamond: NextPage = () => {
   );
   const [selectedEIP2535, setSelectedEIP2535] = useState<ContractName>(EIP2535Names[0]);
   const [selectedFacet, setSelectedFacet] = useState<ContractName>(facetNames[0]);
-  console.log(`contractNames: ${JSON.stringify(contractNames)}`);
-  console.log(`mainDiamondContractName: ${mainDiamondContractName}`);
 
   return (
     <>
