@@ -202,12 +202,17 @@ yarn vercel
 - ䷄ Wait until your project is deployed and shill the link into the telegram chat
 ---
 
-### Checkpoint 7: 📜 Contract Verification
+## Checkpoint 7: 📜 Contract Verification
 
 - Update the `ETHERSCAN_API_KEY` in `.env`
 
 - Now you are ready to run the `yarn verify --network your_network` command to verify your contracts on etherscan 🛰
 
 Copy the verified address for your CrowdfundrDiamond contract and enter that into the appropriate Etherscan testnet.
+
+## Final Side Quest: 📕 Inspect / upload your Diamond & Facets
+
+- upload your Facet to [`facets.wiki`](https://facets.wiki/) so that others will be able to reuse it 
+- 
 
 ---
