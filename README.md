@@ -41,7 +41,9 @@ yarn deploy  (to compile, deploy, and publish your contracts to the frontend)
 
 > 👀 Visit your frontend at http://localhost:3000
 
-> **IMPORTANT**👩‍💻 Rerun `yarn deploy --reset` whenever you want to deploy new contracts to the frontend.
+## **IMPORTANT : Redeploy**👩‍💻 
+
+Rerun `yarn deploy --reset` whenever you want to deploy new contracts to the frontend.
 
 **NOTE**
 
@@ -79,6 +81,7 @@ yarn deploy  (to compile, deploy, and publish your contracts to the frontend)
 
 - As the owner you should be able to `claim()` all the funds added to this contract
 
+
 ### 🥅 **Goals**
 
 - [x] Understand how the initalization of a diamond works
@@ -92,13 +95,13 @@ Contributors have started to complain if they can actually take their money back
 
 🔍 Inspect the code in the `WithdrawFacet.sol` contract in `packages/hardhat/contracts/facets`, specially look at the function `refund()`
 
-> Start by commenting out the `return` line in the code at `02_checkpoint.ts`, this will run the script contained in this file.
+- Start by commenting out the `return` line in the code at `02_checkpoint.ts`, this will run the script contained in this file.
 
-🔍 Inspect the code in the `02_checkpoint.ts` inside `packages/hardhat/deploy`, specially understand how a facet is added to the Diamond
+- 🔍 Inspect the code in the `02_checkpoint.ts` inside `packages/hardhat/deploy`, specially understand how a facet is added to the Diamond
 
-> At this point your contributors should be able to get the funds back by calling the `refund` function in `WithdrawFacet`
+- At this point your contributors should be able to get the funds back by calling the `refund` function in `WithdrawFacet`
 
-> > Can you guess whats wrong here?
+    - Can you guess whats wrong here?
 
 ### ⚔️ Checkpoint 2 side quests
 
@@ -106,9 +109,9 @@ In a crowdfunding contract, usually the contributors will be able to `refund()` 
 
 - [x] call `setDeadline(VALUE)` at the bottom of `02_checkpoint.ts`, the value passed is in seconds, lets set it to 120 Seconds.
 
-- [x] Uncomment the code that enforces deadline to be reached inside `refund()` in `WithdrawFacet.sol`.
+- [x] Uncomment the code that enforces deadline to have passed, inside `refund()` in `WithdrawFacet.sol`.
 
-- [x] Redeploy
+- [x] Redeploy 
 
 - [x] within 2 minute try contributing some ETH and call `refund` , see if `refund` function fails until the 2 minute has passed from deployment
 
