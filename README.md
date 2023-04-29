@@ -76,7 +76,7 @@ https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-5-multi-s
 
 ## 💎 Diamond Challenge
 
-The Diamond standard (EIP-2535) makes it easy to modularize and efficiently upgrade and manage your smart contracts.
+The Diamond standard (EIP-2535) makes it easy to modularize, upgrade, and manage your smart contracts.
 
 We will start with a basic crowdfunding contract that allows users to contribute and the owner to claim the funds any time they want.
 
