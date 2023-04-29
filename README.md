@@ -74,6 +74,18 @@ https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-5-multi-s
 
 ---
 
+## 💎 Diamond Challenge
+
+The Diamond standard (EIP-2535) makes it easy to modularize and efficiently upgrade and manage your smart contracts.
+
+We will start with a basic crowdfunding contract that allows users to contribute and the owner to claim the funds any time they want.
+
+😱 Seems like contributors will never be able to get their money back, your role is to fix this and set up some conditions and add some functionalities to your crowdfunding contract.
+
+https://github.com/scaffold-eth/scaffold-eth-challenges/tree/challenge-5-multi-sig
+
+---
+
 ## 🎁 SVG NFT 🎫 Building Cohort Challenge
 
 🧙 Tinker around with cutting edge smart contracts that render SVGs in Solidity. 🧫 We quickly discovered that the render function needs to be public... 🤔 This allows NFTs that own other NFTs to render their stash. Just wait until you see an Optimistic Loogie and a Fancy Loogie swimming around in the same Loogie Tank!
