@@ -2,8 +2,6 @@
 
 > 🎰 Smart contract development can get quite complex if you have tons of contract logic to maintain. The Diamond standard (EIP-2535) makes it easy to modularize and efficiently upgrade and manage your smart contracts. You can read more about it [here](https://eips.ethereum.org/EIPS/eip-2535)
 
-> We believe that at some point Diamonds will be standarized and used in different kinds of applications i.e. Smart Contract Wallets ERC4337, a hot topic recently
-
 > Sidenote : Crowdfunding contracts have different features and there are many implementations out there, in this Challenge you will write your own Crowdfunding system using diamonds and facets, you will run into some problems where diamonds and facets will become handy and hopefully you get a better understanding of how this standard works
 
 > We will start with a basic crowdfunding contract that allows users to contribute and the owner to claim the funds any time they want.
