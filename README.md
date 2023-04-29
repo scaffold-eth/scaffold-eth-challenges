@@ -1,10 +1,10 @@
 ## 🚩 Challenge 8: Diamond Challenge - Crowdfunding 💎
 
-> 🎰 Smart contract development can get quite complex if you have a lot of contract logic to maintain. The Diamond standard (EIP-2535) makes it easy to modularize and efficiently upgrade and manage your smart contracts.
+> 🎰 Smart contract development can get quite complex if you have tons of contract logic to maintain. The Diamond standard (EIP-2535) makes it easy to modularize and efficiently upgrade and manage your smart contracts. You can read more about it [here](https://eips.ethereum.org/EIPS/eip-2535)
 
-> We believe that at some point Diamonds will be standarized and used in different kinds of applications i.e. Smart Contract Wallets ERC4337
+> We believe that at some point Diamonds will be standarized and used in different kinds of applications i.e. Smart Contract Wallets ERC4337, a hot topic recently
 
-> Crowdfunding contracts have different features and there are many implementations out there, in this Challenge you will write your own Crowdfunding system using diamonds, you will run into some problems where diamonds and facets will become handy and hopefully you get a better understanding of how this standard works
+> Sidenote : Crowdfunding contracts have different features and there are many implementations out there, in this Challenge you will write your own Crowdfunding system using diamonds and facets, you will run into some problems where diamonds and facets will become handy and hopefully you get a better understanding of how this standard works
 
 > We will start with a basic crowdfunding contract that allows users to contribute and the owner to claim the funds any time they want.
 
@@ -65,21 +65,23 @@ yarn deploy  (to compile, deploy, and publish your contracts to the frontend)
 
 <img src="./assets/faucet.png"  width="200" height="80">
 
-> Let's start by sending 1 ETH
+**STEPS TO REPRODUCE**
 
-> > Can you guess why is this happening ?
+- Let's start by sending 1 ETH
 
-> > This wont work so your **TASK 1** is to change the minimum `contribution amount` in TODO: line inside `01_checkpoint.ts`.
+    - Can you guess why is this happening ?
 
-> After you are done with this part : run `yarn deploy --reset`
+    - This wont work so your **TASK 1** is to change the minimum `contribution amount` in TODO: line inside `01_checkpoint.ts`.
 
-> > you should be now able to `contribute` 1 ETH
+- After you are done with this part : run `yarn deploy --reset`
 
-> As the owner you should be able to `claim()` all the funds added to this contract
+    - you should be now able to `contribute` 1 ETH
 
-### 🥅 Goals
+- As the owner you should be able to `claim()` all the funds added to this contract
 
-- [x] Understand how the initalization of a diamond takes place.
+### 🥅 **Goals**
+
+- [x] Understand how the initalization of a diamond works
 - [x] Get acquainted with the essential setup of Diamonds.
 
 ---
