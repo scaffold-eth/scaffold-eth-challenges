@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "@eth-optimism/hardhat-ovm": "^0.2.2",
-    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@nomicfoundation/hardhat-ethers": "^3.0.4",
+    "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers",
     "@nomiclabs/hardhat-etherscan": "^3.1.5",
     "@nomiclabs/hardhat-waffle": "^2.0.0",
     "@openzeppelin/contracts": "^4.3.3",
@@ -21,8 +22,8 @@
     "chalk": "^4.1.0",
     "ethereum-waffle": "^3.1.1",
     "ethers": "^5.4.4",
-    "hardhat": "2.6.0",
-    "hardhat-deploy": "^0.11.23",
+    "hardhat": "2.17.2",
+    "hardhat-deploy": "^0.11.37",
     "node-watch": "^0.7.0",
     "qrcode-terminal": "^0.12.0",
     "ramda": "^0.27.1"
