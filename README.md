@@ -146,7 +146,7 @@ You should see the correct network in the frontend (http://localhost:3000):
 
 ![challenge-0-sepolia-wallet](https://user-images.githubusercontent.com/12072395/220204591-805e38ca-be8f-4534-b05d-a0ec7a2c7949.PNG)
 
-> 🦊 At this moment, you will need to connect the dapp to a browser wallet where you have some ether available to mint tokens. Again, you can use a faucet like [https://www.allthatnode.com/faucet/ethereum.dsrv]. Keep in mind that the address you generated in the previous step to deploy the contract will likely be different from the one you have configured in your wallet.
+> 🦊 At this point, you will need to connect to your dapp using a browser extension wallet where you have some ether available to mint tokens. Again, you can use a faucet like [allthatnode.com/faucet/ethereum.dsrv](https://www.allthatnode.com/faucet/ethereum.dsrv). Keep in mind that the address you generated in the previous step to deploy the contract will be different from the one you have configured in your wallet.
 
 🎫 Ready to mint a batch of NFTs for reals?  Use the `MINT NFT` button.
 
