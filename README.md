@@ -1,6 +1,8 @@
 # 🏗👷🏾 Scaffold-ETH Challenges
 
-> learn how to use 🏗 scaffold-eth to create decentralized applications on Ethereum. 🚀
+> 🎖 We recommend you check the Scaffold-ETH 2 version of the challenges: [https://github.com/scaffold-eth/scaffold-eth-2](https://github.com/scaffold-eth/se-2-challenges)
+
+Learn how to use 🏗 scaffold-eth to create decentralized applications on Ethereum. 🚀
 
 ---
 
