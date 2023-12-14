@@ -296,7 +296,7 @@ Let’s create two new functions that let us deposit and withdraw liquidity. How
         (bool sent, ) = payable(msg.sender).call{ value: ethWithdrawn }("");
         require(sent, "withdraw(): revert in transferring eth to you!");
         require(token.transfer(msg.sender, tokenAmount));
-        emit LiquidityRemoved(msg.sender, amount, ethWithdrawn, tokenAmount);
+        emit LiquidityRemoved(msg.sender, amount, tokenAmount, ethWithdrawn);
         return (ethWithdrawn, tokenAmount);
     }
 
